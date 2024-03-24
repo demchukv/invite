@@ -1,23 +1,28 @@
-import { useDispatch } from 'react-redux';
-import { logOut } from '../../redux/auth/operations';
-import { useAuth } from '../../hooks';
-import Button from "@mui/material/Button";
-import { Box } from "@mui/material";
-import { Typography } from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout';
-
+import { useDispatch } from "react-redux";
+import { logOut } from "../../redux/auth/operations";
+import { useAuth } from "../../hooks";
+import { Link } from "react-router-dom";
 
 const UserMenu = () => {
   const dispatch = useDispatch();
   const { user } = useAuth();
 
   return (
-    <Box sx={{display:"flex", gap:"36px", alignItems:"center"}}>
-      <Typography>Welcome, {user.name}</Typography>
-      <Button variant='contained' type="button" onClick={() => dispatch(logOut())} endIcon={<LogoutIcon />}>
-        Logout
-      </Button>
-    </Box>
+    <ul id="nav-mobile" className="right hide-on-med-and-down">
+      <li>Welcome, {user.name}</li>
+      <li>
+        <Link to={"/contacts"}>Phonebook</Link>
+      </li>
+      <li>
+        <button
+          className="waves-effect waves-light btn"
+          type="button"
+          onClick={() => dispatch(logOut())}
+        >
+          Logout
+        </button>
+      </li>
+    </ul>
   );
 };
 

@@ -8,7 +8,6 @@ import Loader from "../components/Loader/Loader";
 import { fetchContacts } from "../redux/contacts/operations";
 import { selectIsLoading, selectError } from "../redux/contacts/selectors";
 import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
-import { Grid } from "@mui/material";
 
 export default function Contacts() {
   const dispatch = useDispatch();
@@ -23,17 +22,17 @@ export default function Contacts() {
   return (
     <>
       <DocumentTitle>Your phonebook</DocumentTitle>
-      <Grid container spacing={6}>
-        <Grid item xs={12} sm={5} md={3}>
+      <div className="row">
+        <div className="col s3">
             <ContactForm />
             <SearchBox />
-        </Grid>
-        <Grid item xs={12} sm={7} md={9}>
+        </div>
+        <div className="col s9">
             {isError && <ErrorMessage>{isError}</ErrorMessage>}
             {isLoading && <Loader />}
             <ContactList />
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     </>
   );
 }

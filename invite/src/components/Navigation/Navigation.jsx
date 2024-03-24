@@ -1,34 +1,28 @@
-import { NavLink } from "react-router-dom";
-import { useAuth } from "../../hooks";
-import Link from "@mui/material/Link";
-import MenuList from '@mui/material/MenuList';
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
-  const { isLoggedIn } = useAuth();
-
   return (
-    <MenuList open sx={{flexGrow: 1, display:"flex", gap:"36px"}}>
-      <Link
-        component={NavLink}
-        to={"/"}
-        color="inherit"
-        underline="none"
-        variant="h6"
-      >
-        Home
-      </Link>
-      {isLoggedIn && (
-        <Link
-          component={NavLink}
-          to={"/contacts"}
-          color="inherit"
-          underline="none"
-          variant="h6"
-        >
-          Phonebook
-        </Link>
-      )}
-    </MenuList>
+    <>
+      <ul className="left hide-on-med-and-down">
+        <li>
+          <Link to={"/"}>Home</Link>
+        </li>
+        <li>
+          <Link to={"/about"}>About</Link>
+        </li>
+      </ul>
+      <ul id="nav-mobile-left" className="sidenav">
+        <li>
+          <Link to={"/"}>Home</Link>
+        </li>
+        <li>
+          <Link to={"/about"}>About</Link>
+        </li>
+      </ul>
+      <a href="#" data-target="nav-mobile-left" className="sidenav-trigger">
+        <i className="material-icons">menu</i>
+      </a>
+    </>
   );
 };
 

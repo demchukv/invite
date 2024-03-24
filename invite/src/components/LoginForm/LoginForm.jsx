@@ -2,15 +2,12 @@ import { useDispatch } from "react-redux";
 import { logIn } from "../../redux/auth/operations";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Box, TextField } from "@mui/material";
-import Button from "@mui/material/Button";
 import toast from "react-hot-toast";
 
 export const LoginForm = () => {
   const dispatch = useDispatch();
 
   const handleLogin = (values) => {
-
     dispatch(
       logIn({
         email: values.email,
@@ -48,40 +45,52 @@ export const LoginForm = () => {
   });
 
   return (
-    <Box sx={{ maxWidth:380,margin:"0 auto", mt: 4 }}>
-      <form onSubmit={formik.handleSubmit} autoComplete="off">
-      <TextField
-          fullWidth
-          id="email"
-          name="email"
-          label="Email"
-          type="email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-          sx={{mb:2}}
-          variant="standard"
-        />
-        <TextField
-          fullWidth
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-          sx={{mb:2}}
-          variant="standard"
-        />
-        <Button variant="contained" type="submit" fullWidth>
-          Log In
-        </Button>
-      </form>
-    </Box>
+    <div className="row">
+      <div className="col s12 m6 offset-m3 l4 offset-l4">
+        <form onSubmit={formik.handleSubmit} autoComplete="off">
+          <div className="row">
+            <div className="input-field col s12">
+              <input
+                className="validate"
+                id="email"
+                name="email"
+                type="email"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <label htmlFor="email">Email</label>
+              {formik.touched.email && formik.errors.email && (
+                <div className="helper-text red-text darken-2">
+                  {formik.errors.email}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="row">
+            <div className="input-field col s12">
+              <input
+                className="validate"
+                id="password"
+                name="password"
+                type="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <label htmlFor="password">Password</label>
+              {formik.touched.password && formik.errors.password && (
+                <div className="helper-text red-text darken-2">
+                  {formik.errors.password}
+                </div>
+              )}
+            </div>
+          </div>
+          <button type="submit" className="waves-effect waves-light btn">
+            Log In
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };

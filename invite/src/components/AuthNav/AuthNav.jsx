@@ -1,29 +1,18 @@
-import { NavLink } from "react-router-dom";
-import Link from "@mui/material/Link";
-import { Box } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const AuthNav = () => {
   return (
-    <Box sx={{display:"flex", gap:"36px"}}>
-      <Link
-        component={NavLink}
-        to={"/register"}
-        color="inherit"
-        underline="none"
-        variant="h6"
-      >
+    <ul  id="nav-mobile" className="right hide-on-med-and-down">
+      <li><Link to={"/register"}>
         Register
       </Link>
-      <Link
-        component={NavLink}
-        to={"/login"}
-        color="inherit"
-        underline="none"
-        variant="h6"
-      >
+      </li>
+      <li>
+      <Link to={"/login"}>
         Log In
       </Link>
-    </Box>
+      </li>
+    </ul>
   );
 };
 
