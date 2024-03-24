@@ -6,14 +6,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class UserController extends Controller
 {
+    use HasFactory;
 
     public function __construct()
     {
         $this->middleware('auth:sanctum', ['except' => ['login', 'register']]);
     }
+
+    /**
+     * Display a listing of the invites.
+     */
 
     public function login(Request $request)
     {
