@@ -6,6 +6,9 @@ use App\Models\InviteGuest;
 use App\Http\Requests\StoreInviteGuestRequest;
 use App\Http\Requests\UpdateInviteGuestRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\InviteGuestResource;
+use App\Http\Resources\V1\InviteGuestCollection;
+
 
 class InviteGuestController extends Controller
 {
@@ -14,7 +17,8 @@ class InviteGuestController extends Controller
      */
     public function index()
     {
-        //
+        //return new InviteGuestCollection(InviteGuest::all());
+
     }
 
     /**
@@ -38,7 +42,7 @@ class InviteGuestController extends Controller
      */
     public function show(InviteGuest $inviteGuest)
     {
-        //
+        //return new InviteGuestResource($inviteGuest);
     }
 
     /**

@@ -1,5 +1,5 @@
 import DocumentTitle from "../components/DocumentTitle";
-import Link from "@mui/material/Link";
+import { Link } from 'react-router-dom';
 
 const NotFoundPage = () => {
   return (

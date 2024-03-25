@@ -11,7 +11,7 @@ const UserMenu = () => {
     <ul id="nav-mobile" className="right hide-on-med-and-down">
       <li>Welcome, {user.name}</li>
       <li>
-        <Link to={"/contacts"}>Phonebook</Link>
+        <Link to={"/invitations"}>Invitation</Link>
       </li>
       <li>
         <button

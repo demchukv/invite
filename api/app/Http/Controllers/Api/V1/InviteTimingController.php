@@ -6,6 +6,9 @@ use App\Models\InviteTiming;
 use App\Http\Requests\StoreInviteTimingRequest;
 use App\Http\Requests\UpdateInviteTimingRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\V1\InviteTimingResource;
+use App\Http\Resources\V1\InviteTimingCollection;
+
 
 class InviteTimingController extends Controller
 {
@@ -38,7 +41,7 @@ class InviteTimingController extends Controller
      */
     public function show(InviteTiming $inviteTiming)
     {
-        //
+        //return new InviteTimingResource($inviteTiming);
     }
 
     /**

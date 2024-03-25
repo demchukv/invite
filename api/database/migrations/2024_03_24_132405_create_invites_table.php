@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name_one');
             $table->string('name_two');
             $table->date('end_point');
+            $table->string('photo');
             $table->text('place_one');
             $table->string('map_url_one');
             $table->text('place_two');

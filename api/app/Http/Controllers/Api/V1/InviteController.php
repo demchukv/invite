@@ -9,9 +9,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\Resource\V1\InviteResource;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Resources\V1\InviteResource;
+use App\Http\Resources\V1\InviteCollection;
+
 
 class InviteController extends Controller
 {
@@ -20,7 +20,12 @@ class InviteController extends Controller
      */
      public function index()
     {
-        return Invite::all();
+        $user =  auth('sanctum')->user();
+
+        $invite = Invite::where('user_id', $user->id);
+        $invite = $invite -> with('inviteTimings') -> with('invitePhotos') -> with('inviteGroups.inviteGuests');
+        //dd(new InviteCollection($invite->get()));
+        return new InviteCollection($invite->get());
     }
     /**
      * Show the form for creating a new resource.

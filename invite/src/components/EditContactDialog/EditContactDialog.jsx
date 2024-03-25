@@ -1,25 +1,24 @@
-import { Button, Dialog, DialogActions, DialogTitle, DialogContent } from '@mui/material';
 import ContactForm from '../ContactForm/ContactForm';
 
 const EditContactDialog = ({ open, handleClose, contact }) => {
       
   return (
-    <Dialog
+    <dialog
     open={open}
     onClose={handleClose}
     aria-labelledby="alert-dialog-title"
     aria-describedby="alert-dialog-description"
   >
-    <DialogTitle id="alert-dialog-title">
+    <h2 id="alert-dialog-title">
       {"Edit contact"}
-    </DialogTitle>
-    <DialogContent>
+    </h2>
+    <div>
         <ContactForm contact={contact} handleClose={handleClose} />
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={handleClose} autoFocus>Cancel</Button>
-    </DialogActions>
-  </Dialog>
+    </div>
+    <div>
+      <button onClick={handleClose} autoFocus>Cancel</button>
+    </div>
+  </dialog>
 
   )
 }
