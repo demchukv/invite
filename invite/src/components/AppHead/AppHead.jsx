@@ -9,9 +9,11 @@ export const AppHead = () => {
   return (
     <div className="navbar-fixed">
       <nav className="blue-grey">
-        <div className="nav-wrapper">
-          <Navigation />
-          {isLoggedIn ? <UserMenu /> : <AuthNav />}
+        <div className="container">
+          <div className="nav-wrapper">
+            <Navigation />
+            {isLoggedIn ? <UserMenu /> : <AuthNav />}
+          </div>
         </div>
       </nav>
     </div>

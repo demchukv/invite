@@ -21,10 +21,12 @@ class InviteController extends Controller
      public function index()
     {
         $user =  auth('sanctum')->user();
+        if(!isset($user -> id)){
+            return [];
+        }
 
         $invite = Invite::where('user_id', $user->id);
         $invite = $invite -> with('inviteTimings') -> with('invitePhotos') -> with('inviteGroups.inviteGuests');
-        //dd(new InviteCollection($invite->get()));
         return new InviteCollection($invite->get());
     }
     /**
