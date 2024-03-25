@@ -33,7 +33,7 @@ class InviteResource extends JsonResource
             'postinvite' => $this->postinvite,
             'deadline' => $this->deadline,
             'thankyou' => $this->thankyou,
-            'additional' => $this->additional,
+            'addition' => $this->addition,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
             'inviteGroups' => InviteGroupResource::collection($this->whenLoaded('inviteGroups')),

@@ -14,6 +14,13 @@ class InviteTimingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            "id" => $this->id,
+            "inviteId" => $this->invite_id,
+            "eventTime" => $this->event_time,
+            "eventDesc" => $this->event_desc,
+            "createdAt" => $this->created_at,
+            "updatedAt" => $this->updated_at,
+        ];
     }
 }

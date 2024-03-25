@@ -14,6 +14,12 @@ class InvitePhotoResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            "id" => $this -> id,
+            "inviteId" => $this -> invite_id,
+            "photoName" => $this -> photo_name,
+            "createdAt" => $this -> created_at,
+            "updatedAt" => $this -> updated_at
+        ];
     }
 }
