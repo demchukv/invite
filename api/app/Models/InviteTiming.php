@@ -10,7 +10,15 @@ class InviteTiming extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'id',
+        'invite_id',
+        'event_time',
+        'event_desc'
+    ];
+
     public function invites(){
         return $this -> belongsTo(Invite::class);
     }
 }
+

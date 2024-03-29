@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\InviteTiming;
-use App\Http\Requests\StoreInviteTimingRequest;
-use App\Http\Requests\UpdateInviteTimingRequest;
 use App\Http\Controllers\Controller;
+
+use App\Models\InviteTiming;
+use App\Http\Requests\V1\StoreInviteTimingRequest;
+use App\Http\Requests\V1\UpdateInviteTimingRequest;
 use App\Http\Resources\V1\InviteTimingResource;
 use App\Http\Resources\V1\InviteTimingCollection;
 
@@ -33,7 +34,12 @@ class InviteTimingController extends Controller
      */
     public function store(StoreInviteTimingRequest $request)
     {
-        //
+        $request->request->set('inviteId', $request->inviteId);
+        $request->request->set('eventTime', $request->eventTime);
+        $request->request->set('eventDesc', $request->eventDesc);
+
+        dd($request);
+        return new InviteTimingResource(InviteTiming::create($request->all()));
     }
 
     /**
@@ -41,7 +47,8 @@ class InviteTimingController extends Controller
      */
     public function show(InviteTiming $inviteTiming)
     {
-        //return new InviteTimingResource($inviteTiming);
+            $inviteTiming = $inviteTiming -> where('id', $inviteTiming->id);
+            return new InviteTimingCollection($inviteTiming->get());
     }
 
     /**
@@ -57,7 +64,8 @@ class InviteTimingController extends Controller
      */
     public function update(UpdateInviteTimingRequest $request, InviteTiming $inviteTiming)
     {
-        //
+        dd($request);
+        $inviteTiming -> update($request->all());
     }
 
     /**

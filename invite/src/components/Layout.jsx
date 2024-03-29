@@ -11,7 +11,6 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { Link as RouterLink } from "react-router-dom";
 import Link from "@mui/material/Link";
-//import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export const Layout = () => {
   const [mode, setMode] = useState("light");

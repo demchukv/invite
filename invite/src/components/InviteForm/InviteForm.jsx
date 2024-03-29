@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addInvite, updateInvite } from "../../redux/invites/operations";
-import { useFormik } from "formik";
+import { useFormik, FieldArray, FormikProvider } from "formik";
 import * as Yup from "yup";
 import { selectInvites } from "../../redux/invites/selectors";
 import { useNavigate } from "react-router-dom";
@@ -9,14 +9,17 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Grid from "@mui/material/Grid";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const InviteForm = ({ inviteId }) => {
   const dispatch = useDispatch();
-  
+
   const navigate = useNavigate();
 
   const invites = useSelector(selectInvites);
@@ -47,6 +50,7 @@ const InviteForm = ({ inviteId }) => {
       .min(3, "Too Short!")
       .max(50, "Too Long!")
       .required("Required"),
+    endPoint: Yup.date().required("Required"),
   });
 
   const formik = useFormik({
@@ -74,11 +78,12 @@ const InviteForm = ({ inviteId }) => {
       addition: invite
         ? invite.addition
         : "Для швидкого обміну інформацією, фото та відео між нашими гостями ми створили групу в telegram",
+      inviteTimings: invite ? invite.inviteTimings : [],
     },
     validationSchema: InviteSchema,
     onSubmit: (values) => {
       console.log(values);
-        handleSubmit(values);
+      handleSubmit(values);
     },
   });
 
@@ -94,71 +99,118 @@ const InviteForm = ({ inviteId }) => {
       <Typography component="h1" variant="h5">
         {invite ? "Edit your invitation" : "Create your invitation"}
       </Typography>
-
-      <Box
-        component="form"
-        onSubmit={formik.handleSubmit}
-        autoComplete="off"
-        noValidate
-        sx={{ mt: 1 }}
-      >
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="nameOne"
-          name="nameOne"
-          label="Name One"
-          type="text"
-          value={formik.values.nameOne}
-          onChange={(event)=>formik.setValue(event.currentTarget.files[0])}
-          onBlur={formik.handleBlur}
-          error={formik.touched.nameOne && Boolean(formik.errors.nameOne)}
-          helperText={formik.touched.nameOne && formik.errors.nameOne}
-          autoComplete="name"
-        />
-
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="nameTwo"
-          name="nameTwo"
-          label="Name Two"
-          type="text"
-          value={formik.values.nameTwo}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.nameTwo && Boolean(formik.errors.nameTwo)}
-          helperText={formik.touched.nameTwo && formik.errors.nameTwo}
-          autoComplete="name"
-        />
-
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Event date"
-            format="YYYY-MM-DD"
-            value={dayjs(formik.values.endPoint)}
-            id="endPoint"
-            name="endPoint"
-            fullWidth
+      <FormikProvider value={formik}>
+        <Box
+          component="form"
+          onSubmit={formik.handleSubmit}
+          autoComplete="off"
+          noValidate
+          sx={{ mt: 1 }}
+        >
+          <TextField
             margin="normal"
             required
-            onChange={(value) => formik.setFieldValue("endPoint", dayjs(value).format('YYYY-MM-DD'), true)}
-            slotProps={{
-              textField: {
-                variant: "outlined",
-                error:
-                  formik.touched.endPoint && Boolean(formik.errors.endPoint),
-                helperText: formik.touched.endPoint && formik.errors.endPoint,
-                onChange: formik.handleChange,
-                margin: "normal"
-              },
-            }}
+            fullWidth
+            id="nameOne"
+            name="nameOne"
+            label="Name One"
+            type="text"
+            value={formik.values.nameOne}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.nameOne && Boolean(formik.errors.nameOne)}
+            helperText={formik.touched.nameOne && formik.errors.nameOne}
+            autoComplete="name"
           />
-        </LocalizationProvider>
 
-        <TextField
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="nameTwo"
+            name="nameTwo"
+            label="Name Two"
+            type="text"
+            value={formik.values.nameTwo}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.nameTwo && Boolean(formik.errors.nameTwo)}
+            helperText={formik.touched.nameTwo && formik.errors.nameTwo}
+            autoComplete="name"
+          />
+
+          <TextField
+            margin="normal"
+            variant="outlined"
+            multiline
+            required
+            fullWidth
+            maxRows={4}
+            id="invitation"
+            name="invitation"
+            label="Invitation"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.invitation && Boolean(formik.errors.invitation)
+            }
+            helperText={formik.touched.invitation && formik.errors.invitation}
+            defaultValue={formik.values.invitation}
+          />
+
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              format="YYYY-MM-DD"
+              value={dayjs(formik.values.endPoint)}
+              id="endPoint"
+              name="endPoint"
+              onChange = {(value) =>
+                    formik.setFieldValue(
+                      "endPoint",
+                      dayjs(value).format("YYYY-MM-DD"),
+                      true
+                    )}
+              slotProps={{
+                textField: {
+                  variant: "outlined",
+                  error:
+                    formik.touched.endPoint && Boolean(formik.errors.endPoint),
+                  helperText: formik.touched.endPoint && formik.errors.endPoint,
+                  onChange: (value) =>
+                    formik.setFieldValue(
+                      "endPoint",
+                      dayjs(value).format("YYYY-MM-DD"),
+                      true
+                    ),
+                  margin: "normal",
+                  required: true,
+                  fullWidth: true,
+                  label: "Event date",
+                },
+              }}
+            />
+          </LocalizationProvider>
+
+          <TextField
+            margin="normal"
+            variant="outlined"
+            multiline
+            required
+            fullWidth
+            maxRows={4}
+            id="postinvite"
+            name="postinvite"
+            label="Post invitation"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.postinvite && Boolean(formik.errors.postinvite)
+            }
+            helperText={formik.touched.postinvite && formik.errors.postinvite}
+            defaultValue={formik.values.postinvite}
+          />
+
+          {/* <TextField
           margin="normal"
           required
           fullWidth
@@ -172,168 +224,206 @@ const InviteForm = ({ inviteId }) => {
           error={formik.touched.photo && Boolean(formik.errors.photo)}
           helperText={formik.touched.photo && formik.errors.photo}
           autoComplete="off"
-        />
+        /> */}
 
-        <TextField
-          margin="normal"
-          variant="outlined"
-          multiline
-          required
-          fullWidth
-          maxRows={4}
-          id="placeOne"
-          name="placeOne"
-          label="Place One"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.placeOne && Boolean(formik.errors.placeOne)}
-          helperText={formik.touched.placeOne && formik.errors.placeOne}
-          defaultValue={formik.values.placeOne}
-        />
+          <TextField
+            margin="normal"
+            variant="outlined"
+            multiline
+            required
+            fullWidth
+            maxRows={4}
+            id="placeOne"
+            name="placeOne"
+            label="Place One"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.placeOne && Boolean(formik.errors.placeOne)}
+            helperText={formik.touched.placeOne && formik.errors.placeOne}
+            defaultValue={formik.values.placeOne}
+          />
 
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="mapUrlOne"
-          name="mapUrlOne"
-          label="Map url for place one"
-          type="text"
-          value={formik.values.mapUrlOne}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.mapUrlOne && Boolean(formik.errors.mapUrlOne)}
-          helperText={formik.touched.mapUrlOne && formik.errors.mapUrlOne}
-          autoComplete="off"
-        />
+          <TextField
+            margin="normal"
+            variant="outlined"
+            fullWidth
+            id="mapUrlOne"
+            name="mapUrlOne"
+            label="Map url for place one"
+            type="text"
+            value={formik.values.mapUrlOne}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.mapUrlOne && Boolean(formik.errors.mapUrlOne)}
+            helperText={formik.touched.mapUrlOne && formik.errors.mapUrlOne}
+            autoComplete="off"
+          />
 
-        <TextField
-          margin="normal"
-          variant="outlined"
-          multiline
-          required
-          fullWidth
-          maxRows={4}
-          id="placeTwo"
-          name="placeTwo"
-          label="Place Two"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.placeTwo && Boolean(formik.errors.placeTwo)}
-          helperText={formik.touched.placeTwo && formik.errors.placeTwo}
-          defaultValue={formik.values.placeTwo}
-        />
+          <TextField
+            margin="normal"
+            variant="outlined"
+            multiline
+            required
+            fullWidth
+            maxRows={4}
+            id="placeTwo"
+            name="placeTwo"
+            label="Place Two"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.placeTwo && Boolean(formik.errors.placeTwo)}
+            helperText={formik.touched.placeTwo && formik.errors.placeTwo}
+            defaultValue={formik.values.placeTwo}
+          />
 
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="mapUrlTwo"
-          name="mapUrlTwo"
-          label="Map url for place two"
-          type="text"
-          value={formik.values.mapUrlTwo}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.mapUrlTwo && Boolean(formik.errors.mapUrlTwo)}
-          helperText={formik.touched.mapUrlTwo && formik.errors.mapUrlTwo}
-          autoComplete="off"
-        />
+          <TextField
+            margin="normal"
+            fullWidth
+            id="mapUrlTwo"
+            name="mapUrlTwo"
+            label="Map url for place two"
+            type="text"
+            value={formik.values.mapUrlTwo}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.mapUrlTwo && Boolean(formik.errors.mapUrlTwo)}
+            helperText={formik.touched.mapUrlTwo && formik.errors.mapUrlTwo}
+            autoComplete="off"
+          />
 
-        <TextField
-          margin="normal"
-          variant="outlined"
-          multiline
-          required
-          fullWidth
-          maxRows={4}
-          id="invitation"
-          name="invitation"
-          label="Invitation"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.invitation && Boolean(formik.errors.invitation)}
-          helperText={formik.touched.invitation && formik.errors.invitation}
-          defaultValue={formik.values.invitation}
-        />
+          <TextField
+            margin="normal"
+            variant="outlined"
+            multiline
+            required
+            fullWidth
+            maxRows={4}
+            id="deadline"
+            name="deadline"
+            label="Deadline"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.deadline && Boolean(formik.errors.deadline)}
+            helperText={formik.touched.deadline && formik.errors.deadline}
+            defaultValue={formik.values.deadline}
+          />
 
-        <TextField
-          margin="normal"
-          variant="outlined"
-          multiline
-          required
-          fullWidth
-          maxRows={4}
-          id="postinvite"
-          name="postinvite"
-          label="Post invitation"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.postinvite && Boolean(formik.errors.postinvite)}
-          helperText={formik.touched.postinvite && formik.errors.postinvite}
-          defaultValue={formik.values.postinvite}
-        />
+          <Grid container spacing={2} sx={{ marginTop: "1px" }}>
+            <Grid item xs={4} sm={4}>
+              Time
+            </Grid>
+            <Grid item xs={6} sm={6}>
+              Event
+            </Grid>
+            <Grid item xs={2} sm={2}></Grid>
+          </Grid>
+          <FieldArray
+            name="inviteTimings"
+            render={(arrayHelpers) => (
+              <div>
+                {formik.values.inviteTimings.map((timing, index) => (
+                  <div key={index}>
+                    {/** both these conventions do the same  */}
+                    <Grid container spacing={2}>
+                      <Grid item xs={4} sm={4}>
+                        <TextField
+                          margin="normal"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          name={`inviteTimings[${index}].eventTime`}
+                          value={formik.values.inviteTimings[index].eventTime}
+                          onChange={formik.handleChange}
+                        />
+                      </Grid>
+                      <Grid item xs={6} sm={6}>
+                        <TextField
+                          margin="normal"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          name={`inviteTimings.${index}.eventDesc`}
+                          value={formik.values.inviteTimings[index].eventDesc}
+                          onChange={formik.handleChange}
+                        />
+                      </Grid>
+                      <Grid item xs={2} sm={2} sx={{display:"flex",alignItems:"center"}}>
+                        <IconButton
+                          variant="outlined"
+                          color="warning"
+                          size="small"
+                          type="button"
+                          onClick={() => arrayHelpers.remove(index)}
+                          sx={{alignSelf:"center", alignItems:'center'}}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  </div>
+                ))}
+                    <Grid container spacing={2}>
+                      <Grid item xs={10} sm={10}>
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  type="button"
+                  onClick={() =>
+                    arrayHelpers.push({ eventTime: "", eventDesc: "" })
+                  }
+                  sx={{ marginTop: "4px" }}
+                >
+                  Add event
+                </Button>
+                </Grid>
+                <Grid item xs={2} sm={2}></Grid>
+                </Grid>
+              </div>
+            )}
+          />
 
-        <TextField
-          margin="normal"
-          variant="outlined"
-          multiline
-          required
-          fullWidth
-          maxRows={4}
-          id="deadline"
-          name="deadline"
-          label="Deadline"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.deadline && Boolean(formik.errors.deadline)}
-          helperText={formik.touched.deadline && formik.errors.deadline}
-          defaultValue={formik.values.deadline}
-        />
+          <TextField
+            margin="normal"
+            variant="outlined"
+            multiline
+            fullWidth
+            maxRows={4}
+            id="thankyou"
+            name="thankyou"
+            label="Thank you"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.thankyou && Boolean(formik.errors.thankyou)}
+            helperText={formik.touched.thankyou && formik.errors.thankyou}
+            defaultValue={formik.values.thankyou}
+          />
 
-        <TextField
-          margin="normal"
-          variant="outlined"
-          multiline
-          required
-          fullWidth
-          maxRows={4}
-          id="thankyou"
-          name="thankyou"
-          label="Thank you"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.thankyou && Boolean(formik.errors.thankyou)}
-          helperText={formik.touched.thankyou && formik.errors.thankyou}
-          defaultValue={formik.values.thankyou}
-        />
+          <TextField
+            margin="normal"
+            variant="outlined"
+            multiline
+            fullWidth
+            maxRows={4}
+            id="addition"
+            name="addition"
+            label="Additional information"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.addition && Boolean(formik.errors.addition)}
+            helperText={formik.touched.addition && formik.errors.addition}
+            defaultValue={formik.values.addition}
+          />
 
-        <TextField
-          margin="normal"
-          variant="outlined"
-          multiline
-          required
-          fullWidth
-          maxRows={4}
-          id="addition"
-          name="addition"
-          label="Additional information"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.addition && Boolean(formik.errors.addition)}
-          helperText={formik.touched.addition && formik.errors.addition}
-          defaultValue={formik.values.addition}
-        />
-
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          {invite ? "Update invitation" : "Create invitation"}
-        </Button>
-      </Box>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            {invite ? "Update invitation" : "Create invitation"}
+          </Button>
+        </Box>
+      </FormikProvider>
     </Box>
   );
 };

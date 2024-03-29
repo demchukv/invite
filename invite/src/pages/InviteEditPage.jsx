@@ -20,12 +20,12 @@ export default function InviteEditPage() {
   const isLoading = useSelector(selectIsLoading);
   const isError = useSelector(selectError);
   const { inviteId } = useParams();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState("0");
   const dispatch = useDispatch();
  
 
   const handleChange = (event, newValue) => {
-    if(newValue === 2){
+    if(newValue === "2"){
       dispatch(fetchOneInvite(inviteId));
     }
     setValue(newValue);
@@ -41,14 +41,14 @@ export default function InviteEditPage() {
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Edit" value={0} />
-            <Tab label="Guests" value={1} />
-            <Tab label="Preview" value={2} />
+            <Tab label="Edit" value="0" />
+            <Tab label="Guests" value="1" />
+            <Tab label="Preview" value="2" />
           </TabList>
         </Box>
-        <TabPanel value={0}><InviteForm inviteId={inviteId} /></TabPanel>
-        <TabPanel value={1}><GuestsForm inviteId={inviteId} /></TabPanel>
-        <TabPanel value={2}><InvitePreview /></TabPanel>
+        <TabPanel value="0"><InviteForm inviteId={inviteId} /></TabPanel>
+        <TabPanel value="1"><GuestsForm inviteId={inviteId} /></TabPanel>
+        <TabPanel value="2"><InvitePreview /></TabPanel>
       </TabContext>
     </Box>
 

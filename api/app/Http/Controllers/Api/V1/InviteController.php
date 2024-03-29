@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Models\Invite;
-use App\Http\Requests\V1\StoreInviteRequest;
-use App\Http\Requests\V1\UpdateInviteRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+use App\Models\Invite;
+use App\Http\Requests\V1\StoreInviteRequest;
+use App\Http\Requests\V1\UpdateInviteRequest;
 use App\Http\Resources\V1\InviteResource;
 use App\Http\Resources\V1\InviteCollection;
+
+use App\Models\InviteTiming;
+use App\Http\Requests\V1\UpdateInviteTimingRequest;
+use App\Http\Requests\V1\StoreInviteTimingRequest;
+use App\Http\Resources\V1\InviteTimingResource;
 
 
 class InviteController extends Controller
@@ -46,7 +53,9 @@ class InviteController extends Controller
      */
     public function store(StoreInviteRequest $request)
     {
-        return new InviteResource(Invite::create($request->all()));
+        $invite = new InviteResource(Invite::create($request->all()));
+        $this->changeTiming($request, $invite->id);
+        return $invite;
     }
 
     /**
@@ -54,7 +63,10 @@ class InviteController extends Controller
      */
     public function show(Invite $invite)
     {
-        return new InviteResource($invite);
+        //return new InviteResource($invite);
+        $invite = $invite -> where('id', $invite->id);
+        $invite = $invite -> with('inviteTimings') -> with('invitePhotos') -> with('inviteGroups.inviteGuests');
+        return new InviteCollection($invite->get());
     }
 
     /**
@@ -70,8 +82,18 @@ class InviteController extends Controller
      */
     public function update(UpdateInviteRequest $request, Invite $invite)
     {
+        // update base inivite info
         $invite -> update($request->all());
-        return $invite;
+
+        // prepare data for insert or update timings
+        $this->changeTiming($request, $invite->id);
+
+        $invite = $invite -> where('id', $invite->id);
+        $invite = $invite -> with('inviteTimings') -> with('invitePhotos') -> with('inviteGroups.inviteGuests');
+
+
+        $data = new InviteCollection($invite->get());
+        return $data;
     }
 
     /**
@@ -93,5 +115,27 @@ class InviteController extends Controller
                 "message" => "Invitation not found!"
             ], 401);
         }
+    }
+
+    public function changeTiming($request, $invite_id)
+    {
+        //dd($request);
+        foreach($request->inviteTimings as $td){
+            if(!isset($td['id'])){
+                $users = DB::table('invite_timings')->insert([
+                    'invite_id'=>$invite_id,
+                    'event_time'=>$td['eventTime'],
+                    'event_desc'=>$td['eventDesc']
+                ]);
+            }else{
+                $users = DB::table('invite_timings')
+                        ->where('id', $td['id'])
+                        ->update([
+                            'event_time'=>$td['eventTime'],
+                            'event_desc'=>$td['eventDesc']
+                        ]);
+            }
+        }
+
     }
 }

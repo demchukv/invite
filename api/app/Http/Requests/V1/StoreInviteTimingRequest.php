@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreInviteTimingRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreInviteTimingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,18 @@ class StoreInviteTimingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'inviteId' => ['required'],
+            'eventTime' => ['required'],
+            'eventDesc' => ['required'],
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this -> merge([
+            'invite_id' => $this -> inviteId,
+            'event_time' => $this -> eventTime,
+            'event_desc' => $this -> eventDesc,
+        ]);
     }
 }

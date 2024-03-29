@@ -26,8 +26,8 @@ return new class extends Migration
             $table->text('invitation');
             $table->text('postinvite');
             $table->text('deadline');
-            $table->text('thankyou');
-            $table->text('additional');
+            $table->text('thankyou')->nullable();
+            $table->text('additional')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
         });

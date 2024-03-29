@@ -21,7 +21,7 @@ export const fetchInvites = createAsyncThunk(
     async (inviteId, thunkAPI) => {
       try {
         const response = await axios.get(`/invites/${inviteId}`);
-        return response.data.data;
+        return response.data.data[0];
       } catch (e) {
         return thunkAPI.rejectWithValue(e.message);
       }
@@ -57,7 +57,6 @@ export const fetchInvites = createAsyncThunk(
     'invites/updateInvite',
     async (values, thunkAPI) => {
       try {
-
         const response = await axios.patch(`/invites/${values.id}`,  values);
         toast.success("Invite successfully updated!");
         return response.data;

@@ -19,7 +19,7 @@ const DeleteInvitetDialog = ({ open, id, handleClose, handleDelete }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Do you really want delete invite? {id}
+            Do you really want delete invite?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

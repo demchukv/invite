@@ -46,7 +46,8 @@ class StoreInviteRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation(){
+    protected function prepareForValidation()
+    {
         $this -> merge([
             'user_id' => auth('sanctum')->user()->id,
             'theme_id' => $this -> themeId,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -21,8 +21,16 @@ class UpdateInviteTimingRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        if($method == "PUT"){
+            return [
+                'eventTime' => ['required'],
+                'eventDesc' => ['required']
+            ];
+        }else{
+            return [
+                'eventTime' => ['sometimes', 'required'],
+                'eventDesc' => ['sometimes', 'required']
+            ];
+        }
     }
 }
