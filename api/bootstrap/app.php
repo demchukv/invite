@@ -1,5 +1,9 @@
 <?php
 
+// header('Access-Control-Allow-Origin', '*');
+// header('Access-Control-Allow-Methods', 'POST, GET, PATCH, PUT, DELETE');
+// header('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With, Application');
+
 /*
 |--------------------------------------------------------------------------
 | Create The Application

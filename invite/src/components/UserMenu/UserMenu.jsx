@@ -1,28 +1,37 @@
 import { useDispatch } from "react-redux";
 import { logOut } from "../../redux/auth/operations";
 import { useAuth } from "../../hooks";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
+import MenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
-const UserMenu = () => {
+const UserMenu = ({ setOpen }) => {
   const dispatch = useDispatch();
   const { user } = useAuth();
 
   return (
-    <ul id="nav-mobile" className="right hide-on-med-and-down">
-      <li>Welcome, {user.name}</li>
-      <li>
-        <Link to={"/invitations"}>Invitation</Link>
-      </li>
-      <li>
-        <button
-          className="waves-effect waves-light btn"
-          type="button"
-          onClick={() => dispatch(logOut())}
-        >
-          Logout
-        </button>
-      </li>
-    </ul>
+    <>
+      <MenuItem sx={{ py: "6px", px: "12px" }}>
+        <Typography variant="body2" color="text.primary">
+          Welcome, {user.name}
+        </Typography>
+      </MenuItem>
+      <MenuItem sx={{ py: "6px", px: "12px" }} component={RouterLink} to={"/invites"} onClick={()=>setOpen(false)}>
+          <Typography variant="body2" color="text.primary">
+            Invitation
+          </Typography>
+      </MenuItem>
+      <Button
+        color="primary"
+        variant="contained"
+        size="small"
+        component="button"
+        onClick={() => {dispatch(logOut()); setOpen(false);}}
+      >
+        Logout
+      </Button>
+    </>
   );
 };
 

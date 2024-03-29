@@ -14,15 +14,15 @@ return new class extends Migration
         Schema::create('invites', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('theme_id');
+            $table->unsignedBigInteger('theme_id')->nullable();
             $table->string('name_one');
             $table->string('name_two');
             $table->date('end_point');
-            $table->string('photo');
+            $table->string('photo')->nullable();
             $table->text('place_one');
-            $table->string('map_url_one');
+            $table->string('map_url_one')->nullable();
             $table->text('place_two');
-            $table->string('map_url_two');
+            $table->string('map_url_two')->nullable();
             $table->text('invitation');
             $table->text('postinvite');
             $table->text('deadline');

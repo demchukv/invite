@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Invite;
-use App\Http\Requests\StoreInviteRequest;
-use App\Http\Requests\UpdateInviteRequest;
+use App\Http\Requests\V1\StoreInviteRequest;
+use App\Http\Requests\V1\UpdateInviteRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -18,7 +18,7 @@ class InviteController extends Controller
     /**
      * Display a listing of the resource.
      */
-     public function index()
+     public function index(Request $request, $id = null)
     {
         $user =  auth('sanctum')->user();
         if(!isset($user -> id)){
@@ -26,6 +26,10 @@ class InviteController extends Controller
         }
 
         $invite = Invite::where('user_id', $user->id);
+
+        if(isset($id)){
+            $invite = $invite -> where('id', $id);
+        }
         $invite = $invite -> with('inviteTimings') -> with('invitePhotos') -> with('inviteGroups.inviteGuests');
         return new InviteCollection($invite->get());
     }
@@ -42,7 +46,7 @@ class InviteController extends Controller
      */
     public function store(StoreInviteRequest $request)
     {
-        //
+        return new InviteResource(Invite::create($request->all()));
     }
 
     /**
@@ -66,7 +70,8 @@ class InviteController extends Controller
      */
     public function update(UpdateInviteRequest $request, Invite $invite)
     {
-        //
+        $invite -> update($request->all());
+        return $invite;
     }
 
     /**
@@ -74,6 +79,19 @@ class InviteController extends Controller
      */
     public function destroy(Invite $invite)
     {
-        //
+        $record = Invite::find($invite->id);
+
+        if($record){
+            $record -> delete();
+            return response() -> json([
+                "status" => true,
+                "message" => "Invitation deleted"
+            ], 200);
+        }else{
+            return response() -> json([
+                "status" => false,
+                "message" => "Invitation not found!"
+            ], 401);
+        }
     }
 }

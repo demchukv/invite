@@ -1,43 +1,22 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import M from "materialize-css/dist/js/materialize.min.js";
-
+import { Link as RouterLink } from 'react-router-dom';
+import Box from "@mui/material/Box";
+import MenuItem from "@mui/material/MenuItem";
+import Typography from "@mui/material/Typography";
 
 const Navigation = () => {
-
-  useEffect(()=>{
-    const elem = document.querySelector("#slide-out");
-    M.Sidenav.init(elem, {
-            edge: "left",
-            inDuration: 250,
-            closeOnClick: true,
-            draggable: true
-        });
-  }, []);
-  
   return (
-    <>
-      <ul className="left hide-on-med-and-down">
-        <li>
-          <Link to={"/"}>Home</Link>
-        </li>
-        <li>
-          <Link to={"/about"}>About</Link>
-        </li>
-      </ul>
-
-      <ul id="slide-out" className="sidenav">
-        <li>
-          <Link to={"/"}>Home</Link>
-        </li>
-        <li>
-          <Link to={"/about"}>About</Link>
-        </li>
-      </ul>
-      <a href="#" data-target="slide-out" className="sidenav-trigger show-on-large">
-        <i className="material-icons">menu</i>
-      </a>
-    </>
+    <Box sx={{ display: { xs: "none", md: "flex" } }}>
+      <MenuItem component={RouterLink} to={"/"} sx={{ py: "6px", px: "12px" }}>
+        <Typography variant="body2" color="text.primary">
+          Home
+        </Typography>
+      </MenuItem>
+      <MenuItem component={RouterLink} to={"/about"} sx={{ py: "6px", px: "12px" }}>
+        <Typography variant="body2" color="text.primary">
+          About
+        </Typography>
+      </MenuItem>
+    </Box>
   );
 };
 

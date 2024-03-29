@@ -13,6 +13,25 @@ class Invite extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'id',
+        'user_id',
+        'theme_id',
+        'name_one',
+        'name_two',
+        'end_point',
+        'photo',
+        'place_one',
+        'map_url_one',
+        'place_two',
+        'map_url_two',
+        'invitation',
+        'postinvite',
+        'deadline',
+        'thankyou',
+        'addition',
+    ];
+
     public function user(){
         return $this -> belongsTo(User::class);
     }

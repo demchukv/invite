@@ -1,6 +1,5 @@
-import ContactForm from '../ContactForm/ContactForm';
 
-const EditContactDialog = ({ open, handleClose, contact }) => {
+const EditInviteDialog = ({ open, handleClose, invite }) => {
       
   return (
     <dialog
@@ -13,7 +12,7 @@ const EditContactDialog = ({ open, handleClose, contact }) => {
       {"Edit contact"}
     </h2>
     <div>
-        <ContactForm contact={contact} handleClose={handleClose} />
+        <EditInviteDialog invite={invite} handleClose={handleClose} />
     </div>
     <div>
       <button onClick={handleClose} autoFocus>Cancel</button>
@@ -23,4 +22,4 @@ const EditContactDialog = ({ open, handleClose, contact }) => {
   )
 }
 
-export default EditContactDialog
+export default EditInviteDialog
