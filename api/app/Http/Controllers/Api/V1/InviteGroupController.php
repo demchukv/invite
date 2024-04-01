@@ -6,8 +6,6 @@ use App\Models\InviteGroup;
 use App\Http\Requests\V1\StoreInviteGroupRequest;
 use App\Http\Requests\V1\UpdateInviteGroupRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\InviteGroupResource;
-use App\Http\Resources\V1\InviteGroupCollection;
 
 class InviteGroupController extends Controller
 {

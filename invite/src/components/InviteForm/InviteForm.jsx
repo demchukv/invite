@@ -65,29 +65,29 @@ const InviteForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      nameOne: invite && invite.nameOne ? invite.nameOne : "",
-      nameTwo: invite && invite.nameTwo ? invite.nameTwo : "",
-      endPoint: invite && invite.endPoint ? invite.endPoint : "",
-      placeOne: invite && invite.placeOne ? invite.placeOne : "",
-      mapUrlOne: invite && invite.mapUrlOne !== null ? invite.mapUrlOne : "",
-      placeTwo: invite && invite.placeTwo ? invite.placeTwo : "",
-      mapUrlTwo: invite && invite.mapUrlTwo !== null ? invite.mapUrlTwo : "",
-      invitation: invite && invite.invitation
+      nameOne: invite && invite.id ? invite.nameOne : "",
+      nameTwo: invite && invite.id ? invite.nameTwo : "",
+      endPoint: invite && invite.id ? invite.endPoint : "",
+      placeOne: invite && invite.id ? invite.placeOne : "",
+      mapUrlOne: invite && invite.id !== null ? invite.mapUrlOne : "",
+      placeTwo: invite && invite.id ? invite.placeTwo : "",
+      mapUrlTwo: invite && invite.id !== null ? invite.mapUrlTwo : "",
+      invitation: invite && invite.id
         ? invite.invitation
         : "Щиро запрошуємо вас на свято, присвячене створенню нашої сім'ї, яке відбудеться:",
-      deadline: invite && invite.deadline
+      deadline: invite && invite.id
         ? invite.deadline
         : "Прохання повідомити про присутність до 21 грудня 2023 року",
-      postinvite: invite && invite.postinvite
+      postinvite: invite && invite.id
         ? invite.postinvite
         : "І ми не уявляємо цей радісний день без вас — близьких і дорогих нам людей!",
-      thankyou: invite && invite.thankyou
+      thankyou: invite && invite.id
         ? invite.thankyou
         : "Будемо вдячні, якщо ви підтримаєте кольорову гаму нашого свята",
-      addition: invite && invite.addition
+      addition: invite && invite.id
         ? invite.addition
         : "Для швидкого обміну інформацією, фото та відео між нашими гостями ми створили групу в telegram",
-      inviteTimings: invite && invite.inviteTimings ? invite.inviteTimings : [],
+      inviteTimings: invite && invite.id ? invite.inviteTimings : [],
     },
     validationSchema: InviteSchema,
     onSubmit: (values) => {

@@ -6,8 +6,6 @@ use App\Models\InviteGuest;
 use App\Http\Requests\StoreInviteGuestRequest;
 use App\Http\Requests\UpdateInviteGuestRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\InviteGuestResource;
-use App\Http\Resources\V1\InviteGuestCollection;
 
 
 class InviteGuestController extends Controller
