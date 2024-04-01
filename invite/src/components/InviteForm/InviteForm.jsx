@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import { TimeField } from '@mui/x-date-pickers/TimeField';
 import DeleteIcon from "@mui/icons-material/Delete";
 import 'dayjs/locale/uk';
 import { nanoid } from "@reduxjs/toolkit";
@@ -65,29 +66,29 @@ const InviteForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      nameOne: invite && invite.id ? invite.nameOne : "",
-      nameTwo: invite && invite.id ? invite.nameTwo : "",
-      endPoint: invite && invite.id ? invite.endPoint : "",
-      placeOne: invite && invite.id ? invite.placeOne : "",
-      mapUrlOne: invite && invite.id !== null ? invite.mapUrlOne : "",
-      placeTwo: invite && invite.id ? invite.placeTwo : "",
-      mapUrlTwo: invite && invite.id !== null ? invite.mapUrlTwo : "",
-      invitation: invite && invite.id
+      nameOne: invite && invite.id && invite.nameOne ? invite.nameOne : "",
+      nameTwo: invite && invite.id && invite.nameTwo ? invite.nameTwo : "",
+      endPoint: invite && invite.id && invite.endPoint ? invite.endPoint : "",
+      placeOne: invite && invite.id && invite.placeOne ? invite.placeOne : "",
+      mapUrlOne: invite && invite.id && invite.mapUrlOne !== null ? invite.mapUrlOne : "",
+      placeTwo: invite && invite.id && invite.placeTwo ? invite.placeTwo : "",
+      mapUrlTwo: invite && invite.id && invite.mapUrlTwo !== null ? invite.mapUrlTwo : "",
+      invitation: invite && invite.id && invite.invitation
         ? invite.invitation
         : "Щиро запрошуємо вас на свято, присвячене створенню нашої сім'ї, яке відбудеться:",
-      deadline: invite && invite.id
+      deadline: invite && invite.id && invite.deadline
         ? invite.deadline
         : "Прохання повідомити про присутність до 21 грудня 2023 року",
-      postinvite: invite && invite.id
+      postinvite: invite && invite.id && invite.postinvite
         ? invite.postinvite
         : "І ми не уявляємо цей радісний день без вас — близьких і дорогих нам людей!",
-      thankyou: invite && invite.id
+      thankyou: invite && invite.id && invite.thankyou
         ? invite.thankyou
         : "Будемо вдячні, якщо ви підтримаєте кольорову гаму нашого свята",
-      addition: invite && invite.id
+      addition: invite && invite.id && invite.addition
         ? invite.addition
         : "Для швидкого обміну інформацією, фото та відео між нашими гостями ми створили групу в telegram",
-      inviteTimings: invite && invite.id ? invite.inviteTimings : [],
+      inviteTimings: invite && invite.id && invite.inviteTimings ? invite.inviteTimings : [],
     },
     validationSchema: InviteSchema,
     onSubmit: (values) => {
@@ -379,6 +380,20 @@ const InviteForm = () => {
                       {/** both these conventions do the same  */}
                       <Grid container spacing={2}>
                         <Grid item xs={4} sm={4}>
+
+                        {/* <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="uk">
+                        <TimeField
+          defaultValue={dayjs("2022-04-17T17:45")}
+          format="hh:mm"
+          margin="normal"
+          variant="outlined"
+          required
+          fullWidth
+          name={`inviteTimings[${index}].eventTime`}
+          
+          onChange={formik.handleChange}
+/>
+        </LocalizationProvider> */}
                           <TextField
                             margin="normal"
                             variant="outlined"

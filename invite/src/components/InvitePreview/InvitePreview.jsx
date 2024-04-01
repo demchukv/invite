@@ -20,7 +20,7 @@ const InvitePreview = () => {
   const storageUrl = "http://127.0.0.1:8000";
   const invitePreview = useSelector(selectOneInvite);
 
-  const guests = invitePreview.inviteGroups[0].inviteGuests;
+  const guests = invitePreview.inviteGroups[0] && invitePreview.inviteGroups[0].inviteGuests ? invitePreview.inviteGroups[0].inviteGuests : [];
 
   const [answer, setAnswer] = useState(guests);
   const [subanswer, setSubanswer] = useState({'w1':null, 'w2':null});
@@ -135,7 +135,6 @@ const InvitePreview = () => {
                 variant="outlined"
                 href={invitePreview.mapUrlOne}
                 target="_blank"
-                multiline
                 component="a"
                 startIcon={<MapIcon />}
                 sx={{ mb: 4 }}
@@ -156,7 +155,6 @@ const InvitePreview = () => {
                 variant="outlined"
                 href={invitePreview.mapUrlTwo}
                 target="_blank"
-                multiline
                 component="a"
                 startIcon={<MapIcon />}
                 sx={{ mb: 8 }}
@@ -334,8 +332,8 @@ const InvitePreview = () => {
             </Typography>
           </Box>
 
-          <Box sx={{ mx: 2 }}>
-            {Array.isArray(invitePreview.inviteTimings) && (
+          <Box sx={{ mx: 2, mb:8 }}>
+            {Array.isArray(invitePreview.inviteTimings) && invitePreview.inviteTimings.length > 0 && (
               <Typography
                 component="p"
                 variant="h5"
@@ -345,7 +343,7 @@ const InvitePreview = () => {
                 Таймінг дня
               </Typography>
             )}
-            {Array.isArray(invitePreview.inviteTimings) &&
+            {Array.isArray(invitePreview.inviteTimings) && invitePreview.inviteTimings.length > 0 &&
               invitePreview.inviteTimings.map((timing) => {
                 return (
                   <Typography
@@ -360,23 +358,23 @@ const InvitePreview = () => {
               })}
           </Box>
 
-          {invitePreview.thankyou !== "" && (
+          {invitePreview.thankyou !== "" && invitePreview.thankyou !== null && (
             <Typography
               component="p"
               variant="body"
               align="center"
-              sx={{ mt: 8 }}
+              sx={{ mb: 8 }}
             >
               {invitePreview.thankyou}
             </Typography>
           )}
 
-          {invitePreview.addition !== "" && (
+          {invitePreview.addition !== "" && invitePreview.addition !== null && (
             <Typography
               component="p"
               variant="body"
               align="center"
-              sx={{ mt: 8 }}
+              sx={{ mb: 8 }}
             >
               {invitePreview.addition}
             </Typography>

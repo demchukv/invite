@@ -131,7 +131,6 @@ const invitesSlice = createSlice({
       .addCase(updateInviteGroup.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        console.log(action.payload);
         const index = state.items.findIndex(
           (invite) => invite.id === action.payload[0].id
         );
