@@ -21,8 +21,8 @@ class UpdateInviteGroupRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+            return [
+                'invite_id' => ['required'],
+            ];
     }
 }

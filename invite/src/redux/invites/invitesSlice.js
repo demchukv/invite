@@ -1,5 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchInvites, fetchOneInvite, addInvite, deleteInvite, updateInvite } from './operations';
+import {
+  fetchInvites,
+  fetchOneInvite,
+  addInvite,
+  deleteInvite,
+  updateInvite,
+  deleteInviteTiming,
+  deleteInvitePhoto,
+  deleteInviteGroup,
+  deleteInviteGuest,
+  fetchEmptyInvite,
+  updateInviteGroup
+} from "./operations";
 const handlePending = (state) => {
   state.isLoading = true;
 };
@@ -10,7 +22,7 @@ const handleRejected = (state, action) => {
 };
 
 const invitesSlice = createSlice({
-  name: 'invites',
+  name: "invites",
   initialState: {
     items: [],
     invite: {},
@@ -35,6 +47,14 @@ const invitesSlice = createSlice({
       })
       .addCase(fetchOneInvite.rejected, handleRejected)
 
+      .addCase(fetchEmptyInvite.pending, handlePending)
+      .addCase(fetchEmptyInvite.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.invite = action.payload;
+      })
+      .addCase(fetchEmptyInvite.rejected, handleRejected)
+
       .addCase(addInvite.pending, handlePending)
       .addCase(addInvite.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -53,16 +73,72 @@ const invitesSlice = createSlice({
         state.items.splice(index, 1);
       })
       .addCase(deleteInvite.rejected, handleRejected)
+
       .addCase(updateInvite.pending, handlePending)
       .addCase(updateInvite.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
         const index = state.items.findIndex(
-          (invite) => invite.id === action.payload.id
+          (invite) => invite.id === action.payload.data[0].id
         );
-        state.items[index] = action.payload;
+        state.items[index] = action.payload.data[0];
+        state.invite = action.payload.data[0];
       })
-      .addCase(updateInvite.rejected, handleRejected);
+      .addCase(updateInvite.rejected, handleRejected)
+
+      .addCase(deleteInviteTiming.pending, handlePending)
+      .addCase(deleteInviteTiming.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        const index = state.invite.inviteTimings.findIndex(
+          (it) => it.id === action.payload.id
+        );
+        state.invite.inviteTimings.splice(index, 1);
+      })
+
+      .addCase(deleteInvitePhoto.pending, handlePending)
+      .addCase(deleteInvitePhoto.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = null;
+        state.invite.photo = "";
+      })
+
+      .addCase(deleteInviteGroup.pending, handlePending)
+      .addCase(deleteInviteGroup.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        const index = state.invite.inviteGroups.findIndex(
+          (it) => it.id === action.payload.id
+        );
+        state.invite.inviteGroups.splice(index, 1);
+      })
+
+      .addCase(deleteInviteGuest.pending, handlePending)
+      .addCase(deleteInviteGuest.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.invite.inviteGroups.forEach((group) => {
+          if (group.id === action.payload.invite_group_id) {
+            const index = group.inviteGuests.findIndex((it) => {
+              it.id === action.payload.id;
+            });
+            group.inviteGuests.splice(index, 1);
+          }
+        });
+      })
+
+      .addCase(updateInviteGroup.pending, handlePending)
+      .addCase(updateInviteGroup.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        console.log(action.payload);
+        const index = state.items.findIndex(
+          (invite) => invite.id === action.payload[0].id
+        );
+        state.items[index] = action.payload[0];
+        state.invite = action.payload[0];
+      })
+      .addCase(updateInviteGroup.rejected, handleRejected);
   },
 });
 

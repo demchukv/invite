@@ -18,14 +18,14 @@ const HomePage = () => {
               fontSize: 'clamp(3.5rem, 10vw, 4rem)',
             }}
           >
-          Invitation!
+          Запрошення на весілля!
           </Typography>
           <Typography
             textAlign="center"
             color="text.secondary"
             sx={{ alignSelf: 'center', width: { sm: '100%', md: '100%' } }}
           >
-          Create original invitations for your event for free!
+          Створіть свої оригінальні запрошення на весілля!
           </Typography>
           </Stack>
     </>

@@ -19,14 +19,14 @@ const AboutPage = () => {
               fontSize: 'clamp(3.5rem, 10vw, 4rem)',
             }}
           >
-          About us
+          Про сервіс
           </Typography>
           <Typography
             textAlign="center"
             color="text.secondary"
             sx={{ alignSelf: 'center', width: { sm: '100%', md: '100%' } }}
           >
-          How it work?
+          Як це працює?
           </Typography>
           </Stack>
     </>

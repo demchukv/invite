@@ -34,12 +34,7 @@ class InviteTimingController extends Controller
      */
     public function store(StoreInviteTimingRequest $request)
     {
-        $request->request->set('inviteId', $request->inviteId);
-        $request->request->set('eventTime', $request->eventTime);
-        $request->request->set('eventDesc', $request->eventDesc);
-
-        dd($request);
-        return new InviteTimingResource(InviteTiming::create($request->all()));
+        //return new InviteTimingResource(InviteTiming::create($request->all()));
     }
 
     /**
@@ -64,8 +59,7 @@ class InviteTimingController extends Controller
      */
     public function update(UpdateInviteTimingRequest $request, InviteTiming $inviteTiming)
     {
-        dd($request);
-        $inviteTiming -> update($request->all());
+        //$inviteTiming -> update($request->all());
     }
 
     /**
@@ -73,6 +67,20 @@ class InviteTimingController extends Controller
      */
     public function destroy(InviteTiming $inviteTiming)
     {
-        //
+        $record = InviteTiming::find($inviteTiming->id);
+
+        if($record){
+            $record -> delete();
+            return response() -> json([
+                "status" => true,
+                "message" => "Invitation timing deleted"
+            ], 200);
+        }else{
+            return response() -> json([
+                "status" => false,
+                "message" => "Invitation timing not found!"
+            ], 401);
+        }
+
     }
 }

@@ -42,7 +42,7 @@ const InvitesList = () => {
         >
           {invites.map((invite, index) => {
             const primaryText = `${invite.nameOne} and ${invite.nameTwo}`;
-            const secondaryText = `Event date: ${invite.endPoint}`;
+            const secondaryText = `Дата події: ${invite.endPoint}`;
             const hRef = `/invites/${invite.id}`;
 
             return (
@@ -59,7 +59,7 @@ const InvitesList = () => {
                     secondary={secondaryText}
                   />
                   <ListItemSecondaryAction>
-                  <Tooltip title="Remove invitation" placement="top">
+                  <Tooltip title="Видалити запрошення" placement="top">
                     <IconButton
                       edge="end"
                       aria-label="delete"

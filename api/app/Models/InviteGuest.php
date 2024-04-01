@@ -11,6 +11,13 @@ class InviteGuest extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'invite_group_id',
+        'name',
+        'willbe1',
+        'willbe2',
+    ];
+
     public function inviteGroups(){
         return $this -> belongsTo(InviteGroup::class);
     }

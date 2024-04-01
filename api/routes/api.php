@@ -4,6 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\InviteController;
+use App\Http\Controllers\Api\V1\InviteTimingController;
+use App\Http\Controllers\Api\V1\InviteGroupController;
+use App\Http\Controllers\Api\V1\InviteGuestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +35,16 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', '
         Route::post('logout', [UserController::class, 'logout']);
 
         Route::apiResource('invites', InviteController::class);
+        Route::apiResource('invite-timing', InviteTimingController::class);
+        Route::apiResource('invite-group', InviteGroupController::class);
+        Route::apiResource('invite-guest', InviteGuestController::class);
+        Route::post('invite-photo/{id}', [InviteController::class, 'uploadPhoto'], function(Request $request, $id){
+            return $id;
+        });
+        Route::delete('invite-photo/{id}', [InviteController::class, 'deletePhoto'], function(Request $request, $id){
+            return $id;
+        });
+        Route::post('invite-groups', [InviteController::class, 'changeGuests']);
         /*
         Route::get('invites', [InviteController::class, 'index']);
         Route::post('invites', [InviteController::class, 'store']);

@@ -8,12 +8,12 @@ const Navigation = () => {
     <Box sx={{ display: { xs: "none", md: "flex" } }}>
       <MenuItem component={RouterLink} to={"/"} sx={{ py: "6px", px: "12px" }}>
         <Typography variant="body2" color="text.primary">
-          Home
+          Головна
         </Typography>
       </MenuItem>
       <MenuItem component={RouterLink} to={"/about"} sx={{ py: "6px", px: "12px" }}>
         <Typography variant="body2" color="text.primary">
-          About
+          Про сервіс
         </Typography>
       </MenuItem>
     </Box>

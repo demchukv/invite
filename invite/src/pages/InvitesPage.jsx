@@ -21,7 +21,7 @@ export default function Invites() {
 
   return (
     <>
-      <DocumentTitle>Your invitations</DocumentTitle>
+      <DocumentTitle>Ваші запрошення</DocumentTitle>
           {isError && <ErrorMessage>{isError}</ErrorMessage>}
           {isLoading && <Loader />}
           <Button
@@ -31,7 +31,7 @@ export default function Invites() {
             variant="contained"
             size="big"
           >
-            Create your invitation
+            Створити запрошення
           </Button>
           <InvitesList />
     </>

@@ -1,9 +1,18 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addInvite, updateInvite } from "../../redux/invites/operations";
+import {
+  addInvite,
+  updateInvite,
+  deleteInviteTiming,
+  deleteInvitePhoto
+} from "../../redux/invites/operations";
 import { useFormik, FieldArray, FormikProvider } from "formik";
 import * as Yup from "yup";
-import { selectInvites } from "../../redux/invites/selectors";
+import { selectOneInvite } from "../../redux/invites/selectors";
+import { selectToken } from "../../redux/auth/selectors";
 import { useNavigate } from "react-router-dom";
+
+import { Dropzone, FileMosaic } from "@files-ui/react";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -16,19 +25,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import DeleteIcon from "@mui/icons-material/Delete";
+import 'dayjs/locale/uk';
+import { nanoid } from "@reduxjs/toolkit";
 
-const InviteForm = ({ inviteId }) => {
+const InviteForm = () => {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
-
-  const invites = useSelector(selectInvites);
-
-  const invite = invites.filter((item) => {
-    if (item.id === Number(inviteId)) {
-      return item;
-    }
-  })[0];
+  const invite = useSelector(selectOneInvite);
+  const token = useSelector(selectToken);
 
   const handleSubmit = (values) => {
     if (invite) {
@@ -38,6 +42,12 @@ const InviteForm = ({ inviteId }) => {
       dispatch(addInvite(values));
       formik.resetForm();
       navigate("/invites");
+    }
+  };
+
+  const handleDeleteTiming = (id) => {
+    if (id) {
+      dispatch(deleteInviteTiming(id));
     }
   };
 
@@ -55,37 +65,59 @@ const InviteForm = ({ inviteId }) => {
 
   const formik = useFormik({
     initialValues: {
-      nameOne: invite ? invite.nameOne : "",
-      nameTwo: invite ? invite.nameTwo : "",
-      endPoint: invite ? invite.endPoint : "",
-      photo: null,
-      placeOne: invite ? invite.placeOne : "",
-      mapUrlOne: invite ? invite.mapUrlOne : "",
-      placeTwo: invite ? invite.placeTwo : "",
-      mapUrlTwo: invite ? invite.mapUrlTwo : "",
-      invitation: invite
+      nameOne: invite && invite.nameOne ? invite.nameOne : "",
+      nameTwo: invite && invite.nameTwo ? invite.nameTwo : "",
+      endPoint: invite && invite.endPoint ? invite.endPoint : "",
+      placeOne: invite && invite.placeOne ? invite.placeOne : "",
+      mapUrlOne: invite && invite.mapUrlOne !== null ? invite.mapUrlOne : "",
+      placeTwo: invite && invite.placeTwo ? invite.placeTwo : "",
+      mapUrlTwo: invite && invite.mapUrlTwo !== null ? invite.mapUrlTwo : "",
+      invitation: invite && invite.invitation
         ? invite.invitation
         : "Щиро запрошуємо вас на свято, присвячене створенню нашої сім'ї, яке відбудеться:",
-      deadline: invite
+      deadline: invite && invite.deadline
         ? invite.deadline
         : "Прохання повідомити про присутність до 21 грудня 2023 року",
-      postinvite: invite
+      postinvite: invite && invite.postinvite
         ? invite.postinvite
         : "І ми не уявляємо цей радісний день без вас — близьких і дорогих нам людей!",
-      thankyou: invite
+      thankyou: invite && invite.thankyou
         ? invite.thankyou
         : "Будемо вдячні, якщо ви підтримаєте кольорову гаму нашого свята",
-      addition: invite
+      addition: invite && invite.addition
         ? invite.addition
         : "Для швидкого обміну інформацією, фото та відео між нашими гостями ми створили групу в telegram",
-      inviteTimings: invite ? invite.inviteTimings : [],
+      inviteTimings: invite && invite.inviteTimings ? invite.inviteTimings : [],
     },
     validationSchema: InviteSchema,
     onSubmit: (values) => {
-      console.log(values);
       handleSubmit(values);
     },
   });
+
+  const storageUrl = "http://127.0.0.1:8000";
+  const uploadMainPhotoUrl = "http://127.0.0.1:8000/api/v1/invite-photo/";
+  const mainPhotoUrl = storageUrl+invite.photo;
+
+  const mainPhoto = invite.photo ? [{
+      type:"image/jpeg",
+      name:mainPhotoUrl.substring(mainPhotoUrl.lastIndexOf('/')+1),
+      id: nanoid(),
+      imageUrl: mainPhotoUrl,
+      downloadUrl: mainPhotoUrl,
+  }] : [];
+
+  const [files, setFiles] = useState(mainPhoto);
+
+  const updateFiles = (incommingFiles) => {
+    setFiles(incommingFiles);
+  };
+  const removeFile = (id) => {
+    dispatch(deleteInvitePhoto(invite.id));
+    setFiles(files.filter((x) => x.id !== id));
+  };
+
+  const formtype = invite && Object.keys(invite).length === 0 ? 'create' : 'edit';
 
   return (
     <Box
@@ -97,7 +129,7 @@ const InviteForm = ({ inviteId }) => {
       }}
     >
       <Typography component="h1" variant="h5">
-        {invite ? "Edit your invitation" : "Create your invitation"}
+        {invite ? "Редагувати запрошення" : "Створити запрошення"}
       </Typography>
       <FormikProvider value={formik}>
         <Box
@@ -105,8 +137,43 @@ const InviteForm = ({ inviteId }) => {
           onSubmit={formik.handleSubmit}
           autoComplete="off"
           noValidate
+          encType="multipart/form-data"
           sx={{ mt: 1 }}
         >
+
+          {formtype === "edit" &&
+          <Dropzone
+            onChange={updateFiles}
+            value={files}
+            headerConfig={{deleteFiles:false}}
+            footerConfig={{ allowedTypesLabel:false }}
+            label="Перетягніть файл або клацніть..."
+            autoClean            
+            maxFiles={1}
+            accept="image/*"
+            uploadConfig={{
+              method: "POST",
+              url: uploadMainPhotoUrl+invite.id,
+              headers: {
+                'Authorization': `Bearer ${token}`,
+              },
+              cleanOnUpload:true,
+              uploadLabel:"photo",
+              autoUpload:true,
+            }}
+          >
+            {files.map((file) => (
+              <FileMosaic 
+                key={file.id} 
+                {...file}
+                onDelete={removeFile} 
+                info 
+                preview 
+              />
+            ))}
+          </Dropzone>
+          }
+
           <TextField
             margin="normal"
             required
@@ -148,7 +215,7 @@ const InviteForm = ({ inviteId }) => {
             maxRows={4}
             id="invitation"
             name="invitation"
-            label="Invitation"
+            label="Текст запрошення"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={
@@ -158,18 +225,19 @@ const InviteForm = ({ inviteId }) => {
             defaultValue={formik.values.invitation}
           />
 
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="uk">
             <DatePicker
               format="YYYY-MM-DD"
               value={dayjs(formik.values.endPoint)}
               id="endPoint"
               name="endPoint"
-              onChange = {(value) =>
-                    formik.setFieldValue(
-                      "endPoint",
-                      dayjs(value).format("YYYY-MM-DD"),
-                      true
-                    )}
+              onChange={(value) =>
+                formik.setFieldValue(
+                  "endPoint",
+                  dayjs(value).format("YYYY-MM-DD"),
+                  true
+                )
+              }
               slotProps={{
                 textField: {
                   variant: "outlined",
@@ -185,7 +253,7 @@ const InviteForm = ({ inviteId }) => {
                   margin: "normal",
                   required: true,
                   fullWidth: true,
-                  label: "Event date",
+                  label: "Дата події",
                 },
               }}
             />
@@ -200,7 +268,7 @@ const InviteForm = ({ inviteId }) => {
             maxRows={4}
             id="postinvite"
             name="postinvite"
-            label="Post invitation"
+            label="Текст після запрошення"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={
@@ -209,22 +277,6 @@ const InviteForm = ({ inviteId }) => {
             helperText={formik.touched.postinvite && formik.errors.postinvite}
             defaultValue={formik.values.postinvite}
           />
-
-          {/* <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="photo"
-          name="photo"
-          label="Upload your photo"
-          type="file"
-          value={formik.values.photo}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.photo && Boolean(formik.errors.photo)}
-          helperText={formik.touched.photo && formik.errors.photo}
-          autoComplete="off"
-        /> */}
 
           <TextField
             margin="normal"
@@ -235,7 +287,7 @@ const InviteForm = ({ inviteId }) => {
             maxRows={4}
             id="placeOne"
             name="placeOne"
-            label="Place One"
+            label="Адреса вінчання"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.placeOne && Boolean(formik.errors.placeOne)}
@@ -249,7 +301,7 @@ const InviteForm = ({ inviteId }) => {
             fullWidth
             id="mapUrlOne"
             name="mapUrlOne"
-            label="Map url for place one"
+            label="Посилання на карті"
             type="text"
             value={formik.values.mapUrlOne}
             onChange={formik.handleChange}
@@ -268,7 +320,7 @@ const InviteForm = ({ inviteId }) => {
             maxRows={4}
             id="placeTwo"
             name="placeTwo"
-            label="Place Two"
+            label="Адреса банкету"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.placeTwo && Boolean(formik.errors.placeTwo)}
@@ -281,7 +333,7 @@ const InviteForm = ({ inviteId }) => {
             fullWidth
             id="mapUrlTwo"
             name="mapUrlTwo"
-            label="Map url for place two"
+            label="Посилання на карті"
             type="text"
             value={formik.values.mapUrlTwo}
             onChange={formik.handleChange}
@@ -300,7 +352,7 @@ const InviteForm = ({ inviteId }) => {
             maxRows={4}
             id="deadline"
             name="deadline"
-            label="Deadline"
+            label="Текст про підтвердження"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.deadline && Boolean(formik.errors.deadline)}
@@ -310,10 +362,10 @@ const InviteForm = ({ inviteId }) => {
 
           <Grid container spacing={2} sx={{ marginTop: "1px" }}>
             <Grid item xs={4} sm={4}>
-              Time
+              Час
             </Grid>
             <Grid item xs={6} sm={6}>
-              Event
+              Подія
             </Grid>
             <Grid item xs={2} sm={2}></Grid>
           </Grid>
@@ -321,62 +373,76 @@ const InviteForm = ({ inviteId }) => {
             name="inviteTimings"
             render={(arrayHelpers) => (
               <div>
-                {formik.values.inviteTimings.map((timing, index) => (
-                  <div key={index}>
-                    {/** both these conventions do the same  */}
-                    <Grid container spacing={2}>
-                      <Grid item xs={4} sm={4}>
-                        <TextField
-                          margin="normal"
-                          variant="outlined"
-                          required
-                          fullWidth
-                          name={`inviteTimings[${index}].eventTime`}
-                          value={formik.values.inviteTimings[index].eventTime}
-                          onChange={formik.handleChange}
-                        />
-                      </Grid>
-                      <Grid item xs={6} sm={6}>
-                        <TextField
-                          margin="normal"
-                          variant="outlined"
-                          required
-                          fullWidth
-                          name={`inviteTimings.${index}.eventDesc`}
-                          value={formik.values.inviteTimings[index].eventDesc}
-                          onChange={formik.handleChange}
-                        />
-                      </Grid>
-                      <Grid item xs={2} sm={2} sx={{display:"flex",alignItems:"center"}}>
-                        <IconButton
-                          variant="outlined"
-                          color="warning"
-                          size="small"
-                          type="button"
-                          onClick={() => arrayHelpers.remove(index)}
-                          sx={{alignSelf:"center", alignItems:'center'}}
+                {Array.isArray(formik.values.inviteTimings) &&
+                  formik.values.inviteTimings.map((timing, index) => (
+                    <div key={index}>
+                      {/** both these conventions do the same  */}
+                      <Grid container spacing={2}>
+                        <Grid item xs={4} sm={4}>
+                          <TextField
+                            margin="normal"
+                            variant="outlined"
+                            required
+                            fullWidth
+                            name={`inviteTimings[${index}].eventTime`}
+                            value={formik.values.inviteTimings[index].eventTime}
+                            onChange={formik.handleChange}
+                          />
+                        </Grid>
+                        <Grid item xs={6} sm={6}>
+                          <TextField
+                            margin="normal"
+                            variant="outlined"
+                            required
+                            fullWidth
+                            name={`inviteTimings.${index}.eventDesc`}
+                            value={formik.values.inviteTimings[index].eventDesc}
+                            onChange={formik.handleChange}
+                          />
+                        </Grid>
+                        <Grid
+                          item
+                          xs={2}
+                          sm={2}
+                          sx={{ display: "flex", alignItems: "center" }}
                         >
-                          <DeleteIcon />
-                        </IconButton>
+                          <IconButton
+                            variant="outlined"
+                            color="warning"
+                            size="small"
+                            type="button"
+                            onClick={() => {
+                              handleDeleteTiming(
+                                formik.values.inviteTimings[index].id
+                                  ? formik.values.inviteTimings[index].id
+                                  : null
+                              );
+                              arrayHelpers.remove(index);
+                            }}
+                            sx={{ alignSelf: "center", alignItems: "center" }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  </div>
-                ))}
-                    <Grid container spacing={2}>
-                      <Grid item xs={10} sm={10}>
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  type="button"
-                  onClick={() =>
-                    arrayHelpers.push({ eventTime: "", eventDesc: "" })
-                  }
-                  sx={{ marginTop: "4px" }}
-                >
-                  Add event
-                </Button>
-                </Grid>
-                <Grid item xs={2} sm={2}></Grid>
+                    </div>
+                  ))}
+                <Grid container spacing={2}>
+                  <Grid item xs={10} sm={10}>
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      type="button"
+                      size="small"
+                      onClick={() =>
+                        arrayHelpers.push({ eventTime: "", eventDesc: "" })
+                      }
+                      sx={{ marginTop: "4px" }}
+                    >
+                      Додати подію
+                    </Button>
+                  </Grid>
+                  <Grid item xs={2} sm={2}></Grid>
                 </Grid>
               </div>
             )}
@@ -390,7 +456,7 @@ const InviteForm = ({ inviteId }) => {
             maxRows={4}
             id="thankyou"
             name="thankyou"
-            label="Thank you"
+            label="Подяка"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.thankyou && Boolean(formik.errors.thankyou)}
@@ -406,7 +472,7 @@ const InviteForm = ({ inviteId }) => {
             maxRows={4}
             id="addition"
             name="addition"
-            label="Additional information"
+            label="Додатково"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.addition && Boolean(formik.errors.addition)}
@@ -420,7 +486,7 @@ const InviteForm = ({ inviteId }) => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            {invite ? "Update invitation" : "Create invitation"}
+            {invite ? "Оновити запрошення" : "Створити запрошення"}
           </Button>
         </Box>
       </FormikProvider>

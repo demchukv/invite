@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Invite;
 use App\Http\Requests\V1\StoreInviteRequest;
@@ -122,13 +123,13 @@ class InviteController extends Controller
         //dd($request);
         foreach($request->inviteTimings as $td){
             if(!isset($td['id'])){
-                $users = DB::table('invite_timings')->insert([
+                $result = DB::table('invite_timings')->insert([
                     'invite_id'=>$invite_id,
                     'event_time'=>$td['eventTime'],
                     'event_desc'=>$td['eventDesc']
                 ]);
             }else{
-                $users = DB::table('invite_timings')
+                $result = DB::table('invite_timings')
                         ->where('id', $td['id'])
                         ->update([
                             'event_time'=>$td['eventTime'],
@@ -138,4 +139,98 @@ class InviteController extends Controller
         }
 
     }
+
+    public function uploadPhoto(UpdateInviteRequest $request, $id){
+
+        $file = $request->file('photo');
+        $extension = $file->extension();
+
+        $file = $id.".".$extension;
+        $path = Storage::putFileAs('public/photos', $request->file('photo'), $file);
+        $url = Storage::disk('local')->url('public/photos/'.$file);
+
+        $request->photo = $path;
+
+        $result = DB::table('invites')
+        ->where('id', $id)
+        ->update([
+            'photo'=>$url
+        ]);
+        return response() -> json([
+            'status'=>'true',
+            'photo'=>$path,
+            'url'=>$url,
+            'request'=>$request->all(),
+            'inviteId'=>$id
+        ], 200);
+    }
+
+    public function deletePhoto(UpdateInviteRequest $request, $id){
+
+        $res = DB::table('invites')
+            ->where('id', $id)
+            ->first();
+
+        $file = $res->photo;
+        $name = pathinfo($file);
+
+        Storage::delete('public/photos/'.$name['basename']);
+
+        $result = DB::table('invites')
+        ->where('id', $id)
+        ->update([
+            'photo'=>""
+        ]);
+
+        return response() -> json([
+            'status'=>'true',
+            'photo'=>"",
+            'url'=>"",
+            'message'=>"Photodeleted",
+            'request'=>$request->all(),
+            'inviteId'=>$id
+        ], 200);
+    }
+
+    public function changeGuests(Request $request)
+    {
+        $data = array();
+
+        foreach($request->inviteGroups as $group){
+            if(!isset($group['id'])){
+                $group_id = DB::table('invite_groups')->insertGetId([
+                    'invite_id'=>$request->inviteId
+                ]);
+            }else{
+                $group_id = $group['id'];
+            }
+            // insert or update guests
+            foreach($group['inviteGuests'] as $guest){
+                if(!isset($guest['id'])){
+                    $result = DB::table('invite_guests')->insert([
+                        'invite_group_id'=>$group_id,
+                        'name'=>$guest['name']
+                    ]);
+
+                }else{
+                    $result = DB::table('invite_guests')
+                    ->where('id', $guest['id'])
+                    ->update([
+                        'name'=>$guest['name']
+                    ]);
+                }
+
+            }
+    }
+
+    $invite = Invite::where('id', $request->inviteId);
+    $invite = $invite -> with('inviteTimings') -> with('invitePhotos') -> with('inviteGroups.inviteGuests');
+    $data = new InviteCollection($invite->get());
+
+        return response() -> json(
+            $data,
+        200);
+
+    }
+
 }

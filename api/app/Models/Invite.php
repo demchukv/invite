@@ -20,7 +20,6 @@ class Invite extends Model
         'name_one',
         'name_two',
         'end_point',
-        'photo',
         'place_one',
         'map_url_one',
         'place_two',

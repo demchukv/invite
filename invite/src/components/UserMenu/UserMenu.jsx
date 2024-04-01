@@ -14,12 +14,12 @@ const UserMenu = ({ setOpen }) => {
     <>
       <MenuItem sx={{ py: "6px", px: "12px" }}>
         <Typography variant="body2" color="text.primary">
-          Welcome, {user.name}
+          {user.name}
         </Typography>
       </MenuItem>
       <MenuItem sx={{ py: "6px", px: "12px" }} component={RouterLink} to={"/invites"} onClick={()=>setOpen(false)}>
           <Typography variant="body2" color="text.primary">
-            Invitation
+            Запрошення
           </Typography>
       </MenuItem>
       <Button
@@ -29,7 +29,7 @@ const UserMenu = ({ setOpen }) => {
         component="button"
         onClick={() => {dispatch(logOut()); setOpen(false);}}
       >
-        Logout
+        Вихід
       </Button>
     </>
   );

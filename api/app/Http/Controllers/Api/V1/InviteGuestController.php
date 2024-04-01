@@ -66,6 +66,17 @@ class InviteGuestController extends Controller
      */
     public function destroy(InviteGuest $inviteGuest)
     {
-        //
+        $record = InviteGuest::find($inviteGuest->id);
+
+        if($record){
+            $record -> delete();
+            return response() -> json($inviteGuest, 200);
+        }else{
+            return response() -> json([
+                "status" => false,
+                "message" => "Guest not found!"
+            ], 401);
+        }
+
     }
 }

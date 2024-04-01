@@ -1,4 +1,4 @@
-import { useState, } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DocumentTitle from "../components/DocumentTitle";
 import InviteForm from "../components/InviteForm/InviteForm";
@@ -22,12 +22,12 @@ export default function InviteEditPage() {
   const { inviteId } = useParams();
   const [value, setValue] = useState("0");
   const dispatch = useDispatch();
- 
+
+  useEffect(() => {
+    dispatch(fetchOneInvite(inviteId));
+  }, [dispatch, inviteId, value]);
 
   const handleChange = (event, newValue) => {
-    if(newValue === "2"){
-      dispatch(fetchOneInvite(inviteId));
-    }
     setValue(newValue);
   };
 
@@ -37,21 +37,31 @@ export default function InviteEditPage() {
       {isError && <ErrorMessage>{isError}</ErrorMessage>}
       {isLoading && <Loader />}
 
-      <Box sx={{ maxWidth: '420px', typography: 'body1' }}>
-      <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Edit" value="0" />
-            <Tab label="Guests" value="1" />
-            <Tab label="Preview" value="2" />
-          </TabList>
+      {!isLoading && !isError && (
+        <Box sx={{ maxWidth: "460px", typography: "body1" }}>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab label="Запрошення" value="0" />
+                <Tab label="Гості" value="1" />
+                <Tab label="Перегляд" value="2" />
+              </TabList>
+            </Box>
+            <TabPanel value="0">
+              <InviteForm type="edit" />
+            </TabPanel>
+            <TabPanel value="1">
+              <GuestsForm />
+            </TabPanel>
+            <TabPanel value="2">
+              <InvitePreview />
+            </TabPanel>
+          </TabContext>
         </Box>
-        <TabPanel value="0"><InviteForm inviteId={inviteId} /></TabPanel>
-        <TabPanel value="1"><GuestsForm inviteId={inviteId} /></TabPanel>
-        <TabPanel value="2"><InvitePreview /></TabPanel>
-      </TabContext>
-    </Box>
-
+      )}
     </>
   );
 }

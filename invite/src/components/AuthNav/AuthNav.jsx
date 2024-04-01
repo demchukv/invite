@@ -7,12 +7,12 @@ const AuthNav = ({ setOpen }) => {
     <>
       <MenuItem sx={{ py: "6px", px: "12px" }} component={RouterLink} to={"/login"} onClick={()=>setOpen(false)}>
           <Typography variant="body2" color="text.primary">
-            Log In
+            Вхід
           </Typography>
       </MenuItem>
       <MenuItem sx={{ py: "6px", px: "12px" }} component={RouterLink} to={"/register"} onClick={()=>setOpen(false)}>
           <Typography variant="body2" color="text.primary">
-            Register
+            Реєстрація
           </Typography>
       </MenuItem>
     </>
