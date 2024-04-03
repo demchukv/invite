@@ -7,6 +7,9 @@
     --color-black:#000;
     --color-btn-bg:#6d4c41;
     --color-btn-bg-hover:#3e2723;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
 }
 
 /* :root{
@@ -39,6 +42,9 @@ body{
 }
 .in_dark_bg{
     background-color: var(--color-bg-dark);
+}
+.in_very_dark_bg{
+    background-color: var(--color-btn-bg-hover);
 }
 .in_as_btn{
     display: flex;
@@ -123,14 +129,25 @@ body{
 .in_text_upper{
     text-transform: uppercase;
 }
+.in_txt_white{
+    color:var(--color-white);
+} 
+.in_txt_italic{
+    font-style: italic;
+}
+.in_txt_bigger{
+    font-size: 1.5rem;
+}
 .in_pad{
     padding-left: 20px;
     padding-right: 20px;
 }
 .in_header{
-    background-position: center top;
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+.in_head_pad{
     padding-top: 450px;
     padding-bottom: 80px;
 }
@@ -153,6 +170,30 @@ body{
     gap:4px;
 }
 
+/* Back timer styles */
+.in_back_timer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+    gap:20px;
+}
+.in_bt_item{
+    display: flex;
+    flex-direction: column;
+    gap:2px;
+    align-items: center;
+    justify-content: center;
+}
+.in_bt_val{
+    font-size: 2.6rem;
+    color:var(--color-white);
+}
+.in_bt_sign{
+    font-size: 0.8rem;
+    color:var(--color-white);
+}
+
 /* change calendar styles */
 .MuiDateCalendar-root{
     margin: 0 auto;
@@ -172,6 +213,7 @@ body{
 }
 .MuiPickersCalendarHeader-labelContainer{
     margin-right: 6px;
+    justify-content: center;
 }
 .MuiPickersCalendarHeader-labelContainer,
 .MuiPickersFadeTransitionGroup-root{

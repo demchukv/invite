@@ -139,52 +139,80 @@ class InviteController extends Controller
 
     public function uploadPhoto(UpdateInviteRequest $request, $id){
 
-        $file = $request->file('photo');
-        $extension = $file->extension();
+        if($request->file('photo') !== null){
+            $file = $request->file('photo');
+            $extension = $file->extension();
+            $file = $id.".".$extension;
+            $path = Storage::putFileAs('public/photos', $request->file('photo'), $file);
+            $url = Storage::disk('local')->url('public/photos/'.$file);
+            $result = DB::table('invites')
+            ->where('id', $id)
+            ->update([
+                'photo'=>$url
+            ]);
+            return response() -> json([
+                'status'=>'true',
+                'photo'=>$path,
+                'url'=>$url,
+                'inviteId'=>$id
+            ], 200);
+        }
+        if($request->file('timerphoto') !== null){
+            $file = $request->file('timerphoto');
+            $extension = $file->extension();
+            $file = $id.".".$extension;
+            $path = Storage::putFileAs('public/timers', $request->file('timerphoto'), $file);
+            $url = Storage::disk('local')->url('public/timers/'.$file);
+            $result = DB::table('invites')
+            ->where('id', $id)
+            ->update([
+                'timerphoto'=>$url
+            ]);
+            return response() -> json([
+                'status'=>'true',
+                'timerphoto'=>$path,
+                'url'=>$url,
+                'inviteId'=>$id
+            ], 200);
+            }
 
-        $file = $id.".".$extension;
-        $path = Storage::putFileAs('public/photos', $request->file('photo'), $file);
-        $url = Storage::disk('local')->url('public/photos/'.$file);
-
-        $request->photo = $path;
-
-        $result = DB::table('invites')
-        ->where('id', $id)
-        ->update([
-            'photo'=>$url
-        ]);
-        return response() -> json([
-            'status'=>'true',
-            'photo'=>$path,
-            'url'=>$url,
-            'request'=>$request->all(),
-            'inviteId'=>$id
-        ], 200);
     }
 
-    public function deletePhoto(UpdateInviteRequest $request, $id){
-
+    public function deletePhoto($id, $type){
         $res = DB::table('invites')
             ->where('id', $id)
             ->first();
+        if($type === "photo"){
+            $file = $res->photo;
+            $name = pathinfo($file);
+            Storage::delete('public/photos/'.$name['basename']);
 
-        $file = $res->photo;
-        $name = pathinfo($file);
+            $result = DB::table('invites')
+            ->where('id', $id)
+            ->update([
+                'photo'=>""
+            ]);
+        }
 
-        Storage::delete('public/photos/'.$name['basename']);
+        if($type === "timerphoto"){
+            $file = $res->photo;
+            $name = pathinfo($file);
+            Storage::delete('public/timers/'.$name['basename']);
 
-        $result = DB::table('invites')
-        ->where('id', $id)
-        ->update([
-            'photo'=>""
-        ]);
+            $result = DB::table('invites')
+            ->where('id', $id)
+            ->update([
+                'timerphoto'=>""
+            ]);
+        }
 
         return response() -> json([
             'status'=>'true',
+            'type'=>$type,
             'photo'=>"",
+            'timerphoto'=>"",
             'url'=>"",
             'message'=>"Photodeleted",
-            'request'=>$request->all(),
             'inviteId'=>$id
         ], 200);
     }
@@ -228,39 +256,6 @@ class InviteController extends Controller
         return response() -> json(
             $data,
         200);
-
-    }
-
-    public function updateWillbe(Request $request){
-        $inviteGroupId = 0;
-        foreach($request->all() as $guest){
-            DB::table('invite_guests')
-            ->where('id', $guest['id'])
-            ->update([
-                'willbe'=>$guest['willbe']
-            ]);
-            $inviteGroupId = $guest['inviteGroupId'];
-        }
-        return response() -> json([
-            'inviteGroupId'=>$inviteGroupId,
-            'data'=>$request->all(),
-        ], 200);
-
-    }
-
-    public function updateWillbeOn(Request $request){
-        $inviteGroupId = $request->inviteGroupId;
-            DB::table('invite_groups')
-            ->where('id', $request->inviteGroupId)
-            ->update([
-                'w1'=>$request->w1,
-                'w2'=>$request->w2
-            ]);
-        return response() -> json([
-            'inviteGroupId'=>$inviteGroupId,
-            'w1' => $request->w1,
-            'w2' => $request->w2,
-        ], 200);
 
     }
 

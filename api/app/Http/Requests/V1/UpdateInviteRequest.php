@@ -45,6 +45,7 @@ class UpdateInviteRequest extends FormRequest
                 'postinvite' => [],
                 'deadline' => [],
                 'thankyou' => [],
+                'timerphoto' => [],
                 'addition' => [],
             ];
         }else{
@@ -62,6 +63,7 @@ class UpdateInviteRequest extends FormRequest
                 'postinvite' => ['sometimes'],
                 'deadline' => ['sometimes'],
                 'thankyou' => ['sometimes'],
+                'timerphoto' => ['sometimes'],
                 'addition' => ['sometimes'],
             ];
         }

@@ -89,9 +89,9 @@ export const deleteInviteTiming = createAsyncThunk(
 
 export const deleteInvitePhoto = createAsyncThunk(
   "invites/deleteInvitePhoto",
-  async (id, thunkAPI) => {
+  async (values, thunkAPI) => {
     try {
-      const response = await axios.delete(`/invite-photo/${id}`);
+      const response = await axios.delete(`/invite-photo/${values.id}/${values.type}`);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
@@ -129,34 +129,6 @@ export const updateInviteGroup = createAsyncThunk(
     try {
       const response = await axios.post(`/invite-groups`, values);
       toast.success("Список гостей успішно оновлено!");
-      return response.data;
-    } catch (e) {
-      toast.error(e.message);
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-
-export const updateWillbe = createAsyncThunk(
-  "invites/updateWillbe",
-  async (values, thunkAPI) => {
-    try {
-      const response = await axios.post(`/invite-willbe`, values);
-      toast.success("Вашу відповідь збережено!");
-      return response.data;
-    } catch (e) {
-      toast.error(e.message);
-      return thunkAPI.rejectWithValue(e.message);
-    }
-  }
-);
-
-export const updateWillbeOn = createAsyncThunk(
-  "invites/updateWillbeOn",
-  async (values, thunkAPI) => {
-    try {
-      const response = await axios.post(`/invite-willbeon`, values);
-      toast.success("Вашу відповідь збережено!");
       return response.data;
     } catch (e) {
       toast.error(e.message);

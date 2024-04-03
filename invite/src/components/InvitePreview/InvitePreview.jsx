@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectOneInvite } from "../../redux/invites/selectors";
-import { updateWillbe, updateWillbeOn } from "../../redux/invites/operations";
 import { storageUrl } from '../../redux/const';
 
 import Box from "@mui/material/Box";
@@ -20,7 +19,6 @@ import MapIcon from "@mui/icons-material/Map";
 
 const InvitePreview = () => {
 
-  const dispatch = useDispatch();
   const invitePreview = useSelector(selectOneInvite);
 
   const guests = invitePreview.inviteGroups[0] && invitePreview.inviteGroups[0].inviteGuests ? invitePreview.inviteGroups[0].inviteGuests : [];
@@ -50,12 +48,10 @@ const InvitePreview = () => {
     })
     setAnswer(newa);
     setShowSubAnswer(getSubAnswer(newa));
-    dispatch(updateWillbe(newa));
   };
 
   const handleSubSwitch = (evt) => {
     setSubanswer((prev) => ({ ...prev, [evt.target.dataset.event]: evt.target.value }));
-    dispatch(updateWillbeOn({...subanswer, [evt.target.dataset.event]: evt.target.value, 'inviteGroupId':invitePreview.inviteGroups[0].id}));
   }
 
   return (

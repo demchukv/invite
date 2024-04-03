@@ -42,6 +42,7 @@ class StoreInviteRequest extends FormRequest
             'postinvite' => [],
             'deadline' => [],
             'thankyou' => [],
+            'timerphoto' => [],
             'addition' => [],
         ];
     }

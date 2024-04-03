@@ -44,11 +44,9 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', '
         Route::post('invite-photo/{id}', [InviteController::class, 'uploadPhoto'], function(Request $request, $id){
             return $id;
         });
-        Route::delete('invite-photo/{id}', [InviteController::class, 'deletePhoto'], function(Request $request, $id){
-            return $id;
+        Route::delete('invite-photo/{id}/{type}', [InviteController::class, 'deletePhoto'], function(Request $request, $id, $type){
+            return ['id' => $id, 'type'=>$type];
         });
         Route::post('invite-groups', [InviteController::class, 'changeGuests']);
-        Route::post('invite-willbe', [InviteController::class, 'updateWillbe']);
-        Route::post('invite-willbeon', [InviteController::class, 'updateWillbeOn']);
 
 });

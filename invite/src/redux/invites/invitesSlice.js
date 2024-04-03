@@ -11,8 +11,6 @@ import {
   deleteInviteGuest,
   fetchEmptyInvite,
   updateInviteGroup,
-  updateWillbe,
-  updateWillbeOn,
   fetchOneInviteByLink,
   updateGuestAnswer,
   updateGuestSubAnswer
@@ -103,10 +101,16 @@ const invitesSlice = createSlice({
       })
 
       .addCase(deleteInvitePhoto.pending, handlePending)
-      .addCase(deleteInvitePhoto.fulfilled, (state) => {
+      .addCase(deleteInvitePhoto.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.invite.photo = "";
+        if(action.payload.type === "photo"){
+          state.invite.photo = "";
+        }
+        if(action.payload.type === "timerphoto"){
+          state.invite.timerphoto = "";
+        }
+        
       })
 
       .addCase(deleteInviteGroup.pending, handlePending)
@@ -144,29 +148,6 @@ const invitesSlice = createSlice({
         state.invite = action.payload[0];
       })
       .addCase(updateInviteGroup.rejected, handleRejected)
-
-      .addCase(updateWillbe.pending, handlePending)
-      .addCase(updateWillbe.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.error = null;
-        const index = state.invite.inviteGroups.findIndex(
-           (ig) => ig.id === action.payload.inviteGroupId
-         );
-        state.invite.inviteGroups[index].inviteGuests = action.payload.data;
-      })
-      .addCase(updateWillbe.rejected, handleRejected)
-
-      .addCase(updateWillbeOn.pending, handlePending)
-      .addCase(updateWillbeOn.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.error = null;
-        const index = state.invite.inviteGroups.findIndex(
-           (ig) => ig.id === action.payload.inviteGroupId
-         );
-        state.invite.inviteGroups[index].w1 = action.payload.w1;
-        state.invite.inviteGroups[index].w2 = action.payload.w2;
-      })
-      .addCase(updateWillbeOn.rejected, handleRejected)
 
       .addCase(fetchOneInviteByLink.pending, handlePending)
       .addCase(fetchOneInviteByLink.fulfilled, (state, action) => {

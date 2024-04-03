@@ -11,6 +11,7 @@ import DocumentTitle from "../components/DocumentTitle";
 import { selectIsLoading, selectError } from "../redux/invites/selectors";
 import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
 import Loader from "../components/Loader/Loader";
+import { BackTimer } from "../components/BackTimer/BackTimer";
 import { storageUrl } from "../redux/const";
 
 import dayjs from "dayjs";
@@ -39,7 +40,10 @@ const InvitationPage = () => {
   }, [invite.willbe]);
 
   const head_style = {
-    backgroundImage: `url(${storageUrl}${invite?.photo})`,
+    backgroundImage: `url(${storageUrl}${invite?.photo}?t=${Math.random()})`,
+  };
+  const timer_style = {
+    backgroundImage: `url(${storageUrl}${invite?.timerphoto}?t=${Math.random()})`,
   };
 
   const handleAnswerClick = (guest_id, answer) => {
@@ -59,8 +63,9 @@ const InvitationPage = () => {
         <div className="in_page">
           <DocumentTitle>{`Запрошення на весілля: ${invite.name_one} та ${invite.name_two}`}</DocumentTitle>
           <div className="in_container">
+
             {/* HEADER */}
-            <div className="in_header in_pad" style={head_style}>
+            <div className="in_header in_head_pad in_pad in_very_dark_bg" style={head_style}>
               <h1 className="in_header-title in_title_font">
                 {invite.name_one}
                 <br />&<br />
@@ -84,12 +89,12 @@ const InvitationPage = () => {
                       invite.inviteGuests.map((guest, idx) => (
                         <p
                           key={idx}
-                          className="in_text in_center_text in_title_font"
+                          className="in_text in_center_text in_title_font in_txt_bigger"
                         >
                           {guest.name}
                         </p>
                       ))}
-                    <p className="in_text in_center_text in_title_font">
+                    <p className="in_text in_center_text in_title_font in_txt_bigger">
                       {invite.inviteGuests.length === 2 &&
                         invite.inviteGuests.map((guest, idx) =>
                           idx > 0 ? " та " + guest.name : guest.name
@@ -270,6 +275,11 @@ const InvitationPage = () => {
             {invite.thankyou !== "" && invite.thankyou !== null && (
               <div className="in_pad pb50 pt50">{invite.thankyou}</div>
             )}
+
+            <div className="in_pad in_header in_very_dark_bg pb50 pt50" style={timer_style}>
+              <BackTimer date={new Date(dayjs(invite.end_point+' '+invite.inviteTiming[0].event_time))} />
+              <p className="in_text in_center_text in_txt_white in_txt_italic mt50">... і ми будемо одружені</p>
+            </div>
 
             {invite.addition !== "" && invite.addition !== null && (
               <div className="in_pad in_dark_bg pb50 pt50">

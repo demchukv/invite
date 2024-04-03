@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\InviteGroup;
 use App\Models\InvitePhoto;
 use App\Models\InviteTiming;
-use App\Models\InviteGuest;
 
 class Invite extends Model
 {
@@ -28,6 +27,7 @@ class Invite extends Model
         'postinvite',
         'deadline',
         'thankyou',
+        'timerphoto',
         'addition',
     ];
 

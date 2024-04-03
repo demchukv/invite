@@ -4,14 +4,14 @@ import {
   addInvite,
   updateInvite,
   deleteInviteTiming,
-  deleteInvitePhoto
+  deleteInvitePhoto,
 } from "../../redux/invites/operations";
 import { useFormik, FieldArray, FormikProvider } from "formik";
 import * as Yup from "yup";
 import { selectOneInvite } from "../../redux/invites/selectors";
 import { selectToken } from "../../redux/auth/selectors";
 import { useNavigate } from "react-router-dom";
-import { storageUrl, uploadMainPhotoUrl } from '../../redux/const';
+import { storageUrl, uploadMainPhotoUrl } from "../../redux/const";
 
 import { Dropzone, FileMosaic } from "@files-ui/react";
 
@@ -27,7 +27,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 // import { TimeField } from '@mui/x-date-pickers/TimeField';
 import DeleteIcon from "@mui/icons-material/Delete";
-import 'dayjs/locale/uk';
+import "dayjs/locale/uk";
 import { nanoid } from "@reduxjs/toolkit";
 
 const InviteForm = () => {
@@ -71,53 +71,88 @@ const InviteForm = () => {
       nameTwo: invite && invite.id && invite.nameTwo ? invite.nameTwo : "",
       endPoint: invite && invite.id && invite.endPoint ? invite.endPoint : "",
       placeOne: invite && invite.id && invite.placeOne ? invite.placeOne : "",
-      mapUrlOne: invite && invite.id && invite.mapUrlOne !== null ? invite.mapUrlOne : "",
+      mapUrlOne:
+        invite && invite.id && invite.mapUrlOne !== null
+          ? invite.mapUrlOne
+          : "",
       placeTwo: invite && invite.id && invite.placeTwo ? invite.placeTwo : "",
-      mapUrlTwo: invite && invite.id && invite.mapUrlTwo !== null ? invite.mapUrlTwo : "",
-      invitation: invite && invite.id && invite.invitation
-        ? invite.invitation
-        : "Щиро запрошуємо вас на свято, присвячене створенню нашої сім'ї, яке відбудеться:",
-      deadline: invite && invite.id && invite.deadline
-        ? invite.deadline
-        : "Прохання повідомити про присутність до 21 грудня 2023 року",
-      postinvite: invite && invite.id && invite.postinvite
-        ? invite.postinvite
-        : "І ми не уявляємо цей радісний день без вас — близьких і дорогих нам людей!",
-      thankyou: invite && invite.id && invite.thankyou
-        ? invite.thankyou
-        : "Будемо вдячні, якщо ви підтримаєте кольорову гаму нашого свята",
-      addition: invite && invite.id && invite.addition
-        ? invite.addition
-        : "Для швидкого обміну інформацією, фото та відео між нашими гостями ми створили групу в telegram",
-      inviteTimings: invite && invite.id && invite.inviteTimings ? invite.inviteTimings : [],
+      mapUrlTwo:
+        invite && invite.id && invite.mapUrlTwo !== null
+          ? invite.mapUrlTwo
+          : "",
+      invitation:
+        invite && invite.id && invite.invitation
+          ? invite.invitation
+          : invite.invitation !== null ? "Щиро запрошуємо вас на свято, присвячене створенню нашої сім'ї, яке відбудеться:" : "",
+      deadline:
+        invite && invite.id && invite.deadline
+          ? invite.deadline
+          : invite.deadline !== null ? "Прохання повідомити про присутність до 21 грудня 2023 року" : "",
+      postinvite:
+        invite && invite.id && invite.postinvite
+          ? invite.postinvite
+          : invite.postinvite !== null ?"І ми не уявляємо цей радісний день без вас — близьких і дорогих нам людей!" : "",
+      thankyou:
+        invite && invite.id && invite.thankyou
+          ? invite.thankyou
+          : invite.thankyou !== null ? "Будемо вдячні, якщо ви підтримаєте кольорову гаму нашого свята" : "",
+      addition:
+        invite && invite.id && invite.addition
+          ? invite.addition
+          : invite.addition !== null ? "Для швидкого обміну інформацією, фото та відео між нашими гостями ми створили групу в telegram" : "",
+      inviteTimings:
+        invite && invite.id && invite.inviteTimings ? invite.inviteTimings : [],
     },
     validationSchema: InviteSchema,
     onSubmit: (values) => {
       handleSubmit(values);
     },
   });
-
-  const mainPhotoUrl = storageUrl+invite.photo;
-
-  const mainPhoto = invite.photo ? [{
-      type:"image/jpeg",
-      name:mainPhotoUrl.substring(mainPhotoUrl.lastIndexOf('/')+1),
-      id: nanoid(),
-      imageUrl: mainPhotoUrl,
-      downloadUrl: mainPhotoUrl,
-  }] : [];
-
-  const [files, setFiles] = useState(mainPhoto);
-
-  const updateFiles = (incommingFiles) => {
-    setFiles(incommingFiles);
+  /** Main background photo */
+  const mainPhotoUrl = storageUrl + invite.photo;
+  const mainPhoto = invite.photo
+    ? [
+        {
+          type: "image/jpeg",
+          name: mainPhotoUrl.substring(mainPhotoUrl.lastIndexOf("/") + 1),
+          id: nanoid(),
+          imageUrl: mainPhotoUrl,
+          downloadUrl: mainPhotoUrl,
+        },
+      ]
+    : [];
+    const [files, setFiles] = useState(mainPhoto);
+    const updateFiles = (incommingFiles) => {
+      setFiles(incommingFiles);
+    };
+    const removeFile = (id) => {
+      dispatch(deleteInvitePhoto({'id':invite.id, 'type':'photo'}));
+      setFiles(files.filter((x) => x.id !== id));
+    };
+    /** Timer background photo */
+    const mainTimerPhotoUrl = storageUrl + invite.timerphoto;
+    const mainTimerPhoto = invite.timerphoto
+      ? [
+          {
+            type: "image/jpeg",
+            name: mainTimerPhotoUrl.substring(mainTimerPhotoUrl.lastIndexOf("/") + 1),
+            id: nanoid(),
+            imageUrl: mainTimerPhotoUrl,
+            downloadUrl: mainTimerPhotoUrl,
+          },
+        ]
+      : [];
+  const [tfiles, setTfiles] = useState(mainTimerPhoto);
+  const updateTfiles = (incommingFiles) => {
+    setTfiles(incommingFiles);
   };
-  const removeFile = (id) => {
-    dispatch(deleteInvitePhoto(invite.id));
-    setFiles(files.filter((x) => x.id !== id));
+  const removeTfile = (id) => {
+    dispatch(deleteInvitePhoto({'id':invite.id, 'type':'timerphoto'}));
+    setTfiles(tfiles.filter((x) => x.id !== id));
   };
-
-  const formtype = invite && Object.keys(invite).length === 0 ? 'create' : 'edit';
+  console.log(invite.timerphoto);
+  const formtype =
+    invite && Object.keys(invite).length === 0 ? "create" : "edit";
 
   return (
     <Box
@@ -140,39 +175,38 @@ const InviteForm = () => {
           encType="multipart/form-data"
           sx={{ mt: 1 }}
         >
-
-          {formtype === "edit" &&
-          <Dropzone
-            onChange={updateFiles}
-            value={files}
-            headerConfig={{deleteFiles:false}}
-            footerConfig={{ allowedTypesLabel:false }}
-            label="Перетягніть файл або клацніть..."
-            autoClean            
-            maxFiles={1}
-            accept="image/*"
-            uploadConfig={{
-              method: "POST",
-              url: uploadMainPhotoUrl+invite.id,
-              headers: {
-                'Authorization': `Bearer ${token}`,
-              },
-              cleanOnUpload:true,
-              uploadLabel:"photo",
-              autoUpload:true,
-            }}
-          >
-            {files.map((file) => (
-              <FileMosaic 
-                key={file.id} 
-                {...file}
-                onDelete={removeFile} 
-                info 
-                preview 
-              />
-            ))}
-          </Dropzone>
-          }
+          {formtype === "edit" && (
+            <Dropzone
+              onChange={updateFiles}
+              value={files}
+              headerConfig={{ deleteFiles: false }}
+              footerConfig={{ allowedTypesLabel: false, customMessage: "Основне фото" }}
+              label="Перетягніть файл або клацніть..."
+              autoClean
+              maxFiles={1}
+              accept="image/*"
+              uploadConfig={{
+                method: "POST",
+                url: uploadMainPhotoUrl + invite.id,
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                cleanOnUpload: true,
+                uploadLabel: "photo",
+                autoUpload: true,
+              }}
+            >
+              {files.map((file) => (
+                <FileMosaic
+                  key={file.id}
+                  {...file}
+                  onDelete={removeFile}
+                  info
+                  preview
+                />
+              ))}
+            </Dropzone>
+          )}
 
           <TextField
             margin="normal"
@@ -379,8 +413,7 @@ const InviteForm = () => {
                       {/** both these conventions do the same  */}
                       <Grid container spacing={2}>
                         <Grid item xs={4} sm={4}>
-
-                        {/* <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="uk">
+                          {/* <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="uk">
                         <TimeField
           defaultValue={dayjs("2022-04-17T17:45")}
           format="hh:mm"
@@ -477,6 +510,39 @@ const InviteForm = () => {
             helperText={formik.touched.thankyou && formik.errors.thankyou}
             defaultValue={formik.values.thankyou}
           />
+
+          {formtype === "edit" && (
+            <Dropzone
+              onChange={updateTfiles}
+              value={tfiles}
+              headerConfig={{ deleteFiles: false }}
+              footerConfig={{ allowedTypesLabel: false, customMessage: "Фонове фото для таймера" }}
+              label="Перетягніть файл або клацніть..."
+              autoClean
+              maxFiles={1}
+              accept="image/*"
+              uploadConfig={{
+                method: "POST",
+                url: uploadMainPhotoUrl + invite.id,
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                cleanOnUpload: true,
+                uploadLabel: "timerphoto",
+                autoUpload: true,
+              }}
+            >
+              {tfiles.map((file) => (
+                <FileMosaic
+                  key={file.id}
+                  {...file}
+                  onDelete={removeTfile}
+                  info
+                  preview
+                />
+              ))}
+            </Dropzone>
+          )}
 
           <TextField
             margin="normal"

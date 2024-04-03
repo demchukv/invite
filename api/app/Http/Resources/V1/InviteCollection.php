@@ -17,3 +17,4 @@ class InviteCollection extends ResourceCollection
         return parent::toArray($request);
     }
 }
+

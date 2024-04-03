@@ -27,6 +27,7 @@ return new class extends Migration
             $table->text('postinvite');
             $table->text('deadline');
             $table->text('thankyou')->nullable();
+            $table->string('timerphoto')->nullable();
             $table->text('additional')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
