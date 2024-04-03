@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { selectOneInvite } from "../../redux/invites/selectors";
 import { selectToken } from "../../redux/auth/selectors";
 import { useNavigate } from "react-router-dom";
+import { storageUrl, uploadMainPhotoUrl } from '../../redux/const';
 
 import { Dropzone, FileMosaic } from "@files-ui/react";
 
@@ -96,8 +97,6 @@ const InviteForm = () => {
     },
   });
 
-  const storageUrl = "http://127.0.0.1:8000";
-  const uploadMainPhotoUrl = "http://127.0.0.1:8000/api/v1/invite-photo/";
   const mainPhotoUrl = storageUrl+invite.photo;
 
   const mainPhoto = invite.photo ? [{

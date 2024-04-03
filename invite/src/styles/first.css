@@ -8,6 +8,16 @@
     --color-btn-bg:#6d4c41;
     --color-btn-bg-hover:#3e2723;
 }
+
+/* :root{
+    --color-bg:#eceff1;
+    --color-bg-dark:#cfd8dc;
+    --color-white:#fff;
+    --color-black:#000;
+    --color-btn-bg:#90a4ae;
+    --color-btn-bg-hover:#607d8b;
+} */
+
 p, h1, h2, h3, h4, h5, h6{
     margin: 0;
     padding: 0;
@@ -41,12 +51,28 @@ body{
     text-decoration: none;
     margin: 0 auto;
     outline: none;
-    border:none;
     text-align: center;
     cursor: pointer;
 }
 .in_as_btn:hover{
     background-color: var(--color-btn-bg-hover);
+}
+.in_as_btn_outlined{
+    display: flex;
+    width: fit-content;
+    padding: 6px 12px;
+    color:var(--color-btn-bg);
+    background-color: var(--color-bg);
+    border:1px solid var(--color-btn-bg);
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 0 auto;
+    outline: none;
+    text-align: center;
+    cursor: pointer;
+}
+.in_as_btn_outlined:hover{
+    background-color: var(--color-bg-dark);
 }
 .in_btn_fixed{
     width:50px;

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOneInvite } from "../../redux/invites/selectors";
 import { updateWillbe, updateWillbeOn } from "../../redux/invites/operations";
+import { storageUrl } from '../../redux/const';
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -18,7 +19,6 @@ import ToggleButton from "@mui/material/ToggleButton";
 import MapIcon from "@mui/icons-material/Map";
 
 const InvitePreview = () => {
-  const storageUrl = "http://127.0.0.1:8000";
 
   const dispatch = useDispatch();
   const invitePreview = useSelector(selectOneInvite);

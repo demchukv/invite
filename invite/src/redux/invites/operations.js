@@ -1,8 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { apiUrl } from '../const';
 
-axios.defaults.baseURL = "http://127.0.0.1:8000/api/v1";
+axios.defaults.baseURL = apiUrl;
 
 export const fetchInvites = createAsyncThunk(
   "invites/fetchAll",
@@ -172,6 +173,34 @@ export const fetchOneInviteByLink = createAsyncThunk(
       return response.data.invite;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message + ": " + e.response.data.message);
+    }
+  }
+);
+
+export const updateGuestAnswer = createAsyncThunk(
+  "invites/updateGuestAnswer",
+  async (values, thunkAPI) => {
+    try {
+      const response = await axios.post(`/invite-answer`, values);
+      toast.success("Вашу відповідь збережено!");
+      return response.data;
+    } catch (e) {
+      toast.error(e.message);
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const updateGuestSubAnswer = createAsyncThunk(
+  "invites/updateGuestSubAnswer",
+  async (values, thunkAPI) => {
+    try {
+      const response = await axios.post(`/invite-subanswer`, values);
+      toast.success("Вашу відповідь збережено!");
+      return response.data;
+    } catch (e) {
+      toast.error(e.message);
+      return thunkAPI.rejectWithValue(e.message);
     }
   }
 );

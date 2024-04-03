@@ -7,3 +7,4 @@ export const selectInvites = (state) => state.invites.items;
 
 export const selectOneInvite = (state) => state.invites.invite;
 
+export const selectInvitation = (state) => state.invites.guest;

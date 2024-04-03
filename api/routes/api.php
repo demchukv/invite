@@ -29,12 +29,11 @@ Route::post('v1/register', [UserController::class, 'register']);
 Route::get('v1/invitation/{link}', [InviteController::class, 'fetchOneInviteByLink'], function(Request $request, $link){
     return $link;
 });
+Route::post('v1/invite-answer', [InviteController::class, 'updateGuestAnswer']);
+Route::post('v1/invite-subanswer', [InviteController::class, 'updateGuestSubAnswer']);
 
 Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', 'middleware'=>'auth:sanctum'], function(){
 
-
-
-    //Route::group(['middleware'=>'auth:sanctum'], function(){
         Route::get('profile', [UserController::class, 'profile']);
         Route::post('logout', [UserController::class, 'logout']);
 
@@ -51,19 +50,5 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', '
         Route::post('invite-groups', [InviteController::class, 'changeGuests']);
         Route::post('invite-willbe', [InviteController::class, 'updateWillbe']);
         Route::post('invite-willbeon', [InviteController::class, 'updateWillbeOn']);
-        /*
-        Route::get('invites', [InviteController::class, 'index']);
-        Route::post('invites', [InviteController::class, 'store']);
-        Route::get('invites/{id}', [InviteController::class, 'index'], function(integer $id){
-            return $id;
-        })->where('id', '[0-9]+');
-        Route::put('invites/{id}', [InviteController::class, 'update'], function(integer $id){
-            return $id;
-        })->where('id', '[0-9]+');
-        Route::patch('invites/{id}', [InviteController::class, 'update'], function(integer $id){
-            return $id;
-        })->where('id', '[0-9]+');
-        */
-    //});
 
 });

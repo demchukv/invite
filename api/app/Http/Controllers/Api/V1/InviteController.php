@@ -287,9 +287,14 @@ class InviteController extends Controller
         $guests = DB::table('invite_guests')
         ->where('invite_group_id', $group->id)
         ->get();
+        $willbe = false;
         foreach ($guests as $key=>$guest) {
             $invite -> inviteGuests[$key] = $guest;
+            if($guest->willbe == 'y'){
+                $willbe = true;
+            }
         }
+        $invite -> willbe = $willbe;
 
         $timing = DB::table('invite_timings')
         ->where('invite_id', $invite_id)
@@ -315,5 +320,85 @@ class InviteController extends Controller
      public function unique_id($l = 16) {
         return substr(md5(uniqid(mt_rand(), true)), 0, $l);
     }
+
+    public function updateGuestAnswer(Request $request){
+        $group = DB::table('invite_groups')
+        ->where('link', $request->link)
+        ->first();
+
+        if(!$group){
+            return response() -> json([
+                'status'=>"false",
+                'message'=>'Forbidden',
+            ], 403);
+        }
+        DB::table('invite_guests')
+        ->where('id', $request->guest_id)
+        ->update([
+            'willbe'=>$request->answer,
+        ]);
+
+        $guest = DB::table('invite_guests')
+        ->where('id', $request->guest_id)
+        ->first();
+
+        $guests = DB::table('invite_guests')
+        ->where('invite_group_id', $guest->invite_group_id)
+        ->get();
+        $willbe = false;
+        foreach($guests as $g){
+            if($g->willbe == 'y'){
+                $willbe = true;
+            }
+        }
+        if($willbe == false){
+            DB::table('invite_groups')
+            ->where('id', $guest->invite_group_id)
+            ->update([
+                'w1'=>'n',
+                'w2'=>'n',
+            ]);
+        }
+
+
+        return response() -> json([
+            'status'=>"true",
+            'message'=>'Answer updated',
+            'guest_id'=>$request->guest_id,
+            'willbe'=>$willbe,
+            'guest'=>$guest,
+        ], 200);
+    }
+
+    public function updateGuestSubAnswer(Request $request){
+        $group = DB::table('invite_groups')
+        ->where('link', $request->link)
+        ->first();
+
+        if(!$group){
+            return response() -> json([
+                'status'=>"false",
+                'message'=>'Forbidden',
+            ], 403);
+        }
+        DB::table('invite_groups')
+        ->where('id', $group->id)
+        ->update([
+            $request->field=>$request->val
+        ]);
+
+        $ret_group = DB::table('invite_groups')
+        ->where('id', $group->id)
+        ->first();
+
+
+        return response() -> json([
+            'status'=>"true",
+            'message'=>'Answer updated',
+            'group_id'=>$group->id,
+            'group'=>$ret_group,
+        ], 200);
+    }
+
 }
 

@@ -13,7 +13,9 @@ import {
   updateInviteGroup,
   updateWillbe,
   updateWillbeOn,
-  fetchOneInviteByLink
+  fetchOneInviteByLink,
+  updateGuestAnswer,
+  updateGuestSubAnswer
 } from "./operations";
 const handlePending = (state) => {
   state.isLoading = true;
@@ -29,6 +31,7 @@ const invitesSlice = createSlice({
   initialState: {
     items: [],
     invite: {},
+    guest: {},
     isLoading: false,
     error: null,
   },
@@ -169,9 +172,29 @@ const invitesSlice = createSlice({
       .addCase(fetchOneInviteByLink.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = null;
-        state.invite = action.payload;
+        state.guest = action.payload;
       })
       .addCase(fetchOneInviteByLink.rejected, handleRejected)
+
+      .addCase(updateGuestAnswer.pending, handlePending)
+      .addCase(updateGuestAnswer.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        const index = state.guest.inviteGuests.findIndex(
+           (ig) => ig.id === action.payload.guest_id
+         );
+        state.guest.inviteGuests[index] = action.payload.guest;
+        state.guest.willbe = action.payload.willbe;
+      })
+      .addCase(updateGuestAnswer.rejected, handleRejected)
+
+      .addCase(updateGuestSubAnswer.pending, handlePending)
+      .addCase(updateGuestSubAnswer.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.guest.inviteGroup = action.payload.group;
+      })
+      .addCase(updateGuestSubAnswer.rejected, handleRejected)
 
   },
 });
