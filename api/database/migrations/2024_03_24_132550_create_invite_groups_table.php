@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('invite_groups', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('invite_id');
+            $table->enum('w1', ['y', 'n'])->nullable();
+            $table->enum('w1', ['y', 'n'])->nullable();
+            $table->string('link', 8)->unique();
             $table->timestamps();
+            $table->index('link');
             $table->foreign('invite_id')->references('id')->on('invites')->onUpdate('cascade')->onDelete('cascade');
         });
     }

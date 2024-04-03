@@ -13,8 +13,7 @@ class InviteGuest extends Model
     protected $fillable = [
         'invite_group_id',
         'name',
-        'willbe1',
-        'willbe2',
+        'willbe',
     ];
 
     public function inviteGroups(){

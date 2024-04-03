@@ -135,3 +135,43 @@ export const updateInviteGroup = createAsyncThunk(
     }
   }
 );
+
+export const updateWillbe = createAsyncThunk(
+  "invites/updateWillbe",
+  async (values, thunkAPI) => {
+    try {
+      const response = await axios.post(`/invite-willbe`, values);
+      toast.success("Вашу відповідь збережено!");
+      return response.data;
+    } catch (e) {
+      toast.error(e.message);
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const updateWillbeOn = createAsyncThunk(
+  "invites/updateWillbeOn",
+  async (values, thunkAPI) => {
+    try {
+      const response = await axios.post(`/invite-willbeon`, values);
+      toast.success("Вашу відповідь збережено!");
+      return response.data;
+    } catch (e) {
+      toast.error(e.message);
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const fetchOneInviteByLink = createAsyncThunk(
+  "invites/fetchOneInviteByLink",
+  async (link, thunkAPI) => {
+    try {
+      const response = await axios.get(`/invitation/${link}`);
+      return response.data.invite;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message + ": " + e.response.data.message);
+    }
+  }
+);

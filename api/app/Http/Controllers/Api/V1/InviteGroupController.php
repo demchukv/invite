@@ -71,7 +71,7 @@ class InviteGroupController extends Controller
             return response() -> json([
                 "status" => false,
                 "message" => "Group not found!"
-            ], 401);
+            ], 404);
         }
 
     }

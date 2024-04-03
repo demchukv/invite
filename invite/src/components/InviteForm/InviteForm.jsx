@@ -36,7 +36,7 @@ const InviteForm = () => {
   const token = useSelector(selectToken);
 
   const handleSubmit = (values) => {
-    if (invite) {
+    if (invite && invite.id) {
       values.id = invite.id;
       dispatch(updateInvite(values));
     } else {
@@ -501,7 +501,7 @@ const InviteForm = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            {invite ? "Оновити запрошення" : "Створити запрошення"}
+            {invite && invite.id ? "Оновити запрошення" : "Створити запрошення"}
           </Button>
         </Box>
       </FormikProvider>

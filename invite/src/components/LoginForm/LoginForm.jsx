@@ -68,7 +68,7 @@ export const LoginForm = () => {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Login
+        Логін
       </Typography>
       <Box
         component="form"
@@ -84,7 +84,7 @@ export const LoginForm = () => {
           id="email"
           name="email"
           type="email"
-          label="Email"
+          label="E-mail"
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -101,7 +101,7 @@ export const LoginForm = () => {
           id="password"
           name="password"
           type="password"
-          label="Password"
+          label="Пароль"
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
@@ -116,7 +116,7 @@ export const LoginForm = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Log In
+          Вхід
         </Button>
 
         <Grid container>
@@ -124,7 +124,7 @@ export const LoginForm = () => {
           </Grid>
           <Grid item>
             <Link component={RouterLink} to="/register" variant="body2">
-              {"Don't have an account? Sign Up"}
+              Ще не зареєстровані? Зареєструватися
             </Link>
           </Grid>
         </Grid>

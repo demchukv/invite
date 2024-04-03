@@ -13,6 +13,9 @@ class InviteGroup extends Model
 
     protected $fillable = [
         'invite_id',
+        'w1',
+        'w2',
+        'link'
     ];
 
     public function invites(){

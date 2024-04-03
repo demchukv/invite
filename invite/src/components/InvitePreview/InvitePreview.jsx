@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectOneInvite } from "../../redux/invites/selectors";
+import { updateWillbe, updateWillbeOn } from "../../redux/invites/operations";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -18,35 +19,43 @@ import MapIcon from "@mui/icons-material/Map";
 
 const InvitePreview = () => {
   const storageUrl = "http://127.0.0.1:8000";
+
+  const dispatch = useDispatch();
   const invitePreview = useSelector(selectOneInvite);
 
   const guests = invitePreview.inviteGroups[0] && invitePreview.inviteGroups[0].inviteGuests ? invitePreview.inviteGroups[0].inviteGuests : [];
-
+  
+  const getSubAnswer = (guests) => {
+    let sha = false;
+    guests.forEach((g) =>{
+      if(g.willbe === "y"){
+        sha = true;
+      }
+    })
+    return sha;    
+  }
   const [answer, setAnswer] = useState(guests);
-  const [subanswer, setSubanswer] = useState({'w1':null, 'w2':null});
-  const [showSubAnswer, setShowSubAnswer] = useState(false);
+  const [subanswer, setSubanswer] = useState({
+    'w1':invitePreview.inviteGroups[0] && invitePreview.inviteGroups[0].w1 ? invitePreview.inviteGroups[0].w1 : null, 
+    'w2':invitePreview.inviteGroups[0] && invitePreview.inviteGroups[0].w2 ? invitePreview.inviteGroups[0].w2 : null,
+  });
+  const [showSubAnswer, setShowSubAnswer] = useState(getSubAnswer(guests));
 
   const handleSwitch = (evt) => {
     const newa = answer.map((g)=>{
       if(g.id === Number(evt.target.dataset.guestid)){
-        return {...g, 'willbe1': evt.target.value};
+        return {...g, 'willbe': evt.target.value};
       }
       return g;
     })
     setAnswer(newa);
-    let sha = false;
-    newa.forEach((g) =>{
-      if(g.willbe1 === "y"){
-        sha = true;
-      }
-    })
-    setShowSubAnswer(sha);
-    //TODO: set data to backend API
+    setShowSubAnswer(getSubAnswer(newa));
+    dispatch(updateWillbe(newa));
   };
 
   const handleSubSwitch = (evt) => {
-    setSubanswer({...subanswer, [evt.target.dataset.event]: evt.target.value});
-    //TODO: request to API
+    setSubanswer((prev) => ({ ...prev, [evt.target.dataset.event]: evt.target.value }));
+    dispatch(updateWillbeOn({...subanswer, [evt.target.dataset.event]: evt.target.value, 'inviteGroupId':invitePreview.inviteGroups[0].id}));
   }
 
   return (
@@ -65,6 +74,10 @@ const InvitePreview = () => {
             border: "7px solid #90a4ae",
           }}
         >
+          {/* <svg xmlns="http://www.w3.org/2000/svg" width="140" height="60" viewBox="0 0 140 60">
+  <circle cx="30" cy="30" r="20" fill="#FFD700" />
+  <circle cx="110" cy="30" r="20" fill="#FFD700" />
+</svg> */}
           <Box
             sx={{
               pt: 60,
@@ -96,6 +109,22 @@ const InvitePreview = () => {
               backgroundColor: "#cfd8dc",
             }}
           >
+
+            <Typography component="p" variant="body" align="center" sx={{pb:1}}>
+              Дорогі
+            </Typography>
+            {Array.isArray(answer) && answer.length > 0 && (
+                  <Typography component="p" variant="body" align="center" sx={{pb:1}}>
+                  {answer.map((guest, idx) => {
+                    return (
+                      idx > 0 ? " та " + guest.name : "" + guest.name
+                      )
+                  }
+                  )}
+                </Typography>
+            )
+            }
+
             <Typography component="p" variant="body" align="center">
               {invitePreview.invitation}
             </Typography>
@@ -193,7 +222,7 @@ const InvitePreview = () => {
                   <Grid item xs={4} sm={4}>
                     <ToggleButtonGroup
                       size="small"
-                      value={guest.willbe1}
+                      value={guest.willbe}
                       sx={{ border: "1px solid #607d8b" }}
                       exclusive
                       onChange={(evt) => handleSwitch(evt)}

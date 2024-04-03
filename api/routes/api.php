@@ -26,6 +26,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('v1/login', [UserController::class, 'login']);
 Route::post('v1/register', [UserController::class, 'register']);
 
+Route::get('v1/invitation/{link}', [InviteController::class, 'fetchOneInviteByLink'], function(Request $request, $link){
+    return $link;
+});
+
 Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', 'middleware'=>'auth:sanctum'], function(){
 
 
@@ -45,6 +49,8 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', '
             return $id;
         });
         Route::post('invite-groups', [InviteController::class, 'changeGuests']);
+        Route::post('invite-willbe', [InviteController::class, 'updateWillbe']);
+        Route::post('invite-willbeon', [InviteController::class, 'updateWillbeOn']);
         /*
         Route::get('invites', [InviteController::class, 'index']);
         Route::post('invites', [InviteController::class, 'store']);

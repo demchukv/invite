@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('invite_group_id');
             $table->string('name');
-            $table->enum('willbe1', ['y', 'n'])->nullable();
-            $table->enum('willbe2', ['y', 'n'])->nullable();
+            $table->enum('willbe', ['y', 'n'])->nullable();
             $table->timestamps();
             $table->foreign('invite_group_id')->references('id')->on('invite_groups')->onUpdate('cascade')->onDelete('cascade');
         });

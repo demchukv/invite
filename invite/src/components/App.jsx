@@ -2,6 +2,7 @@ import { useEffect, lazy } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { Layout } from "./Layout";
+import { InvitationLayout } from "./InvitationLayout";
 import { PrivateRoute } from "./PrivateRoute";
 import { RestrictedRoute } from "./RestrictedRoute";
 import { refreshUser } from "../redux/auth/operations";
@@ -15,6 +16,7 @@ const InvitesPage = lazy(() => import("../pages/InvitesPage"));
 const InviteEditPage = lazy(() => import("../pages/InviteEditPage"));
 const InviteCreatePage = lazy(() => import("../pages/InviteCreatePage"));
 const AboutPage = lazy(() => import("../pages/AboutPage"));
+const InvitationPage = lazy(() => import("../pages/InvitationPage"));
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
 
 export const App = () => {
@@ -30,6 +32,7 @@ export const App = () => {
   ) : (
     <>
       <Routes>
+      
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -65,6 +68,12 @@ export const App = () => {
           
           <Route path="*" element={<NotFoundPage />} />
         </Route>
+
+        {/* Routes that use layout 2 for show guests invitation*/}
+        <Route element={<InvitationLayout />}>
+          <Route path="/invitation/:link" element={<InvitationPage />} />
+        </Route>
+        
       </Routes>
     </>
   );

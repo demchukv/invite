@@ -98,6 +98,10 @@ class InviteController extends Controller
         $record = Invite::find($invite->id);
 
         if($record){
+            $file = $record->photo;
+            $name = pathinfo($file);
+            Storage::delete('public/photos/'.$name['basename']);
+
             $record -> delete();
             return response() -> json([
                 "status" => true,
@@ -192,7 +196,8 @@ class InviteController extends Controller
         foreach($request->inviteGroups as $group){
             if(!isset($group['id'])){
                 $group_id = DB::table('invite_groups')->insertGetId([
-                    'invite_id'=>$request->inviteId
+                    'invite_id'=>$request->inviteId,
+                    'link'=>$this -> unique_id(),
                 ]);
             }else{
                 $group_id = $group['id'];
@@ -202,7 +207,7 @@ class InviteController extends Controller
                 if(!isset($guest['id'])){
                     $result = DB::table('invite_guests')->insert([
                         'invite_group_id'=>$group_id,
-                        'name'=>$guest['name']
+                        'name'=>$guest['name'],
                     ]);
 
                 }else{
@@ -226,4 +231,89 @@ class InviteController extends Controller
 
     }
 
+    public function updateWillbe(Request $request){
+        $inviteGroupId = 0;
+        foreach($request->all() as $guest){
+            DB::table('invite_guests')
+            ->where('id', $guest['id'])
+            ->update([
+                'willbe'=>$guest['willbe']
+            ]);
+            $inviteGroupId = $guest['inviteGroupId'];
+        }
+        return response() -> json([
+            'inviteGroupId'=>$inviteGroupId,
+            'data'=>$request->all(),
+        ], 200);
+
+    }
+
+    public function updateWillbeOn(Request $request){
+        $inviteGroupId = $request->inviteGroupId;
+            DB::table('invite_groups')
+            ->where('id', $request->inviteGroupId)
+            ->update([
+                'w1'=>$request->w1,
+                'w2'=>$request->w2
+            ]);
+        return response() -> json([
+            'inviteGroupId'=>$inviteGroupId,
+            'w1' => $request->w1,
+            'w2' => $request->w2,
+        ], 200);
+
+    }
+
+    public function fetchOneInviteByLink($link){
+        $group = DB::table('invite_groups')
+            ->where('link', $link)
+            ->first();
+
+        if(!$group){
+            return response() -> json([
+                'status'=>"false",
+                'message'=>'Page not found',
+            ], 404);
+        }
+
+        $invite_id = $group->invite_id;
+
+        $invite = DB::table('invites')
+        ->where('id', $invite_id)
+        ->first();
+
+        $invite -> inviteGroup = $group;
+
+        $guests = DB::table('invite_guests')
+        ->where('invite_group_id', $group->id)
+        ->get();
+        foreach ($guests as $key=>$guest) {
+            $invite -> inviteGuests[$key] = $guest;
+        }
+
+        $timing = DB::table('invite_timings')
+        ->where('invite_id', $invite_id)
+        ->get();
+        foreach ($timing as $key=>$times) {
+            $invite -> inviteTiming[$key] = $times;
+        }
+
+        $photos = DB::table('invite_photos')
+        ->where('invite_id', $invite_id)
+        ->get();
+        foreach ($photos as $key=>$photo) {
+            $invite -> invitePhotos[$key] = $photo;
+        }
+
+
+        return response() -> json([
+            'invite'=>$invite,
+        ], 200);
+
+    }
+
+     public function unique_id($l = 16) {
+        return substr(md5(uniqid(mt_rand(), true)), 0, $l);
+    }
 }
+

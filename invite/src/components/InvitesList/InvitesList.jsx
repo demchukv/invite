@@ -31,7 +31,7 @@ const InvitesList = () => {
   const handleDelete = (id) => {
     dispatch(deleteInvite(id));
     setOpen(false);
-    toast.success("Invitation and all related data will be deleted!");
+    toast.success("Запрошення і всі супутні дані успішно виадалені!");
   };
 
   return (

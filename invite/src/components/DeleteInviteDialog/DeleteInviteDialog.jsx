@@ -15,17 +15,17 @@ const DeleteInvitetDialog = ({ open, id, handleClose, handleDelete }) => {
     aria-describedby="alert-dialog-description"
   >
     <DialogTitle id="alert-dialog-title">
-          {"Delete invite?"}
+          {"Видалити запрошення?"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Do you really want delete invite?
+            Ви справді бажаєте видалити запрошення?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={()=>handleDelete(id)}>Delete</Button>
+          <Button onClick={()=>handleDelete(id)}>Видалити</Button>
           <Button onClick={handleClose} autoFocus>
-          Cancel
+          Скасувати
           </Button>
         </DialogActions>
   </Dialog>

@@ -79,7 +79,7 @@ export const RegisterForm = () => {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Register
+        Реєстрація
       </Typography>
       <Box
         component="form"
@@ -94,7 +94,7 @@ export const RegisterForm = () => {
           fullWidth
           id="name"
           name="name"
-          label="Name"
+          label="Ім'я"
           type="text"
           value={formik.values.name}
           onChange={formik.handleChange}
@@ -110,7 +110,7 @@ export const RegisterForm = () => {
           fullWidth
           id="email"
           name="email"
-          label="Email"
+          label="E-mail"
           type="email"
           value={formik.values.email}
           onChange={formik.handleChange}
@@ -126,7 +126,7 @@ export const RegisterForm = () => {
           fullWidth
           id="password"
           name="password"
-          label="Password"
+          label="Пароль"
           type="password"
           value={formik.values.password}
           onChange={formik.handleChange}
@@ -142,7 +142,7 @@ export const RegisterForm = () => {
           fullWidth
           id="password_confirmation"
           name="password_confirmation"
-          label="Confirm password"
+          label="Підтвердження пароля"
           type="password"
           value={formik.values.password_confirmation}
           onChange={formik.handleChange}
@@ -164,14 +164,14 @@ export const RegisterForm = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Register
+          Зареєструватися
         </Button>
 
         <Grid container>
           <Grid item xs></Grid>
           <Grid item>
             <Link component={RouterLink} to="/login" variant="body2">
-              Already have an account? Sign in
+              Вже зареєстровані? Увійти
             </Link>
           </Grid>
         </Grid>

@@ -18,8 +18,7 @@ class InviteGuestResource extends JsonResource
             'id' => $this->id,
             'inviteGroupId' => $this->invite_group_id,
             'name' => $this->name,
-            'willbe1' => $this->willbe1,
-            'willbe2' => $this->willbe2,
+            'willbe' => $this->willbe,
         ];
     }
 }

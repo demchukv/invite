@@ -1,0 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+:root{
+    --color-bg:#efebe9;
+    --color-bg-dark:#d7ccc8;
+    --color-white:#fff;
+    --color-black:#000;
+    --color-btn-bg:#6d4c41;
+    --color-btn-bg-hover:#3e2723;
+}
+p, h1, h2, h3, h4, h5, h6{
+    margin: 0;
+    padding: 0;
+}
+.in_title_font {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+body{
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+}
+.in_page{
+    background-color: var(--color-bg);
+    min-height: 100vh;
+}
+.in_dark_bg{
+    background-color: var(--color-bg-dark);
+}
+.in_as_btn{
+    display: flex;
+    width: fit-content;
+    padding: 6px 12px;
+    color:var(--color-white);
+    background-color: var(--color-btn-bg);
+    border:1px solid var(--color-btn-bg);
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 0 auto;
+    outline: none;
+    border:none;
+    text-align: center;
+    cursor: pointer;
+}
+.in_as_btn:hover{
+    background-color: var(--color-btn-bg-hover);
+}
+.in_btn_fixed{
+    width:50px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mt10{
+    margin-top: 10px;
+}
+.mb10{
+    margin-bottom: 10px;
+}
+.mt30{
+    margin-top: 30px;
+}
+.mb30{
+    margin-bottom: 30px;
+}
+.mt50{
+    margin-top: 50px;
+}
+.mb50{
+    margin-bottom: 50px;
+}
+.pt50{
+    padding-top: 80px;
+}
+.pb50{
+    padding-bottom: 80px;
+}
+.in_container{
+    min-width: 280px;
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 0;
+}
+.in_text{
+    font-size: 1.3rem;
+}
+.in_text_sm{
+    font-size: 1.1rem;
+}
+.in_center_text{
+    text-align: center;
+}
+.in_text_upper{
+    text-transform: uppercase;
+}
+.in_pad{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.in_header{
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 450px;
+    padding-bottom: 80px;
+}
+.in_header-title{
+    text-align: center;
+    color: var(--color-white);
+    font-size: 3rem;
+    text-shadow: 2px 2px 2px var(--color-black);
+    line-height: 1.2;
+}
+
+/* buttons for answer */
+.in_guest_control{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.in_guest_btn{
+    display: flex;
+    gap:4px;
+}
+
+/* change calendar styles */
+.MuiDateCalendar-root{
+    margin: 0 auto;
+    padding: 0;
+    width: 280px;
+    height: auto;
+}
+.MuiPickersDay-root,
+.MuiDayCalendar-weekDayLabel
+{
+    width: 30px;
+    height: 30px;
+}
+.MuiPickersCalendarHeader-root{
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.MuiPickersCalendarHeader-labelContainer{
+    margin-right: 6px;
+}
+.MuiPickersCalendarHeader-labelContainer,
+.MuiPickersFadeTransitionGroup-root{
+    width: 100%;
+    text-align: center;
+}
+.MuiPickersArrowSwitcher-root{
+    display: none;
+}
+.MuiPickersSlideTransition-root, 
+.MuiDayCalendar-slideTransition{
+    min-height: 210px;
+}
+.MuiPickersDay-root.Mui-selected{
+    background-color: var(--color-btn-bg);
+}
+.MuiButtonBase-root.MuiPickersDay-root.Mui-disabled:not(.Mui-selected){
+    color:var(--color-black);
+}
