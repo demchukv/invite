@@ -6,8 +6,6 @@ use App\Models\InvitePhoto;
 use App\Http\Requests\StoreInvitePhotoRequest;
 use App\Http\Requests\UpdateInvitePhotoRequest;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\V1\InvitePhotoResource;
-use App\Http\Resources\V1\InvitePhotoCollection;
 
 
 class InvitePhotoController extends Controller

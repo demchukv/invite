@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\InviteTiming;
 use App\Http\Requests\V1\StoreInviteTimingRequest;
 use App\Http\Requests\V1\UpdateInviteTimingRequest;
-use App\Http\Resources\V1\InviteTimingResource;
 use App\Http\Resources\V1\InviteTimingCollection;
 
 

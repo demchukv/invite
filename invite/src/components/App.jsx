@@ -32,7 +32,12 @@ export const App = () => {
   ) : (
     <>
       <Routes>
-      
+
+        {/* Routes that use layout 2 for show guests invitation*/}
+        <Route element={<InvitationLayout />}>
+          <Route path="/invitation/:link" element={<InvitationPage />} />
+        </Route>
+
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
@@ -69,11 +74,6 @@ export const App = () => {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
 
-        {/* Routes that use layout 2 for show guests invitation*/}
-        <Route element={<InvitationLayout />}>
-          <Route path="/invitation/:link" element={<InvitationPage />} />
-        </Route>
-        
       </Routes>
     </>
   );

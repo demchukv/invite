@@ -145,7 +145,8 @@ class InviteController extends Controller
             $file = $id.".".$extension;
             $path = Storage::putFileAs('public/photos', $request->file('photo'), $file);
             $url = Storage::disk('local')->url('public/photos/'.$file);
-            $result = DB::table('invites')
+
+            DB::table('invites')
             ->where('id', $id)
             ->update([
                 'photo'=>$url
@@ -163,7 +164,7 @@ class InviteController extends Controller
             $file = $id.".".$extension;
             $path = Storage::putFileAs('public/timers', $request->file('timerphoto'), $file);
             $url = Storage::disk('local')->url('public/timers/'.$file);
-            $result = DB::table('invites')
+            DB::table('invites')
             ->where('id', $id)
             ->update([
                 'timerphoto'=>$url

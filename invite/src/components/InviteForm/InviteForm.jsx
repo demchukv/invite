@@ -150,7 +150,7 @@ const InviteForm = () => {
     dispatch(deleteInvitePhoto({'id':invite.id, 'type':'timerphoto'}));
     setTfiles(tfiles.filter((x) => x.id !== id));
   };
-  console.log(invite.timerphoto);
+  
   const formtype =
     invite && Object.keys(invite).length === 0 ? "create" : "edit";
 
