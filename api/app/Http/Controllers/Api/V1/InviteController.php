@@ -13,6 +13,9 @@ use App\Http\Requests\V1\UpdateInviteRequest;
 use App\Http\Resources\V1\InviteResource;
 use App\Http\Resources\V1\InviteCollection;
 
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
+
 
 class InviteController extends Controller
 {
@@ -102,16 +105,30 @@ class InviteController extends Controller
             $name = pathinfo($file);
             Storage::delete('public/photos/'.$name['basename']);
 
+            $tfile = $record->timerphoto;
+            $name = pathinfo($tfile);
+            Storage::delete('public/timers/'.$name['basename']);
+
+            $photos = DB::table('invite_photos')
+            ->where('invite_id', $invite->id)
+            ->get();
+            foreach($photos as $photo){
+                $gfile = $photo->photo_name;
+                $name = pathinfo($gfile);
+                Storage::delete('public/gallery/'.$invite->id.'/'.$name['basename']);
+            }
+            Storage::deleteDirectory('public/gallery/'.$invite->id);
+
             $record -> delete();
             return response() -> json([
                 "status" => true,
-                "message" => "Invitation deleted"
+                "message" => "Запрошення видалено!"
             ], 200);
         }else{
             return response() -> json([
                 "status" => false,
-                "message" => "Invitation not found!"
-            ], 401);
+                "message" => "Запрошення не знайдено!"
+            ], 404);
         }
     }
 
@@ -140,11 +157,17 @@ class InviteController extends Controller
     public function uploadPhoto(UpdateInviteRequest $request, $id){
 
         if($request->file('photo') !== null){
+
             $file = $request->file('photo');
-            $extension = $file->extension();
-            $file = $id.".".$extension;
-            $path = Storage::putFileAs('public/photos', $request->file('photo'), $file);
-            $url = Storage::disk('local')->url('public/photos/'.$file);
+            $filename = $id.".". $file->extension();
+
+            Image::make($file->getRealPath())
+            ->resize(800, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })
+            ->save(storage_path('app/public/photos/').$filename);
+
+            $url = Storage::disk('local')->url('photos/'.$filename);
 
             DB::table('invites')
             ->where('id', $id)
@@ -153,17 +176,25 @@ class InviteController extends Controller
             ]);
             return response() -> json([
                 'status'=>'true',
-                'photo'=>$path,
+                'photo'=>public_path(),
                 'url'=>$url,
                 'inviteId'=>$id
             ], 200);
         }
+
         if($request->file('timerphoto') !== null){
+
             $file = $request->file('timerphoto');
-            $extension = $file->extension();
-            $file = $id.".".$extension;
-            $path = Storage::putFileAs('public/timers', $request->file('timerphoto'), $file);
-            $url = Storage::disk('local')->url('public/timers/'.$file);
+            $filename = $id.".". $file->extension();
+
+            Image::make($file->getRealPath())
+            ->resize(800, null, function ($constraint) {
+                $constraint->aspectRatio();
+            })
+            ->save(storage_path('app/public/timers/').$filename);
+
+            $url = Storage::disk('local')->url('timers/'.$filename);
+
             DB::table('invites')
             ->where('id', $id)
             ->update([
@@ -171,11 +202,58 @@ class InviteController extends Controller
             ]);
             return response() -> json([
                 'status'=>'true',
-                'timerphoto'=>$path,
+                'timerphoto'=>public_path(),
                 'url'=>$url,
                 'inviteId'=>$id
             ], 200);
             }
+
+            if($request->file('gallery') !== null){
+
+                $file = $request->file('gallery');
+                $filename = $id."_".Str::random(8).".". $file->extension();
+
+                Storage::makeDirectory('public/gallery');
+                Storage::makeDirectory('public/gallery/'.$id);
+
+                Image::make($file->getRealPath())
+                ->resize(600, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                })
+                ->save(storage_path('app/public/gallery/'.$id.'/').$filename);
+
+                $url = Storage::disk('local')->url('gallery/'.$id.'/'.$filename);
+
+                DB::table('invite_photos')
+                ->insert([
+                    'invite_id'=>$id,
+                    'photo_name'=>$url
+                ]);
+
+                $photos = DB::table('invite_photos')
+                ->where('invite_id', $id)
+                ->get();
+                $invitePhotos = array();
+                foreach($photos as $photo){
+                    $invitePhotos[] =
+                        [
+                            'id'=>$photo->id,
+                            'inviteId'=>$photo->invite_id,
+                            'photoName'=>$photo->photo_name,
+                            'createdAt'=>null,
+                            'updatedAt'=>null
+                        ];
+                }
+
+                return response() -> json([
+                    'status'=>'true',
+                    'gallery'=>public_path(),
+                    'url'=>$url,
+                    'inviteId'=>$id,
+                    'message'=>'Фото успішно додано!',
+                    'invitePhotos'=>$invitePhotos
+                ], 200);
+                }
 
     }
 
@@ -207,14 +285,34 @@ class InviteController extends Controller
             ]);
         }
 
+        if($type === "gallery"){
+            $photo = DB::table('invite_photos')
+            ->where('id', $id)
+            ->first();
+
+            if(!$photo){
+                return response() -> json([
+                    'status'=>'false',
+                    'message'=>'Photo not found!'
+                ], 404);
+            }
+
+            $name = pathinfo($photo->photo_name);
+            Storage::delete('public/gallery/'.$photo->invite_id.'/'.$name['basename']);
+
+            $result = DB::table('invite_photos')
+             ->where('id', '=', $id)
+             ->delete();
+        }
+
         return response() -> json([
             'status'=>'true',
             'type'=>$type,
-            'photo'=>"",
-            'timerphoto'=>"",
-            'url'=>"",
-            'message'=>"Photodeleted",
-            'inviteId'=>$id
+            'message'=>"Photo deleted!",
+            'inviteId'=>$photo->invite_id,
+            'id'=>$id,
+            'file'=>$photo,
+            'basename'=>$name['basename']
         ], 200);
     }
 
@@ -260,6 +358,27 @@ class InviteController extends Controller
 
     }
 
+    public function fetchOneInviteById($id){
+        $group = DB::table('invite_groups')
+            ->where('invite_id', $id)
+            ->where('link', '!=', '')
+            ->first();
+
+        if(!$group){
+            return response() -> json([
+                'status'=>"false",
+                'message'=>'Додайте хоча б одного гостя до списку',
+            ],404);
+        }
+        if($group->link === "" || $group->link === null){
+            return response() -> json([
+                'status'=>"false",
+                'message'=>'Помилка. Відсутнє посилання на запрошення.',
+            ],404);
+        }
+        return $this->fetchOneInviteByLink($group->link);
+    }
+
     public function fetchOneInviteByLink($link){
         $group = DB::table('invite_groups')
             ->where('link', $link)
@@ -271,7 +390,6 @@ class InviteController extends Controller
                 'message'=>'Page not found',
             ], 404);
         }
-
         $invite_id = $group->invite_id;
 
         $invite = DB::table('invites')
@@ -306,9 +424,18 @@ class InviteController extends Controller
             $invite -> invitePhotos[$key] = $photo;
         }
 
+        /** select invitation theme */
+        if($invite -> theme_id === null){
+            $invite -> theme_id = 1;
+        }
+        $theme = DB::table('invite_themes')
+        ->where('id', $invite -> theme_id)
+        ->first();
+        $invite -> inviteTheme = $theme;
 
         return response() -> json([
             'invite'=>$invite,
+            'theme'=>$theme,
         ], 200);
 
     }
@@ -396,5 +523,24 @@ class InviteController extends Controller
         ], 200);
     }
 
+    public function changeInvitationTheme(Request $request){
+
+        $theme = DB::table('invite_themes')
+        ->where('css', $request->css)
+        ->first();
+
+        DB::table('invites')
+        ->where('id', $request->invite_id)
+        ->update([
+            'theme_id'=> $theme->id
+        ]);
+
+        return response() -> json([
+            'status'=>"true",
+            'message'=>'Тему запрошення успішно змінено!',
+            'inviteTheme'=>$theme,
+            'theme_id'=>$theme->id,
+        ], 200);
+    }
 }
 

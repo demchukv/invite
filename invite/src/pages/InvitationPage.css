@@ -1,17 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 
-:root{
-    --color-bg:#eceff1;
-    --color-bg-dark:#cfd8dc;
-    --color-white:#fff;
-    --color-black:#000;
-    --color-btn-bg:#90a4ae;
-    --color-btn-bg-hover:#607d8b;
-    font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-}
-
 p, h1, h2, h3, h4, h5, h6{
     margin: 0;
     padding: 0;
@@ -26,10 +14,18 @@ body{
     margin: 0;
     padding: 0;
     font-size: 1rem;
+    color:var(--color-black);
+    min-width: 320px;
 }
 .in_page{
     background-color: var(--color-bg);
-    min-height: 100vh;
+    font-size: 1rem;
+    color:var(--color-black);
+    min-width: 320px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    /* min-height: 100vh; */
 }
 .in_dark_bg{
     background-color: var(--color-bg-dark);
@@ -103,7 +99,7 @@ body{
     padding-bottom: 80px;
 }
 .in_container{
-    min-width: 280px;
+    min-width: 320px;
     max-width: 460px;
     margin: 0 auto;
     padding: 0;
@@ -168,6 +164,7 @@ body{
     justify-content: center;
     align-self: center;
     gap:20px;
+    text-shadow: 2px 2px 2px var(--color-black);
 }
 .in_bt_item{
     display: flex;

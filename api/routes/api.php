@@ -29,6 +29,11 @@ Route::post('v1/register', [UserController::class, 'register']);
 Route::get('v1/invitation/{link}', [InviteController::class, 'fetchOneInviteByLink'], function(Request $request, $link){
     return $link;
 });
+
+Route::get('v1/invitation/id/{id}', [InviteController::class, 'fetchOneInviteById'], function(Request $request, $id){
+    return $id;
+});
+
 Route::post('v1/invite-answer', [InviteController::class, 'updateGuestAnswer']);
 Route::post('v1/invite-subanswer', [InviteController::class, 'updateGuestSubAnswer']);
 
@@ -41,6 +46,7 @@ Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', '
         Route::apiResource('invite-timing', InviteTimingController::class);
         Route::apiResource('invite-group', InviteGroupController::class);
         Route::apiResource('invite-guest', InviteGuestController::class);
+        Route::post('invite-theme', [InviteController::class, 'changeInvitationTheme']);
         Route::post('invite-photo/{id}', [InviteController::class, 'uploadPhoto'], function(Request $request, $id){
             return $id;
         });

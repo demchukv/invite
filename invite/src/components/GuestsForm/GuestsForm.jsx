@@ -2,7 +2,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteInviteGroup, deleteInviteGuest, updateInviteGroup } from "../../redux/invites/operations";
 import { useFormik, FieldArray, FormikProvider } from "formik";
 import * as Yup from "yup";
-import { selectOneInvite } from "../../redux/invites/selectors";
+import { selectOneInvite, selectIsLoading, selectError } from "../../redux/invites/selectors";
+import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -18,6 +20,8 @@ import Tooltip from "@mui/material/Tooltip";
 const GuestsForm = () => {
   const dispatch = useDispatch();
   const invite = useSelector(selectOneInvite);
+  const isLoadingGuestsForm = useSelector(selectIsLoading);
+  const isErrorGuestsForm = useSelector(selectError);
 
   const handleSubmit = (values) => {
     values.inviteId = invite.id;
@@ -49,6 +53,11 @@ const GuestsForm = () => {
   });
 
   return (
+    <>
+    {isErrorGuestsForm && <ErrorMessage>{isErrorGuestsForm}</ErrorMessage>}
+    {isLoadingGuestsForm && <Loader />}
+
+    {!isLoadingGuestsForm && !isErrorGuestsForm && (
     <Box
       sx={{
         marginTop: 2,
@@ -222,6 +231,8 @@ const GuestsForm = () => {
         </Box>
       </FormikProvider>
     </Box>
+  )}
+  </>
   );
 };
 

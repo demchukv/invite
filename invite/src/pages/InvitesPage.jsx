@@ -27,7 +27,7 @@ export default function Invites() {
           <Button
             fullWidth
             component={RouterLink} to={"/create"}
-            color="secondary"
+            
             variant="contained"
             size="big"
           >

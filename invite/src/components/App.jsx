@@ -48,7 +48,6 @@ export const App = () => {
               <RestrictedRoute redirectTo="/invites" component={<RegisterPage />} />
             }
           />
-
           <Route
             path="/login"
             element={
@@ -59,11 +58,9 @@ export const App = () => {
           <Route
             path="/invites/:inviteId"
             element={<PrivateRoute redirectTo="/login" component={<InviteEditPage />} />} />
-
           <Route
             path="/create"
             element={<PrivateRoute redirectTo="/login" component={<InviteCreatePage />} />} />
-
           <Route
             path="/invites"
             element={

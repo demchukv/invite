@@ -1,0 +1,12 @@
+:root{
+    --color-bg:#efebe9;
+    --color-bg-dark:#d7ccc8;
+    --color-white: #fff;
+    --color-black: #000;
+    --color-btn-bg: #6d4c41;
+    --color-btn-bg-hover:#3e2723;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+

@@ -21,14 +21,14 @@ const NotFoundPage = () => {
               fontSize: 'clamp(3.5rem, 10vw, 4rem)',
             }}
           >
-          Sorry, page not found!
+          Вибачте, сторінка не знайдена!
           </Typography>
           <Typography
             textAlign="center"
             color="text.secondary"
             sx={{ alignSelf: 'center', width: { sm: '100%', md: '100%' } }}
           >
-          Start with <Link component={RouterLink} to="/">Home page</Link>
+          Розпочніть з <Link component={RouterLink} to="/">Головної сторінки</Link>
           </Typography>
           </Stack>
     </>

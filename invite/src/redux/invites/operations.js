@@ -12,6 +12,7 @@ export const fetchInvites = createAsyncThunk(
       const response = await axios.get("/invites");
       return response.data.data;
     } catch (e) {
+      toast.error(e.message);
       return thunkAPI.rejectWithValue(e.message);
     }
   }
@@ -36,6 +37,16 @@ export const fetchEmptyInvite = createAsyncThunk(
   }
 );
 
+export const updateGalleryPhotos = createAsyncThunk(
+  "invites/updateGalleryPhotos",
+  async (values, thunkAPI) => {
+    try{
+      return values;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+)
 export const addInvite = createAsyncThunk(
   "invites/addInvite",
   async (values, thunkAPI) => {
@@ -149,6 +160,18 @@ export const fetchOneInviteByLink = createAsyncThunk(
   }
 );
 
+export const fetchOneInviteById = createAsyncThunk(
+  "invites/fetchOneInviteById",
+  async (id, thunkAPI) => {
+    try {
+      const response = await axios.get(`/invitation/id/${id}`);
+      return response.data.invite;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message + ": " + e.response.data.message);
+    }
+  }
+);
+
 export const updateGuestAnswer = createAsyncThunk(
   "invites/updateGuestAnswer",
   async (values, thunkAPI) => {
@@ -169,6 +192,20 @@ export const updateGuestSubAnswer = createAsyncThunk(
     try {
       const response = await axios.post(`/invite-subanswer`, values);
       toast.success("Вашу відповідь збережено!");
+      return response.data;
+    } catch (e) {
+      toast.error(e.message);
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const changeInvitationTheme = createAsyncThunk(
+  "invites/changeInvitationTheme",
+  async (values, thunkAPI) => {
+    try {
+      const response = await axios.post(`/invite-theme`, values);
+      toast.success("Тему запрошення успішно змінено!");
       return response.data;
     } catch (e) {
       toast.error(e.message);

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('invite_themes', function (Blueprint $table) {
             $table->id();
+            $table->string('css', 25)->index('css');
             $table->string('name');
             $table->timestamps();
         });

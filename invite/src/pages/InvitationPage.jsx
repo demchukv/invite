@@ -7,12 +7,14 @@ import {
   updateGuestAnswer,
   updateGuestSubAnswer,
 } from "../redux/invites/operations";
+import { Helmet } from 'react-helmet-async';
 import DocumentTitle from "../components/DocumentTitle";
 import { selectIsLoading, selectError } from "../redux/invites/selectors";
 import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
 import Loader from "../components/Loader/Loader";
 import { BackTimer } from "../components/BackTimer/BackTimer";
-import { storageUrl } from "../redux/const";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -20,7 +22,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import "dayjs/locale/uk";
 
-import "../styles/first.css";
+import  "./InvitationPage.css";
 
 const InvitationPage = () => {
   const dispatch = useDispatch();
@@ -32,35 +34,57 @@ const InvitationPage = () => {
   const [showSubAnswer, setShowSubAnswer] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchOneInviteByLink(link));
+    if (!link) return;
+      dispatch(fetchOneInviteByLink(link));
   }, [dispatch, link]);
 
   useEffect(() => {
     setShowSubAnswer(invite.willbe);
   }, [invite.willbe]);
 
+  
   const head_style = {
-    backgroundImage: `url(${storageUrl}${invite?.photo}?t=${Math.random()})`,
+    backgroundImage: `url(${invite?.photo}?t=${Math.random()})`,
   };
   const timer_style = {
-    backgroundImage: `url(${storageUrl}${invite?.timerphoto}?t=${Math.random()})`,
+    backgroundImage: `url(${invite?.timerphoto}?t=${Math.random()})`,
   };
 
   const handleAnswerClick = (guest_id, answer) => {
+    if (!link) return;
     dispatch(updateGuestAnswer({ guest_id, answer, link }));
   };
 
   const handleSubAnswerClick = (field, val) => {
+    if (!link) return;
     dispatch(updateGuestSubAnswer({ field, val, link }));
   };
+
+  const cssFile = invite?.inviteTheme?.css ? `/styles/${invite.inviteTheme.css}.css` : `/styles/first.css`;
+
+  const images = [];
+  if(Array.isArray(invite?.invitePhotos)){
+    for(const img of invite.invitePhotos){
+      images.push({original: img.photo_name, thumbnail: null});
+    }
+  }
 
   return (
     <>
       {isError && <ErrorMessage>{isError}</ErrorMessage>}
       {isLoading && <Loader />}
 
-      {invite && invite.id && !isError && (
+      {invite && invite.id && (
         <div className="in_page">
+          {link && (
+                  <Helmet>
+                  <link
+                    type="text/css"
+                    rel="stylesheet"
+                    href={cssFile}
+                />
+                </Helmet>
+          )}
           <DocumentTitle>{`Запрошення на весілля: ${invite.name_one} та ${invite.name_two}`}</DocumentTitle>
           <div className="in_container">
 
@@ -74,7 +98,7 @@ const InvitationPage = () => {
             </div>
 
             {/* Invitation */}
-            <div className="in_pad pb50 pt50">
+            <div className="in_pad pt50">
               {Array.isArray(invite.inviteGuests) &&
                 invite.inviteGuests.length > 0 && (
                   <>
@@ -106,7 +130,8 @@ const InvitationPage = () => {
               <p className="in_text in_center_text mt10 mb10">
                 {invite.invitation}
               </p>
-
+            </div>
+            <div className="">
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
                 adapterLocale="uk"
@@ -118,7 +143,9 @@ const InvitationPage = () => {
                   disabled
                 />
               </LocalizationProvider>
+            </div>
 
+            <div className="in_pad pb50 mt10">
               <p className="in_text in_center_text">{invite.postinvite}</p>
             </div>
 
@@ -141,7 +168,7 @@ const InvitationPage = () => {
               <p className="in_text_sm in_center_text mb10 mt30">
                 {invite.place_two}
               </p>
-              {invite.map_url_two !== "" && (
+              {invite.map_url_two !== "" && invite.map_url_two !== null && (
                 <a
                   href={invite.map_url_two}
                   target="_blank"
@@ -255,6 +282,10 @@ const InvitationPage = () => {
                 {invite.deadline}
               </p>
             </div>
+            
+            {images.length > 0 && (
+              <ImageGallery items={images} showFullscreenButton={false} showPlayButton={false} showThumbnails={false} />
+            )}
 
             {/* Timings */}
             <div className="in_pad in_dark_bg pb50 pt50">
@@ -277,7 +308,7 @@ const InvitationPage = () => {
             )}
 
             <div className="in_pad in_header in_very_dark_bg pb50 pt50" style={timer_style}>
-              <BackTimer date={new Date(dayjs(invite.end_point+' '+invite.inviteTiming[0].event_time))} />
+              <BackTimer date={new Date(dayjs(invite.end_point + ' ' + (!invite.inviteTiming ? "" : invite.inviteTiming[0].event_time)))} />
               <p className="in_text in_center_text in_txt_white in_txt_italic mt50">... і ми будемо одружені</p>
             </div>
 

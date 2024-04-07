@@ -7,12 +7,12 @@ const NavigationDrawer = ({ setOpen }) => {
     <>
       <MenuItem sx={{ py: "6px", px: "12px" }} component={RouterLink} to={"/"} onClick={()=>setOpen(false)}>
           <Typography variant="body2" color="text.primary">
-            Home
+            Головна
           </Typography>
       </MenuItem>
       <MenuItem sx={{ py: "6px", px: "12px" }} component={RouterLink} to={"/about"} onClick={()=>setOpen(false)}>
           <Typography variant="body2" color="text.primary">
-            About
+            Про сервіс
           </Typography>
       </MenuItem>
     </>

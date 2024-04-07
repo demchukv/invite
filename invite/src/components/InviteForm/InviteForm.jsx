@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addInvite,
   updateInvite,
   deleteInviteTiming,
   deleteInvitePhoto,
+  updateGalleryPhotos
 } from "../../redux/invites/operations";
 import { useFormik, FieldArray, FormikProvider } from "formik";
 import * as Yup from "yup";
-import { selectOneInvite } from "../../redux/invites/selectors";
+import { selectOneInvite, selectIsLoading, selectError } from "../../redux/invites/selectors";
 import { selectToken } from "../../redux/auth/selectors";
 import { useNavigate } from "react-router-dom";
-import { storageUrl, uploadMainPhotoUrl } from "../../redux/const";
+import { uploadMainPhotoUrl } from "../../redux/const";
+import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
 
 import { Dropzone, FileMosaic } from "@files-ui/react";
 
@@ -33,8 +36,11 @@ import { nanoid } from "@reduxjs/toolkit";
 const InviteForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const invite = useSelector(selectOneInvite);
   const token = useSelector(selectToken);
+  const isLoadingForm = useSelector(selectIsLoading);
+  const isErrorForm = useSelector(selectError);
+
+  const invite = useSelector(selectOneInvite);
 
   const handleSubmit = (values) => {
     if (invite && invite.id) {
@@ -55,14 +61,14 @@ const InviteForm = () => {
 
   const InviteSchema = Yup.object().shape({
     nameOne: Yup.string()
-      .min(3, "Too Short!")
-      .max(50, "Too Long!")
+      .min(3, "Занадто коротке!")
+      .max(50, "Занадто довге!")
       .required("Required"),
     nameTwo: Yup.string()
-      .min(3, "Too Short!")
-      .max(50, "Too Long!")
-      .required("Required"),
-    endPoint: Yup.date().required("Required"),
+      .min(3, "Занадто коротке!")
+      .max(50, "Занадто довге!")
+      .required("Поле обов'язкове!"),
+    endPoint: Yup.date().required("Поле обов'язкове!"),
   });
 
   const formik = useFormik({
@@ -109,7 +115,7 @@ const InviteForm = () => {
     },
   });
   /** Main background photo */
-  const mainPhotoUrl = storageUrl + invite.photo;
+  const mainPhotoUrl = invite.photo;
   const mainPhoto = invite.photo
     ? [
         {
@@ -130,7 +136,7 @@ const InviteForm = () => {
       setFiles(files.filter((x) => x.id !== id));
     };
     /** Timer background photo */
-    const mainTimerPhotoUrl = storageUrl + invite.timerphoto;
+    const mainTimerPhotoUrl = /*storageUrl + */invite.timerphoto;
     const mainTimerPhoto = invite.timerphoto
       ? [
           {
@@ -150,11 +156,42 @@ const InviteForm = () => {
     dispatch(deleteInvitePhoto({'id':invite.id, 'type':'timerphoto'}));
     setTfiles(tfiles.filter((x) => x.id !== id));
   };
+
+    /** Gallery photo */
+    const mainGalleryPhoto = [];
+    if(Array.isArray(invite.invitePhotos)){
+      for(const photo of invite.invitePhotos){
+        let galleryPhotoUrl = photo.photoName;
+        mainGalleryPhoto.push({
+          //file:new File([], galleryPhotoUrl.substring(galleryPhotoUrl.lastIndexOf("/") + 1), {type:"image/jpeg"}),
+          type: "image/jpeg",
+          name: galleryPhotoUrl.substring(galleryPhotoUrl.lastIndexOf("/") + 1),
+          id: photo.id,
+          imageUrl: galleryPhotoUrl,
+          downloadUrl: galleryPhotoUrl,
+        });
+      }
+  }
+  const [gfiles, setGfiles] = useState(mainGalleryPhoto);
+  const updateGfiles = (incommingFiles) => {
+    setGfiles(incommingFiles);
+  };
+  const removeGfile = (id) => {
+    dispatch(deleteInvitePhoto({'id':id, 'type':'gallery'}));
+    setTfiles(gfiles.filter((x) => x.id !== id));
+  };
+  const handleUpload=(responses)=>{
+    dispatch(updateGalleryPhotos({'invitePhotos': responses[0].serverResponse.payload.invitePhotos}));
+  }
   
-  const formtype =
-    invite && Object.keys(invite).length === 0 ? "create" : "edit";
+  const formtype = invite && Object.keys(invite).length === 0 ? "create" : "edit";
 
   return (
+    <>
+    {isErrorForm && <ErrorMessage>{isErrorForm}</ErrorMessage>}
+    {isLoadingForm && <Loader />}
+
+    {!isLoadingForm && !isErrorForm && (
     <Box
       sx={{
         marginTop: 2,
@@ -164,7 +201,7 @@ const InviteForm = () => {
       }}
     >
       <Typography component="h1" variant="h5">
-        {invite ? "Редагувати запрошення" : "Створити запрошення"}
+        {invite.id ? "Редагувати запрошення" : "Створити запрошення"}
       </Typography>
       <FormikProvider value={formik}>
         <Box
@@ -214,7 +251,7 @@ const InviteForm = () => {
             fullWidth
             id="nameOne"
             name="nameOne"
-            label="Name One"
+            label="Ім'я нареченої"
             type="text"
             value={formik.values.nameOne}
             onChange={formik.handleChange}
@@ -230,7 +267,7 @@ const InviteForm = () => {
             fullWidth
             id="nameTwo"
             name="nameTwo"
-            label="Name Two"
+            label="Ім'я нареченого"
             type="text"
             value={formik.values.nameTwo}
             onChange={formik.handleChange}
@@ -265,6 +302,7 @@ const InviteForm = () => {
               value={dayjs(formik.values.endPoint)}
               id="endPoint"
               name="endPoint"
+              disablePast
               onChange={(value) =>
                 formik.setFieldValue(
                   "endPoint",
@@ -560,6 +598,38 @@ const InviteForm = () => {
             defaultValue={formik.values.addition}
           />
 
+          {formtype === "edit" && (
+            <Dropzone
+              onChange={updateGfiles}
+              value={gfiles}
+              headerConfig={{ deleteFiles: false }}
+              footerConfig={{ allowedTypesLabel: false, customMessage: "Фото для міні-галереї" }}
+              label="Перетягніть файл або клацніть..."
+              autoClean
+              maxFiles={6}
+              accept="image/*"
+              uploadConfig={{
+                method: "POST",
+                url: uploadMainPhotoUrl + invite.id,
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+                cleanOnUpload: true,
+                uploadLabel: "gallery",
+                autoUpload: true,
+              }}
+              onUploadFinish={handleUpload}
+            >
+              {gfiles.map((file) => (
+                <FileMosaic
+                  key={file.id}
+                  {...file}
+                  onDelete={removeGfile}
+                />
+              ))}
+            </Dropzone>
+          )}
+
           <Button
             type="submit"
             fullWidth
@@ -571,6 +641,8 @@ const InviteForm = () => {
         </Box>
       </FormikProvider>
     </Box>
+  )}
+  </>
   );
 };
 

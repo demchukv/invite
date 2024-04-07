@@ -12,8 +12,11 @@ import {
   fetchEmptyInvite,
   updateInviteGroup,
   fetchOneInviteByLink,
+  fetchOneInviteById,
   updateGuestAnswer,
-  updateGuestSubAnswer
+  updateGuestSubAnswer,
+  changeInvitationTheme,
+  updateGalleryPhotos
 } from "./operations";
 const handlePending = (state) => {
   state.isLoading = true;
@@ -99,6 +102,7 @@ const invitesSlice = createSlice({
         );
         state.invite.inviteTimings.splice(index, 1);
       })
+      .addCase(deleteInviteTiming.rejected, handleRejected)
 
       .addCase(deleteInvitePhoto.pending, handlePending)
       .addCase(deleteInvitePhoto.fulfilled, (state, action) => {
@@ -110,8 +114,15 @@ const invitesSlice = createSlice({
         if(action.payload.type === "timerphoto"){
           state.invite.timerphoto = "";
         }
+        if(action.payload.type === "gallery"){
+          const index = state.invite.invitePhotos.findIndex(
+            (it) => it.id === action.payload.id
+          );
+          state.invite.invitePhotos.splice(index, 1);
+          }
         
       })
+      .addCase(deleteInvitePhoto.rejected, handleRejected)
 
       .addCase(deleteInviteGroup.pending, handlePending)
       .addCase(deleteInviteGroup.fulfilled, (state, action) => {
@@ -122,6 +133,7 @@ const invitesSlice = createSlice({
         );
         state.invite.inviteGroups.splice(index, 1);
       })
+      .addCase(deleteInviteGroup.rejected, handleRejected)
 
       .addCase(deleteInviteGuest.pending, handlePending)
       .addCase(deleteInviteGuest.fulfilled, (state, action) => {
@@ -136,6 +148,7 @@ const invitesSlice = createSlice({
           }
         });
       })
+      .addCase(deleteInviteGuest.rejected, handleRejected)
 
       .addCase(updateInviteGroup.pending, handlePending)
       .addCase(updateInviteGroup.fulfilled, (state, action) => {
@@ -157,6 +170,14 @@ const invitesSlice = createSlice({
       })
       .addCase(fetchOneInviteByLink.rejected, handleRejected)
 
+      .addCase(fetchOneInviteById.pending, handlePending)
+      .addCase(fetchOneInviteById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.guest = action.payload;
+      })
+      .addCase(fetchOneInviteById.rejected, handleRejected)
+
       .addCase(updateGuestAnswer.pending, handlePending)
       .addCase(updateGuestAnswer.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -176,6 +197,23 @@ const invitesSlice = createSlice({
         state.guest.inviteGroup = action.payload.group;
       })
       .addCase(updateGuestSubAnswer.rejected, handleRejected)
+
+      .addCase(changeInvitationTheme.pending, handlePending)
+      .addCase(changeInvitationTheme.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.guest.inviteTheme = action.payload.inviteTheme;
+        state.guest.theme_id = action.payload.theme_id;
+      })
+      .addCase(changeInvitationTheme.rejected, handleRejected)
+
+      .addCase(updateGalleryPhotos.pending, handlePending)
+      .addCase(updateGalleryPhotos.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.invite.invitePhotos = action.payload.invitePhotos;
+      })
+      .addCase(updateGalleryPhotos.rejected, handleRejected)
 
   },
 });

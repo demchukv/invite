@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { selectOneInvite } from "../../redux/invites/selectors";
-import { storageUrl } from '../../redux/const';
+import { selectOneInvite, selectIsLoading, selectError } from "../../redux/invites/selectors";
+import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
+
+import InvitationPage from '../../pages/InvitationPage';
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -20,6 +23,8 @@ import MapIcon from "@mui/icons-material/Map";
 const InvitePreview = () => {
 
   const invitePreview = useSelector(selectOneInvite);
+  const isLoadingPreview = useSelector(selectIsLoading);
+  const isErrorPreview = useSelector(selectError);
 
   const guests = invitePreview.inviteGroups[0] && invitePreview.inviteGroups[0].inviteGuests ? invitePreview.inviteGroups[0].inviteGuests : [];
   
@@ -56,12 +61,15 @@ const InvitePreview = () => {
 
   return (
     <>
-      {invitePreview && (
+    {isErrorPreview && <ErrorMessage>{isErrorPreview}</ErrorMessage>}
+    {isLoadingPreview && <Loader />}
+
+      {!isLoadingPreview && !isErrorPreview && invitePreview && (
         <Box
           sx={{
             marginTop: 2,
             maxWidth: "460px",
-            maxHeight: "70vh",
+            // maxHeight: "70vh",
             overflow: "auto",
             display: "flex",
             flexDirection: "column",
@@ -70,6 +78,7 @@ const InvitePreview = () => {
             border: "7px solid #90a4ae",
           }}
         >
+          <InvitationPage />
           {/* <svg xmlns="http://www.w3.org/2000/svg" width="140" height="60" viewBox="0 0 140 60">
   <circle cx="30" cy="30" r="20" fill="#FFD700" />
   <circle cx="110" cy="30" r="20" fill="#FFD700" />
@@ -79,7 +88,7 @@ const InvitePreview = () => {
               pt: 60,
               pb: 10,
               px: 2,
-              backgroundImage: `url(${storageUrl}${
+              backgroundImage: `url(${
                 invitePreview.photo
               }?t=${Math.random()})`,
               backgroundPosition: "center top",

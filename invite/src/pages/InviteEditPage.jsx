@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DocumentTitle from "../components/DocumentTitle";
 import InviteForm from "../components/InviteForm/InviteForm";
 import GuestsForm from "../components/GuestsForm/GuestsForm";
-import InvitePreview from "../components/InvitePreview/InvitePreview";
-import Loader from "../components/Loader/Loader";
+// import InvitePreview from "../components/InvitePreview/InvitePreview";
+import InvitePreviewTwo from "../components/InvitePreview/InvitePreviewTwo";
+import InviteStat from "../components/InviteStat/InviteStat";
+import { useParams } from "react-router-dom";
+import { fetchOneInvite, fetchOneInviteById } from "../redux/invites/operations";
 import { selectIsLoading, selectError } from "../redux/invites/selectors";
 import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
-import { useParams } from "react-router-dom";
-import { fetchOneInvite } from "../redux/invites/operations";
+import Loader from "../components/Loader/Loader";
 
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -16,40 +18,51 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 
+import DynamicFormIcon from '@mui/icons-material/DynamicForm';
+import PeopleIcon from '@mui/icons-material/People';
+import PreviewIcon from '@mui/icons-material/Preview';
+import ChecklistIcon from '@mui/icons-material/Checklist';
+
 export default function InviteEditPage() {
-  const isLoading = useSelector(selectIsLoading);
-  const isError = useSelector(selectError);
   const { inviteId } = useParams();
-  const [value, setValue] = useState("0");
+  const [tabValue, setTabValue] = useState("0");
   const dispatch = useDispatch();
+  const isLoadingInvite = useSelector(selectIsLoading);
+  const isErrorInvite = useSelector(selectError);
 
   useEffect(() => {
-    dispatch(fetchOneInvite(inviteId));
-  }, [dispatch, inviteId, value]);
+    if(tabValue === "2") {
+      dispatch(fetchOneInviteById(inviteId));
+    }else{
+      dispatch(fetchOneInvite(inviteId));
+    }
+  }, [dispatch, inviteId, tabValue]);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setTabValue(newValue);
   };
 
   return (
     <>
       <DocumentTitle>Edit your invitation</DocumentTitle>
-      {isError && <ErrorMessage>{isError}</ErrorMessage>}
-      {isLoading && <Loader />}
+      {isErrorInvite && <ErrorMessage>{isErrorInvite}</ErrorMessage>}
+      {isLoadingInvite && <Loader />}
 
-      {!isLoading && !isError && (
         <Box sx={{ maxWidth: "460px", typography: "body1" }}>
-          <TabContext value={value}>
+          <TabContext value={tabValue}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
                 onChange={handleChange}
-                aria-label="lab API tabs example"
+                aria-label="edit invite tabs"
               >
-                <Tab label="Запрошення" value="0" />
-                <Tab label="Гості" value="1" />
-                <Tab label="Перегляд" value="2" />
+                <Tab icon={<DynamicFormIcon />} label="" value="0" />
+                <Tab icon={<PeopleIcon />} label="" value="1" />
+                <Tab icon={<PreviewIcon />} label="" value="2" />
+                <Tab icon={<ChecklistIcon />} label="" value="3" />
               </TabList>
             </Box>
+            {!isLoadingInvite && !isErrorInvite && (
+              <>
             <TabPanel value="0">
               <InviteForm type="edit" />
             </TabPanel>
@@ -57,11 +70,15 @@ export default function InviteEditPage() {
               <GuestsForm />
             </TabPanel>
             <TabPanel value="2">
-              <InvitePreview />
+              <InvitePreviewTwo />
             </TabPanel>
-          </TabContext>
-        </Box>
+            <TabPanel value="3">
+              <InviteStat />
+            </TabPanel>
+            </>
       )}
+      </TabContext>
+        </Box>
     </>
   );
 }

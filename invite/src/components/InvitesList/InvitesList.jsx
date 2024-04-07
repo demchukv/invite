@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectInvites } from "../../redux/invites/selectors";
 import { Link as RouterLink } from "react-router-dom";
 import DeleteInviteDialog from "../DeleteInviteDialog/DeleteInviteDialog";
-import { deleteInvite } from "../../redux/invites/operations";
+import { deleteInvite, fetchEmptyInvite } from "../../redux/invites/operations";
 import toast from "react-hot-toast";
 
 import List from "@mui/material/List";
@@ -23,6 +23,10 @@ const InvitesList = () => {
   const [inviteId, setInviteId] = useState(null);
   const invites = useSelector(selectInvites);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchEmptyInvite());
+  }, [dispatch]);
 
   const handleCloseDialog = () => {
     setOpen(false);
@@ -48,7 +52,7 @@ const InvitesList = () => {
             return (
               <React.Fragment key={invite.id}>
                 {index !== 0 && <Divider variant="inset" component="li" />}
-                <ListItem key={invite.id} component={RouterLink} to={hRef}>
+                <ListItem key={invite.id} component={RouterLink} to={hRef} sx={{color: "text.primary"}}>
                   <ListItemAvatar>
                     <Avatar sx={{ backgroundColor: "background.paper" }}>
                       <AssignmentTurnedInIcon color="secondary" />
