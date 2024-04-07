@@ -77,7 +77,7 @@ export const Layout = () => {
               <Typography variant="body2" color="text.secondary">
                 {"Copyright © "}
                 <Link component={RouterLink} color="inherit" to="/">
-                  Invites
+                  Invite
                 </Link>{" "}
                 {new Date().getFullYear()}
                 {"."}
