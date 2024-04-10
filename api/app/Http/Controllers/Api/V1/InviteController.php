@@ -120,15 +120,19 @@ class InviteController extends Controller
             Storage::deleteDirectory('public/gallery/'.$invite->id);
 
             $record -> delete();
+
             return response() -> json([
                 "status" => true,
                 "message" => "Запрошення видалено!"
             ], 200);
+
         }else{
+
             return response() -> json([
                 "status" => false,
                 "message" => "Запрошення не знайдено!"
             ], 404);
+            
         }
     }
 

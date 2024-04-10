@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme} from "@mui/material/styles";
 import { alpha } from "@mui/material";
 import { AppHead } from "./AppHead/AppHead";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -19,6 +19,7 @@ import '@fontsource/roboto/700.css';
 
 export const Layout = () => {
   const [mode, setMode] = useState("light");
+  
   const defaultTheme = createTheme({ palette: { mode } });
   const toggleColorMode = () => {
     setMode((prev) => (prev === "dark" ? "light" : "dark"));

@@ -63,5 +63,15 @@ export const refreshUser = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
+  },
+  {
+    condition: (_, { getState }) => {
+      const state = getState();
+      const persistedToken = state.auth.token;
+      if(!persistedToken) {
+        return false;
+      }
+      return true;
+    }
   }
 );
