@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Invite database", // <-- to identify the connection
+    "type": "mysql", // <- or "mariadb" if you are using MariaDB
+    "host": "localhost",
+    "port": "3600",
+    "username": "root",
+    "password": "",
+    "database": "invite" // <-- the database to show in VS Code DevDb view
+  }
+]
