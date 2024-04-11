@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { Layout } from "./Layout";
 import { InvitationLayout } from "./InvitationLayout";
-import { PrivateRoute } from "./PrivateRoute";
+// import { PrivateRoute } from "./PrivateRoute";
 import { RestrictedRoute } from "./RestrictedRoute";
 import { refreshUser } from "../redux/auth/operations";
 import { useAuth } from "../hooks";
@@ -21,7 +21,7 @@ const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
 
 export const App = () => {
   const dispatch = useDispatch();
-  const { isRefreshing } = useAuth();
+  const { isLoggedIn, isRefreshing } = useAuth();
 
   useEffect(() => {
     dispatch(refreshUser());
@@ -57,6 +57,15 @@ export const App = () => {
 
           <Route
             path="/invites/:inviteId"
+            element={!isLoggedIn && !isRefreshing ? <LoginPage /> : <InviteEditPage />} />
+          <Route
+            path="/create"
+            element={!isLoggedIn && !isRefreshing ? <LoginPage /> : <InviteCreatePage />} />
+          <Route
+            path="/invites"
+            element={!isLoggedIn && !isRefreshing ? <LoginPage /> : <InvitesPage />} />
+          {/* <Route
+            path="/invites/:inviteId"
             element={<PrivateRoute redirectTo="/login" component={<InviteEditPage />} />} />
           <Route
             path="/create"
@@ -65,7 +74,7 @@ export const App = () => {
             path="/invites"
             element={<PrivateRoute redirectTo="/login" component={<InvitesPage />} />
             }
-          />
+          /> */}
           
           <Route path="*" element={<NotFoundPage />} />
         </Route>
