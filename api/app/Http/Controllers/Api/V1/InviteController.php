@@ -132,7 +132,7 @@ class InviteController extends Controller
                 "status" => false,
                 "message" => "Запрошення не знайдено!"
             ], 404);
-            
+
         }
     }
 
@@ -266,8 +266,8 @@ class InviteController extends Controller
             ->where('id', $id)
             ->first();
         if($type === "photo"){
-            $file = $res->photo;
-            $name = pathinfo($file);
+            $photo = $res->photo;
+            $name = pathinfo($photo);
             Storage::delete('public/photos/'.$name['basename']);
 
             $result = DB::table('invites')
@@ -278,8 +278,8 @@ class InviteController extends Controller
         }
 
         if($type === "timerphoto"){
-            $file = $res->photo;
-            $name = pathinfo($file);
+            $photo = $res->photo;
+            $name = pathinfo($photo);
             Storage::delete('public/timers/'.$name['basename']);
 
             $result = DB::table('invites')
@@ -313,7 +313,7 @@ class InviteController extends Controller
             'status'=>'true',
             'type'=>$type,
             'message'=>"Photo deleted!",
-            'inviteId'=>$photo->invite_id,
+            'inviteId'=>$id,
             'id'=>$id,
             'file'=>$photo,
             'basename'=>$name['basename']

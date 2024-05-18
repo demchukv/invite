@@ -1,0 +1,96 @@
+:root{
+    --color-bg:#fff;
+    --color-bg-dark:#d7ccc8;
+    --color-white: #fff;
+    --color-black: #000;
+    --color-btn-bg: #6d4c41;
+    --color-btn-bg-hover:#3e2723;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.in_very_dark_bg{
+    background-color: transparent;
+}
+.in_timer{
+    padding-bottom: 0;
+    padding-top: 0;
+    margin-bottom: -80px;
+}
+.in_timer > p{
+    display: none;
+}
+
+.in_header-title{
+    transform: rotate(-8deg);
+    text-shadow: none;
+}
+.in_title_font{
+    font-weight: 300;
+    color:#111;
+    font-style: italic;
+}
+
+.in_invite{
+    padding-top: 0;
+    background-color: transparent;
+}
+.in_invite_title{
+    background-color: aqua;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 100px 40px;
+    background-position: center;
+    background-size:cover;
+    background-repeat: no-repeat;
+    font-size: 2.6rem;
+    font-weight: 600;
+    color:var(--color-black);
+    text-shadow: 2px 2px 2px var(--color-white);
+}
+.in_invite_bg_one{
+    background-image: url(/public/tserkva.jpg);
+}
+.in_invite_bg_two{
+    background-image: url(/public/zal.jpg);
+}
+
+.in_invite_desc p{
+    margin: 15px 0;
+}
+
+/* Back timer styles */
+.in_back_timer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+    gap:20px;
+    text-shadow: none;
+    font-family: 'Courier New', Courier, monospace;
+}
+.in_bt_item{
+    display: flex;
+    flex-direction: column;
+    gap:2px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.in_bt_item:not(:last-of-type)::after{
+    content: "·";
+    font-size: 2rem;
+    color:var(--color-black);
+    position: absolute;
+    top:4px;
+    right: -16px;
+}
+.in_bt_val{
+    font-size: 2.6rem;
+    color:var(--color-black);
+}
+.in_bt_sign{
+    font-size: 0.8rem;
+    color:var(--color-black);
+}

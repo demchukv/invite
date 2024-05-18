@@ -31,6 +31,7 @@ const InvitePreviewTwo = () => {
   };
 
   const styleVariants = [
+    { key: "white", name: "White" },
     { key: "first", name: "Brown" },
     { key: "second", name: "Blue-Grey" },
     { key: "lime", name: "Lime" },
