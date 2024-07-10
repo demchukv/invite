@@ -23,9 +23,10 @@ export const selectStatistics = createSelector([selectInviteGroups], (groups) =>
                 group.inviteGuests[i].willbe === "y" ? count.willbey += 1 : count.willben += 1;
                 group.w1 === "y" ? count.w1y += 1 : count.w1n += 1;
                 group.w2 === "y" ? count.w2y += 1 : count.w2n += 1;
+                if(group.transfer === "y") count.transfer += 1;
            }
           return count;
         },
-        { w1y: 0, w1n: 0, w2y: 0, w2n: 0, willbey: 0, willben: 0 }  
+        { w1y: 0, w1n: 0, w2y: 0, w2n: 0, willbey: 0, willben: 0, transfer: 0 }  
       );
 })

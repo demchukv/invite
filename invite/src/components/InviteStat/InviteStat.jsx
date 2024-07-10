@@ -60,10 +60,13 @@ const InviteStat = () => {
               </Typography>
               <List>
                 <ListItem>
-                  На вінчанні: <b>{stat.w1y}</b>
+                  На вінчанні: &nbsp;<b>{stat.w1y}</b>
                 </ListItem>
                 <ListItem>
-                  На банкеті: <b>{stat.w2y}</b>
+                  На банкеті: &nbsp;<b>{stat.w2y}</b>
+                </ListItem>
+                <ListItem>
+                  Потрібен трансфер: &nbsp;<b>{stat.w2y}</b>
                 </ListItem>
               </List>
             </CardContent>
@@ -111,6 +114,14 @@ const InviteStat = () => {
                     </ListItem>
                   ))}
                 </List>
+                {ig.transfer === "y" && (
+                  <Chip
+                    label="Трансфер"
+                    size="small"
+                    color="warning"
+                    variant="outlined"
+                  />
+                )}
               </CardContent>
               <CardActions>
                 <TextField

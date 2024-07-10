@@ -1,11 +1,12 @@
 :root{
     --color-bg:#fff;
     --color-bg-dark:#d7ccc8;
+    --color-bg-light:#f1eeec;
     --color-white: #fff;
     --color-black: #000;
     --color-btn-bg: #6d4c41;
     --color-btn-bg-hover:#3e2723;
-    font-family: "Roboto", sans-serif;
+    font-family: "Cormorant Garamond", serif;
     font-weight: 300;
     font-style: normal;
 }
@@ -21,13 +22,16 @@
 .in_timer > p{
     display: none;
 }
-
+.in_ligth_bg{
+    background-color: var(--color-bg-light);
+}
 .in_header-title{
     transform: rotate(-8deg);
-    text-shadow: none;
+    text-shadow: 2px 2px 8px #fff;
+    font-size: 4rem;
 }
 .in_title_font{
-    font-weight: 300;
+    font-weight: 500;
     color:#111;
     font-style: italic;
 }
@@ -37,23 +41,29 @@
     background-color: transparent;
 }
 .in_invite_title{
-    background-color: aqua;
     margin-left: -20px;
     margin-right: -20px;
     padding: 100px 40px;
     background-position: center;
     background-size:cover;
     background-repeat: no-repeat;
-    font-size: 2.6rem;
-    font-weight: 600;
+    font-size: 2.8rem;
+    font-weight: 400;
     color:var(--color-black);
     text-shadow: 2px 2px 2px var(--color-white);
 }
+.in_invite_section{
+    font-size: 2.8rem;
+}
 .in_invite_bg_one{
-    background-image: url(/public/tserkva.jpg);
+    background-image: 
+        radial-gradient(closest-side, #ffffff, transparent),
+        url(/tserkva.jpg);
 }
 .in_invite_bg_two{
-    background-image: url(/public/zal.jpg);
+    background-image: 
+        radial-gradient(closest-side, #ffffff, transparent),
+        url(/zal.jpg);
 }
 
 .in_invite_desc p{

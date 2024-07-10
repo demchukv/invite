@@ -25,6 +25,7 @@ class UpdateInviteGroupRequest extends FormRequest
                 'invite_id' => ['required'],
                 'w1' => [],
                 'w2' => [],
+                'transfer' => [],
                 'link' => [],
             ];
     }

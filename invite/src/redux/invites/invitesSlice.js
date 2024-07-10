@@ -16,7 +16,8 @@ import {
   updateGuestAnswer,
   updateGuestSubAnswer,
   changeInvitationTheme,
-  updateGalleryPhotos
+  updateGalleryPhotos,
+  updateGuestTransfer
 } from "./operations";
 const handlePending = (state) => {
   state.isLoading = true;
@@ -197,6 +198,15 @@ const invitesSlice = createSlice({
         state.guest.inviteGroup = action.payload.group;
       })
       .addCase(updateGuestSubAnswer.rejected, handleRejected)
+
+      .addCase(updateGuestTransfer.pending, handlePending)
+      .addCase(updateGuestTransfer.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.guest.inviteGroup = action.payload.group;
+      })
+      .addCase(updateGuestTransfer.rejected, handleRejected)
+
 
       .addCase(changeInvitationTheme.pending, handlePending)
       .addCase(changeInvitationTheme.fulfilled, (state, action) => {

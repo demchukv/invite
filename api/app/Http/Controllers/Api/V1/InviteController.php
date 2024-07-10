@@ -527,6 +527,36 @@ class InviteController extends Controller
         ], 200);
     }
 
+    public function updateGuestTransfer(Request $request){
+        $group = DB::table('invite_groups')
+        ->where('link', $request->link)
+        ->first();
+
+        if(!$group){
+            return response() -> json([
+                'status'=>"false",
+                'message'=>'Forbidden',
+            ], 403);
+        }
+        DB::table('invite_groups')
+        ->where('id', $group->id)
+        ->update([
+            $request->field=>$request->val
+        ]);
+
+        $ret_group = DB::table('invite_groups')
+        ->where('id', $group->id)
+        ->first();
+
+
+        return response() -> json([
+            'status'=>"true",
+            'message'=>'Answer updated',
+            'group_id'=>$group->id,
+            'group'=>$ret_group,
+        ], 200);
+    }
+
     public function changeInvitationTheme(Request $request){
 
         $theme = DB::table('invite_themes')

@@ -20,6 +20,7 @@ class InviteGroupResource extends JsonResource
             'inviteId' => $this -> invite_id,
             'w1' => $this -> w1,
             'w2' => $this -> w2,
+            'transfer' => $this -> transfer,
             'link' => $this -> link,
             'inviteGuests' => InviteGuestResource::collection($this->whenLoaded('inviteGuests')),
         ];

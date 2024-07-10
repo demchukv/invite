@@ -15,7 +15,7 @@ class Invite extends Model
     protected $fillable = [
         'id',
         'user_id',
-        'theme_id',
+        // 'theme_id',
         'name_one',
         'name_two',
         'end_point',
@@ -31,22 +31,23 @@ class Invite extends Model
         'addition',
     ];
 
-    public function user(){
-        return $this -> belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function inviteGroups()
     {
-        return $this -> hasMany(InviteGroup::class);
+        return $this->hasMany(InviteGroup::class);
     }
 
-    public function invitePhotos(){
-        return $this -> hasMany(InvitePhoto::class);
+    public function invitePhotos()
+    {
+        return $this->hasMany(InvitePhoto::class);
     }
 
-    public function inviteTimings(){
-        return $this -> hasMany(InviteTiming::class);
+    public function inviteTimings()
+    {
+        return $this->hasMany(InviteTiming::class);
     }
-
-
 }

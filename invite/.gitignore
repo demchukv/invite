@@ -1,6 +1,5 @@
 # Logs
 logs
-Work-Material
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -8,10 +7,14 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+Work-Material
 node_modules
 dist
 dist-ssr
 *.local
+.env
+firebase.js
+firebase_credentials.json
 
 # Editor directories and files
 .vscode/*

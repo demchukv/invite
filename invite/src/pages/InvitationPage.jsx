@@ -6,6 +6,7 @@ import {
   fetchOneInviteByLink,
   updateGuestAnswer,
   updateGuestSubAnswer,
+  updateGuestTransfer,
 } from "../redux/invites/operations";
 import { Helmet } from "react-helmet-async";
 import DocumentTitle from "../components/DocumentTitle";
@@ -17,10 +18,17 @@ import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 
 import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import "dayjs/locale/uk";
+import updateLocale from 'dayjs/plugin/updateLocale';
+dayjs.locale('uk');
+dayjs.extend(updateLocale);
+dayjs.updateLocale('uk', {
+  months: [
+    "Січень", "Лютий", "Березень", "Квітень", "Травень", "Червень", "Липень",
+    "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"
+  ],
+  weekdays: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+});
 
 import "./InvitationPage.css";
 
@@ -30,8 +38,8 @@ const InvitationPage = () => {
   const invite = useSelector(selectInvitation);
   const isLoading = useSelector(selectIsLoading);
   const isError = useSelector(selectError);
-  //const [value, setValue] = useState(dayjs(invite.end_point));
   const [showSubAnswer, setShowSubAnswer] = useState(false);
+  const [showTransfer, setShowTransfer] = useState(false);
 
   useEffect(() => {
     if (!link) return;
@@ -41,6 +49,11 @@ const InvitationPage = () => {
   useEffect(() => {
     setShowSubAnswer(invite.willbe);
   }, [invite.willbe]);
+
+  useEffect(() => {
+    if (!invite || !link) return;
+    setShowTransfer(invite.inviteGroup && (invite.inviteGroup.w1 === "y" || invite.inviteGroup.w2 === "y") ? true : false);
+  }, [invite, link]);
 
   const head_style = {
     backgroundImage: `url(${invite?.photo}?t=${Math.random()})`,
@@ -59,15 +72,29 @@ const InvitationPage = () => {
     dispatch(updateGuestSubAnswer({ field, val, link }));
   };
 
+  const handleTransferClick = (field, val) => {
+    if (!link) return;
+    dispatch(updateGuestTransfer({ field, val, link }));
+  };
+
   const cssFile = invite?.inviteTheme?.css
     ? `/styles/${invite.inviteTheme.css}.css`
-    : `/styles/first.css`;
+    : `/styles/white.css`;
 
   const images = [];
   if (Array.isArray(invite?.invitePhotos)) {
     for (const img of invite.invitePhotos) {
       images.push({ original: img.photo_name, thumbnail: null });
     }
+  }
+
+  const miniCalendar = [];
+  for( let i = 1; i < 8; i++){
+    miniCalendar.push({
+      'dn' : dayjs(dayjs(invite.end_point).day(i)).format("dddd"),
+      'dd':dayjs(dayjs(invite.end_point).day(i)).format("DD"),
+      'sel': dayjs(invite.end_point).format("DD") === dayjs(dayjs(invite.end_point).day(i)).format("DD") ? true : false
+    });
   }
 
   return (
@@ -77,6 +104,7 @@ const InvitationPage = () => {
 
       {invite && invite.id && (
         <div className="in_page">
+          
           {link && (
             <Helmet>
               <link type="text/css" rel="stylesheet" href={cssFile} />
@@ -111,10 +139,10 @@ const InvitationPage = () => {
               className="in_header in_head_pad in_pad in_very_dark_bg"
               style={head_style}
             >
-              <h1 className="in_header-title in_title_font">
-                {invite.name_one}
-                <br />+<br />
-                {invite.name_two}
+              <h1 className="in_header-title in_title_font great-vibes-regular">
+                <span className="in_left">{invite.name_one}</span>
+                <br /><span className="in_plus">+</span><br />
+                <span className="in_right">{invite.name_two}</span>
               </h1>
             </div>
 
@@ -152,18 +180,24 @@ const InvitationPage = () => {
                 {invite.invitation}
               </p>
             </div>
-            <div className="">
-              <LocalizationProvider
-                dateAdapter={AdapterDayjs}
-                adapterLocale="uk"
-              >
-                <DateCalendar
-                  value={dayjs(invite.end_point)}
-                  // onChange={(newValue) => setValue(newValue)}
-                  readOnly
-                  disabled
-                />
-              </LocalizationProvider>
+
+            {/* Calendar */}
+            <div className="in_pad pt50 pb50 mt10 in_invite_calendar">
+              <h4 className="mb10 in_invite_calendar_title">{dayjs(invite.end_point).format("MMMM")}</h4>
+              <div className="mb10 in_invite_calendar_days">
+              {miniCalendar.map((day, idx) => (
+                <div key={"dn"+idx} className={day.sel === true ? "in_invite_calendar_dayname in_invite_calendar_dayname_sel" : "in_invite_calendar_dayname"}>
+                {day.dn}
+                </div>
+              ))}
+              </div>
+              <div className="in_invite_calendar_days in_sel_icon">
+              {miniCalendar.map((day, idx) => (
+                <div key={"dd"+idx} className={day.sel === true ? "in_invite_calendar_daynumber in_invite_calendar_dayname_sel " : "in_invite_calendar_daynumber"}>
+                {day.dd}
+                </div>
+              ))}
+              </div>
             </div>
 
             <div className="in_pad pb50 mt10">
@@ -172,7 +206,7 @@ const InvitationPage = () => {
 
             {/* Map */}
             <div className="in_pad in_dark_bg pb50 pt50 in_invite">
-              <div className="in_text in_center_text in_text_upper in_invite_title in_invite_bg_one">Вінчання</div>
+              <div className="in_text in_center_text in_invite_title in_invite_bg_one great-vibes-regular">Вінчання</div>
               <div className="in_text_sm in_center_text mt30 in_invite_desc" dangerouslySetInnerHTML={{__html:invite.place_one}}>
               </div>
               {invite.map_url_one !== "" && (
@@ -184,8 +218,8 @@ const InvitationPage = () => {
                   Дивитись на мапі
                 </a>
               )}
-              <div className="in_text in_center_text in_text_upper in_invite_title in_invite_bg_two">Банкет</div>
-              <div className="in_text_sm in_center_text mb10 mt30 in_invite_desc" dangerouslySetInnerHTML={{__html:invite.place_two}}>
+              <div className="in_text in_center_text in_invite_title in_invite_bg_two great-vibes-regular">Банкет</div>
+              <div className="in_text_sm in_center_text mb10 mt30 in_invite_desc " dangerouslySetInnerHTML={{__html:invite.place_two}}>
               </div>
               {invite.map_url_two !== "" && invite.map_url_two !== null && (
                 <a
@@ -199,7 +233,7 @@ const InvitationPage = () => {
             </div>
 
             {/* Guests answer */}
-            <div className="in_pad pb50 pt50">
+            <div className="in_pad pb50 pt50 in_ligth_bg">
               <p className="in_text in_center_text mb50">
                 Чи зможете ви приєднатись до святкування разом з нами?
               </p>
@@ -268,6 +302,7 @@ const InvitationPage = () => {
                       </button>
                     </div>
                   </div>
+
                   <div className="in_guest_control mt10">
                     <div className="in_text">Банкет</div>
                     <div className="in_guest_btn">
@@ -295,16 +330,56 @@ const InvitationPage = () => {
                       </button>
                     </div>
                   </div>
+                  {invite.inviteGroup && showTransfer && (
+                    
+                  <div className="in_guest_control mt50">
+                    <div className="in_text">Чи потрібен трансфер<br/>від церкви до ресторану?</div>
+                    <div className="in_guest_btn">
+                      <button
+                        type="button"
+                        className={
+                          invite.inviteGroup.transfer === "y"
+                            ? "in_as_btn in_btn_fixed"
+                            : "in_as_btn_outlined in_btn_fixed"
+                        }
+                        onClick={() => handleTransferClick("transfer", "y")}
+                      >
+                        Так
+                      </button>
+                      <button
+                        type="button"
+                        className={
+                          invite.inviteGroup.transfer === "n"
+                            ? "in_as_btn in_btn_fixed"
+                            : "in_as_btn_outlined in_btn_fixed"
+                        }
+                        onClick={() => handleTransferClick("transfer", "n")}
+                      >
+                        Ні
+                      </button>
+                    </div>
+                  </div>
+                  )}
+
                 </div>
               )}
-              <p className="in_text_sm in_center_text mt50">
+              <p className="in_center_text mt50">
                 {invite.deadline}
               </p>
             </div>
 
+            {invite.thankyou !== "" && invite.thankyou !== null && (
+              <>
+              <div className="in_pad pb50 pt50 in_center_text">
+                <p className="great-vibes-regular in_invite_section">Дрес-код</p>
+                <p className="in_center_text">{invite.thankyou}</p>
+              </div>
+              </>
+            )}
+
             {images.length > 0 && (
               <ImageGallery
-                items={images}
+                items={images.reverse()}
                 showFullscreenButton={false}
                 showPlayButton={false}
                 showThumbnails={false}
@@ -314,7 +389,7 @@ const InvitationPage = () => {
             {/* Timings */}
             {Array.isArray(invite.inviteTiming) &&
                   invite.inviteTiming.length > 0 &&
-            <div className="in_pad in_dark_bg pb50 pt50">
+            <div className="in_pad pb50 pt50">
               <p className="in_text in_center_text mb50">Таймінг дня</p>
               <>
                 {Array.isArray(invite.inviteTiming) &&
@@ -330,13 +405,10 @@ const InvitationPage = () => {
             </div>
             }
 
-            {invite.thankyou !== "" && invite.thankyou !== null && (
-              <div className="in_pad pb50 pt50">{invite.thankyou}</div>
-            )}
-
             {invite.addition !== "" && invite.addition !== null && (
-              <div className="in_pad in_dark_bg pb50 pt50">
+              <div className="in_pad pb50 pt50 in_center_text">
                 {invite.addition}
+                <p className="in_center_text pt50 great-vibes-regular in_invite_section">З любов'ю,<br></br>{invite.name_one} та {invite.name_two}</p>
               </div>
             )}
           </div>

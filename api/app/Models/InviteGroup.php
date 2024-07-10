@@ -15,6 +15,7 @@ class InviteGroup extends Model
         'invite_id',
         'w1',
         'w2',
+        'transfer',
         'link'
     ];
 

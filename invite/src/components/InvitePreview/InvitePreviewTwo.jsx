@@ -20,14 +20,21 @@ const InvitePreviewTwo = () => {
   const isLoadingPreview = useSelector(selectIsLoading);
   const isErrorPreview = useSelector(selectError);
   const invite = useSelector(selectInvitation);
-
-  const [style, setStyle] = useState(invite?.inviteTheme?.css ? `/styles/${invite.inviteTheme.css}.css` : `/styles/first.css`);
-  const [styleKey, setStyleKey] = useState(invite?.inviteTheme?.css ? invite.inviteTheme.css : "first");
+  const [style, setStyle] = useState(
+    invite?.inviteTheme?.css
+      ? `/styles/${invite.inviteTheme.css}.css`
+      : `/styles/white.css`
+  );
+  const [styleKey, setStyleKey] = useState(
+    invite?.inviteTheme?.css ? invite.inviteTheme.css : "white"
+  );
 
   const handleStyle = (event) => {
     setStyleKey(event.target.value);
     setStyle(`/styles/${event.target.value}.css`);
-    dispatch(changeInvitationTheme({'css':event.target.value, 'invite_id':invite.id}));
+    dispatch(
+      changeInvitationTheme({ css: event.target.value, invite_id: invite.id })
+    );
   };
 
   const styleVariants = [
@@ -36,7 +43,7 @@ const InvitePreviewTwo = () => {
     { key: "second", name: "Blue-Grey" },
     { key: "lime", name: "Lime" },
   ];
-  
+
   return (
     <>
       {isErrorPreview && <ErrorMessage>{isErrorPreview}</ErrorMessage>}

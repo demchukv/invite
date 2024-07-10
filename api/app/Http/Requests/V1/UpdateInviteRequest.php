@@ -12,9 +12,9 @@ class UpdateInviteRequest extends FormRequest
     public function authorize(): bool
     {
         $user =  auth('sanctum')->user();
-        if(isset($user -> id)){
+        if (isset($user->id)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -27,11 +27,11 @@ class UpdateInviteRequest extends FormRequest
      */
     public function rules(): array
     {
-        $method = $this -> method();
+        $method = $this->method();
 
-        if($method == "PUT"){
+        if ($method == "PUT") {
             return [
-                'themeId' => [],
+                // 'themeId' => [],
                 'nameOne' => ['required'],
                 'nameTwo' => ['required'],
                 'endPoint' => ['required'],
@@ -47,9 +47,9 @@ class UpdateInviteRequest extends FormRequest
                 'timerphoto' => [],
                 'addition' => [],
             ];
-        }else{
+        } else {
             return [
-                'themeId' => ['sometimes'],
+                // 'themeId' => ['sometimes'],
                 'nameOne' => ['sometimes', 'required'],
                 'nameTwo' => ['sometimes', 'required'],
                 'endPoint' => ['sometimes', 'required'],
@@ -68,16 +68,17 @@ class UpdateInviteRequest extends FormRequest
         }
     }
 
-    protected function prepareForValidation(){
-        $this -> merge([
-            'theme_id' => $this -> themeId,
-            'name_one' => $this -> nameOne,
-            'name_two' => $this -> nameTwo,
-            'end_point' => $this -> endPoint,
-            'place_one' => $this -> placeOne,
-            'map_url_one' => $this -> mapUrlOne,
-            'place_two' => $this -> placeTwo,
-            'map_url_two' => $this -> mapUrlTwo,
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'theme_id' => $this->themeId,
+            'name_one' => $this->nameOne,
+            'name_two' => $this->nameTwo,
+            'end_point' => $this->endPoint,
+            'place_one' => $this->placeOne,
+            'map_url_one' => $this->mapUrlOne,
+            'place_two' => $this->placeTwo,
+            'map_url_two' => $this->mapUrlTwo,
         ]);
     }
 }

@@ -1,11 +1,11 @@
-:root{
-    --color-bg:#f9fbe7;
-    --color-bg-dark:#f0f4c3;
-    --color-white:#fff;
-    --color-black:#000;
-    --color-btn-bg:#9e9d24;
-    --color-btn-bg-hover:#827717;
-    font-family: "Roboto", sans-serif;
-    font-weight: 300;
-    font-style: normal;
+:root {
+  --color-bg: #fff;
+  --color-bg-dark: #f0f4c3;
+  --color-white: #fff;
+  --color-black: #000;
+  --color-btn-bg: #9e9d24;
+  --color-btn-bg-hover: #827717;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  font-style: normal;
 }

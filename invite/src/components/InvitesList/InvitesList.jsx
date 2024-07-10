@@ -16,7 +16,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 
 const InvitesList = () => {
   const [open, setOpen] = useState(false);
@@ -52,7 +52,12 @@ const InvitesList = () => {
             return (
               <React.Fragment key={invite.id}>
                 {index !== 0 && <Divider variant="inset" component="li" />}
-                <ListItem key={invite.id} component={RouterLink} to={hRef} sx={{color: "text.primary"}}>
+                <ListItem
+                  key={invite.id}
+                  component={RouterLink}
+                  to={hRef}
+                  sx={{ color: "text.primary" }}
+                >
                   <ListItemAvatar>
                     <Avatar sx={{ backgroundColor: "background.paper" }}>
                       <AssignmentTurnedInIcon color="secondary" />
@@ -63,14 +68,17 @@ const InvitesList = () => {
                     secondary={secondaryText}
                   />
                   <ListItemSecondaryAction>
-                  <Tooltip title="Видалити запрошення" placement="top">
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => {setInviteId(invite.id); setOpen(true)}}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    <Tooltip title="Видалити запрошення" placement="top">
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => {
+                          setInviteId(invite.id);
+                          setOpen(true);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
                     </Tooltip>
                   </ListItemSecondaryAction>
                 </ListItem>

@@ -36,6 +36,7 @@ Route::get('v1/invitation/id/{id}', [InviteController::class, 'fetchOneInviteByI
 
 Route::post('v1/invite-answer', [InviteController::class, 'updateGuestAnswer']);
 Route::post('v1/invite-subanswer', [InviteController::class, 'updateGuestSubAnswer']);
+Route::post('v1/invite-transfer', [InviteController::class, 'updateGuestTransfer']);
 
 Route::group(['prefix' => 'v1', 'namespace' => '\App\Http\Controllers\Api\V1', 'middleware'=>'auth:sanctum'], function(){
 

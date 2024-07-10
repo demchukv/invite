@@ -13,9 +13,9 @@ class StoreInviteRequest extends FormRequest
     public function authorize(): bool
     {
         $user =  auth('sanctum')->user();
-        if(isset($user -> id)){
+        if (isset($user->id)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -29,7 +29,7 @@ class StoreInviteRequest extends FormRequest
     {
         return [
             'userId' => [],
-            'themeId' => [],
+            // 'themeId' => [],
             'nameOne' => ['required'],
             'nameTwo' => ['required'],
             'endPoint' => ['required'],
@@ -49,16 +49,16 @@ class StoreInviteRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this -> merge([
+        $this->merge([
             'user_id' => auth('sanctum')->user()->id,
-            'theme_id' => $this -> themeId,
-            'name_one' => $this -> nameOne,
-            'name_two' => $this -> nameTwo,
-            'end_point' => $this -> endPoint,
-            'place_one' => $this -> placeOne,
-            'map_url_one' => $this -> mapUrlOne,
-            'place_two' => $this -> placeTwo,
-            'map_url_two' => $this -> mapUrlTwo,
+            // 'theme_id' => $this->themeId,
+            'name_one' => $this->nameOne,
+            'name_two' => $this->nameTwo,
+            'end_point' => $this->endPoint,
+            'place_one' => $this->placeOne,
+            'map_url_one' => $this->mapUrlOne,
+            'place_two' => $this->placeTwo,
+            'map_url_two' => $this->mapUrlTwo,
         ]);
     }
 }

@@ -200,6 +200,20 @@ export const updateGuestSubAnswer = createAsyncThunk(
   }
 );
 
+export const updateGuestTransfer = createAsyncThunk(
+  "invites/updateGuestTransfer",
+  async (values, thunkAPI) => {
+    try {
+      const response = await axios.post(`/invite-transfer`, values);
+      toast.success("Вашу відповідь збережено!");
+      return response.data;
+    } catch (e) {
+      toast.error(e.message);
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
 export const changeInvitationTheme = createAsyncThunk(
   "invites/changeInvitationTheme",
   async (values, thunkAPI) => {
