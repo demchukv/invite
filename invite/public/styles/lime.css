@@ -1,3 +1,280 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap'); */
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+:root {
+  --color-bg: #fff;
+  --color-bg-dark: #d7ccc8;
+  --color-bg-light: #f1eeec;
+  --color-white: #fff;
+  --color-black: #000;
+  --color-btn-bg: #6d4c41;
+  --color-btn-bg-hover: #3e2723;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.great-vibes-regular {
+  font-family: "Great Vibes", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+.in_invite_section {
+  font-size: 2.8rem;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+.in_title_font {
+  /* font-family: "Pacifico", cursive; */
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  color: var(--color-black);
+  min-width: 320px;
+}
+.in_page {
+  background-color: var(--color-bg);
+  font-size: 1.4rem;
+  color: var(--color-black);
+  min-width: 320px;
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
+  font-style: normal;
+}
+.in_dark_bg {
+  background-color: var(--color-bg-dark);
+}
+.in_ligth_bg {
+  background-color: var(--color-bg-light);
+}
+.in_very_dark_bg {
+  background-color: var(--color-btn-bg-hover);
+}
+.in_as_btn {
+  display: flex;
+  width: fit-content;
+  padding: 6px 12px;
+  color: var(--color-white);
+  background-color: var(--color-btn-bg);
+  border: 1px solid var(--color-btn-bg);
+  border-radius: 5px;
+  text-decoration: none;
+  margin: 0 auto;
+  outline: none;
+  text-align: center;
+  cursor: pointer;
+  font-family: "Cormorant Garamond", serif;
+}
+.in_as_btn:hover {
+  background-color: var(--color-btn-bg-hover);
+}
+.in_as_btn_outlined {
+  display: flex;
+  width: fit-content;
+  padding: 6px 12px;
+  color: var(--color-btn-bg);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-btn-bg);
+  border-radius: 5px;
+  text-decoration: none;
+  margin: 0 auto;
+  outline: none;
+  text-align: center;
+  cursor: pointer;
+  font-family: "Cormorant Garamond", serif;
+}
+.in_as_btn_outlined:hover {
+  background-color: var(--color-bg-dark);
+}
+.in_btn_fixed {
+  width: 50px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mt10 {
+  margin-top: 10px;
+}
+.mb10 {
+  margin-bottom: 10px;
+}
+.mt30 {
+  margin-top: 30px;
+}
+.mb30 {
+  margin-bottom: 30px;
+}
+.mt50 {
+  margin-top: 50px;
+}
+.mb50 {
+  margin-bottom: 50px;
+}
+.pt50 {
+  padding-top: 80px;
+}
+.pb50 {
+  padding-bottom: 80px;
+}
+.in_container {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-width: 320px;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 0;
+}
+.in_text {
+  font-size: 1.3rem;
+}
+.in_text_sm {
+  font-size: 1.1rem;
+}
+.in_center_text {
+  text-align: center;
+}
+.in_text_upper {
+  text-transform: uppercase;
+}
+.in_txt_white {
+  color: var(--color-white);
+}
+.in_txt_italic {
+  font-style: italic;
+}
+.in_txt_bigger {
+  font-size: 1.5rem;
+}
+.in_pad {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.in_header {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.in_head_pad {
+  padding-top: 500px;
+  padding-bottom: 40px;
+}
+.in_header-title {
+  /* text-align: center; */
+  display: flex;
+  flex-direction: column;
+  color: var(--color-white);
+  /* font-size: 3rem; */
+  text-shadow: 2px 2px 2px var(--color-black);
+  line-height: 0.7;
+}
+.in_left {
+  display: inline-block;
+  text-align: left;
+}
+.in_right {
+  display: inline-block;
+  text-align: right;
+  margin-top: -60px;
+  padding-right: 30px;
+}
+.in_plus {
+  display: inline-block;
+  font-size: 152px;
+  text-align: center;
+  margin-top: -90px;
+  padding-right: 50px;
+}
+
+/* buttons for answer */
+.in_guest_control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.in_guest_btn {
+  display: flex;
+  gap: 4px;
+}
+
+/* Back timer styles */
+.in_back_timer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-self: center;
+  gap: 20px;
+  text-shadow: 2px 2px 2px var(--color-black);
+}
+.in_bt_item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  justify-content: center;
+}
+.in_bt_val {
+  font-size: 2.6rem;
+  color: var(--color-white);
+}
+.in_bt_sign {
+  font-size: 0.8rem;
+  color: var(--color-white);
+}
+
+/* custom calendar */
+.in_invite_calendar {
+  display: block;
+}
+.in_invite_calendar_title {
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 300;
+  font-size: 1.5rem;
+}
+.in_invite_calendar_days {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.in_invite_calendar_dayname {
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  text-align: center;
+  width: calc((100% - 24px) / 7);
+}
+.in_invite_calendar_daynumber {
+  text-align: center;
+  width: calc((100% - 24px) / 7);
+}
+.in_invite_calendar_dayname_sel {
+  font-weight: 600;
+}
+.in_sel_icon {
+  background-image: url(/public/heartd.svg);
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center top;
+  min-height: 160px;
+}
+
+/* REPLACE STYLES */
 :root {
   --color-bg: #fff;
   --color-bg-dark: #f0f4c3;

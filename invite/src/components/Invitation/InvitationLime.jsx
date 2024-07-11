@@ -26,7 +26,7 @@ dayjs.updateLocale("uk", {
 });
 // import "../../pages/InvitationPage.css";
 
-export const InvitationWhite = ({
+export const InvitationLime = ({
   invite,
   handleAnswerClick,
   handleSubAnswerClick,

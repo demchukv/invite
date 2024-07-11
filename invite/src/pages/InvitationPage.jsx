@@ -15,31 +15,7 @@ import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
 import Loader from "../components/Loader/Loader";
 
 import { InvitationWhite } from "../components/Invitation/InvitationWhite";
-
-import dayjs from "dayjs";
-import "dayjs/locale/uk";
-import updateLocale from "dayjs/plugin/updateLocale";
-dayjs.locale("uk");
-dayjs.extend(updateLocale);
-dayjs.updateLocale("uk", {
-  months: [
-    "Січень",
-    "Лютий",
-    "Березень",
-    "Квітень",
-    "Травень",
-    "Червень",
-    "Липень",
-    "Серпень",
-    "Вересень",
-    "Жовтень",
-    "Листопад",
-    "Грудень",
-  ],
-  weekdays: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-});
-
-import "./InvitationPage.css";
+import { InvitationLime } from "../components/Invitation/InvitationLime";
 
 const InvitationPage = () => {
   const dispatch = useDispatch();
@@ -88,6 +64,7 @@ const InvitationPage = () => {
     ? `/styles/${invite.inviteTheme.css}.css`
     : `/styles/white.css`;
 
+  const nameOfTemplates = ["white", "lime"];
   return (
     <>
       {isError && <ErrorMessage>{isError}</ErrorMessage>}
@@ -101,15 +78,27 @@ const InvitationPage = () => {
             </Helmet>
           )}
           <DocumentTitle>{`Запрошення на весілля: ${invite.name_one} та ${invite.name_two}`}</DocumentTitle>
-
-          <InvitationWhite
-            invite={invite}
-            handleAnswerClick={handleAnswerClick}
-            handleSubAnswerClick={handleSubAnswerClick}
-            handleTransferClick={handleTransferClick}
-            showSubAnswer={showSubAnswer}
-            showTransfer={showTransfer}
-          />
+          {(invite.inviteTheme.css === "white" ||
+            !nameOfTemplates.includes(invite.inviteTheme.css)) && (
+            <InvitationWhite
+              invite={invite}
+              handleAnswerClick={handleAnswerClick}
+              handleSubAnswerClick={handleSubAnswerClick}
+              handleTransferClick={handleTransferClick}
+              showSubAnswer={showSubAnswer}
+              showTransfer={showTransfer}
+            />
+          )}
+          {invite.inviteTheme.css === "lime" && (
+            <InvitationLime
+              invite={invite}
+              handleAnswerClick={handleAnswerClick}
+              handleSubAnswerClick={handleSubAnswerClick}
+              handleTransferClick={handleTransferClick}
+              showSubAnswer={showSubAnswer}
+              showTransfer={showTransfer}
+            />
+          )}
         </>
       )}
     </>
