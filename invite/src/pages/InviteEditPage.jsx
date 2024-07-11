@@ -4,7 +4,7 @@ import DocumentTitle from "../components/DocumentTitle";
 import InviteForm from "../components/InviteForm/InviteForm";
 import GuestsForm from "../components/GuestsForm/GuestsForm";
 // import InvitePreview from "../components/InvitePreview/InvitePreview";
-import InvitePreviewTwo from "../components/InvitePreview/InvitePreviewTwo";
+import InvitePreview from "../components/InvitePreview/InvitePreview";
 import InviteStat from "../components/InviteStat/InviteStat";
 import { useParams } from "react-router-dom";
 import {
@@ -70,7 +70,7 @@ export default function InviteEditPage() {
                 <GuestsForm />
               </TabPanel>
               <TabPanel value="2">
-                <InvitePreviewTwo />
+                <InvitePreview />
               </TabPanel>
               <TabPanel value="3">
                 <InviteStat />
