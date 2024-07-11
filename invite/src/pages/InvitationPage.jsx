@@ -17,6 +17,8 @@ import Loader from "../components/Loader/Loader";
 import { InvitationWhite } from "../components/Invitation/InvitationWhite";
 import { InvitationLime } from "../components/Invitation/InvitationLime";
 
+import "./InvitationPage.css";
+
 const InvitationPage = () => {
   const dispatch = useDispatch();
   const { link } = useParams();
@@ -78,6 +80,7 @@ const InvitationPage = () => {
             </Helmet>
           )}
           <DocumentTitle>{`Запрошення на весілля: ${invite.name_one} та ${invite.name_two}`}</DocumentTitle>
+
           {(invite.inviteTheme.css === "white" ||
             !nameOfTemplates.includes(invite.inviteTheme.css)) && (
             <InvitationWhite
@@ -89,6 +92,7 @@ const InvitationPage = () => {
               showTransfer={showTransfer}
             />
           )}
+
           {invite.inviteTheme.css === "lime" && (
             <InvitationLime
               invite={invite}
