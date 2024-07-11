@@ -25,14 +25,21 @@
   background-color: var(--color-bg-light);
 }
 .in_header-title {
-  transform: rotate(-8deg);
+  /* transform: rotate(-8deg); */
   text-shadow: 2px 2px 8px #fff;
-  font-size: 4rem;
+  font-size: 3.2rem;
 }
 .in_title_font {
   font-weight: 500;
   color: #111;
   font-style: italic;
+}
+.in_plus {
+  display: none;
+  font-size: 3.2rem;
+  text-align: center;
+  margin-top: -90px;
+  padding-right: 50px;
 }
 
 .in_invite {
@@ -42,7 +49,7 @@
 .in_invite_title {
   margin-left: -20px;
   margin-right: -20px;
-  padding: 100px 40px;
+  padding: 30px 40px 0px 40px;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -55,12 +62,12 @@
   font-size: 2.8rem;
 }
 .in_invite_bg_one {
-  background-image: radial-gradient(closest-side, #ffffff, transparent),
-    url(/tserkva.jpg);
+  /* background-image: radial-gradient(closest-side, #ffffff, transparent),
+    url(/tserkva.jpg); */
 }
 .in_invite_bg_two {
-  background-image: radial-gradient(closest-side, #ffffff, transparent),
-    url(/zal.jpg);
+  /* background-image: radial-gradient(closest-side, #ffffff, transparent),
+    url(/zal.jpg); */
 }
 
 .in_invite_desc p {
