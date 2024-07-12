@@ -63,8 +63,8 @@ const InvitationPage = () => {
   };
 
   const cssFile = invite?.inviteTheme?.css
-    ? `/styles/${invite.inviteTheme.css}.css`
-    : `/styles/white.css`;
+    ? `/styles/${invite.inviteTheme.css}.css?t=${Math.random()}`
+    : `/styles/white.css?t=${Math.random()}`;
 
   const nameOfTemplates = ["white", "lime"];
   return (

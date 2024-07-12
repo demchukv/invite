@@ -12,6 +12,7 @@
   --color-btn-bg: #a4a387;
   --color-btn-bg-hover: #6b6d55;
 
+  --color-gamma-0: #fff;
   --color-gamma-1: #e8d0b6;
   --color-gamma-2: #dfd6cd;
   --color-gamma-3: #a4a387;
@@ -201,6 +202,7 @@
 .in_invite_calendar_days {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 4px;
   justify-content: space-between;
   align-items: flex-start;
@@ -237,6 +239,10 @@
 .in_palitra_item {
   width: 40px;
   height: 40px;
+  border: 1px solid var(--color-black);
+}
+.pi0 {
+  background-color: var(--color-gamma-0);
 }
 .pi1 {
   background-color: var(--color-gamma-1);
@@ -325,4 +331,12 @@
 .in_bt_sign {
   font-size: 0.8rem;
   color: var(--color-black);
+}
+
+.in_img_tsan {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

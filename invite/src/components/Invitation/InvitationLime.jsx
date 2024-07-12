@@ -36,9 +36,10 @@ export const InvitationLime = ({
   const head_style = {
     backgroundImage: `url(${invite?.photo}?t=${Math.random()})`,
   };
-  const timer_style = {
-    backgroundImage: `url(${invite?.timerphoto}?t=${Math.random()})`,
-  };
+  // const timer_style = {
+  //   backgroundImage: `url(${invite?.timerphoto}?t=${Math.random()})`,
+  // };
+  // console.log(dayjs(invite.end_point));
   const miniCalendar = [];
   for (let i = 1; i < 8; i++) {
     miniCalendar.push({
@@ -51,6 +52,7 @@ export const InvitationLime = ({
           : false,
     });
   }
+  // console.log(miniCalendar);
   const images = [];
   if (Array.isArray(invite?.invitePhotos)) {
     for (const img of invite.invitePhotos) {
@@ -145,7 +147,7 @@ export const InvitationLime = ({
         </div>
 
         {/* Calendar */}
-        <div className="in_pad pt50 pb50 mt10 in_invite_calendar">
+        <div className="in_pad pt50 pb50 mt10 in_invite_calendar in_ligth_bg">
           <h4 className="mb10 in_invite_calendar_title">
             {dayjs(invite.end_point).format("MMMM")}
           </h4>
@@ -361,6 +363,7 @@ export const InvitationLime = ({
               <p className="great-vibes-regular in_invite_section">Дрес-код</p>
               <p className="in_center_text">{invite.thankyou}</p>
               <div className="in_palitra">
+                <div className="in_palitra_item pi0"></div>
                 <div className="in_palitra_item pi1"></div>
                 <div className="in_palitra_item pi2"></div>
                 <div className="in_palitra_item pi3"></div>
@@ -401,6 +404,12 @@ export const InvitationLime = ({
         {invite.addition !== "" && invite.addition !== null && (
           <div className="in_pad pb50 pt50 in_center_text in_ligth_bg">
             {invite.addition}
+            <img
+              className="in_img_tsan"
+              src="/4/igor-tsan.jpg"
+              width={500}
+              height={889}
+            />
             <p className="mt30">
               🔗 Посилання на банку:
               <br />
