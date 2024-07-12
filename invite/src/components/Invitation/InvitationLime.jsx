@@ -1,4 +1,4 @@
-import { BackTimer } from "../BackTimer/BackTimer";
+// import { BackTimer } from "../BackTimer/BackTimer";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 
@@ -24,7 +24,6 @@ dayjs.updateLocale("uk", {
   ],
   weekdays: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
 });
-// import "../../pages/InvitationPage.css";
 
 export const InvitationLime = ({
   invite,
@@ -62,7 +61,7 @@ export const InvitationLime = ({
   return (
     <div className="in_page">
       <div className="in_container">
-        <div
+        {/* <div
           className="in_pad in_header in_very_dark_bg pb50 pt50 in_timer"
           style={timer_style}
         >
@@ -82,20 +81,32 @@ export const InvitationLime = ({
           <p className="in_text in_center_text in_txt_white in_txt_italic mt50">
             ... і ми будемо одружені
           </p>
-        </div>
+        </div> */}
 
         {/* HEADER */}
-        <div
-          className="in_header in_head_pad in_pad in_very_dark_bg"
-          style={head_style}
-        >
+        <div className="in_header in_head_pad in_pad" style={head_style}>
           <h1 className="in_header-title in_title_font great-vibes-regular">
             <span className="in_left">{invite.name_one}</span>
             <br />
-            <span className="in_plus">+</span>
+            <span className="in_plus">&</span>
             <br />
             <span className="in_right">{invite.name_two}</span>
           </h1>
+          <div className="in_head_date">
+            <div className="in_head_date_inner">
+              <div className="in_head_date_item">СЕРПЕНЬ</div>
+            </div>
+            <div className="in_head_date_inner">
+              <div className="in_head_date_item in_head_date_border">
+                п'ятниця
+              </div>
+              <div className="in_head_date_item in_head_date_number">30</div>
+              <div className="in_head_date_item in_head_date_border">12:00</div>
+            </div>
+            <div className="in_head_date_inner">
+              <div className="in_head_date_item">2024</div>
+            </div>
+          </div>
         </div>
 
         {/* Invitation */}
@@ -152,13 +163,13 @@ export const InvitationLime = ({
               </div>
             ))}
           </div>
-          <div className="in_invite_calendar_days in_sel_icon">
+          <div className="in_invite_calendar_days ">
             {miniCalendar.map((day, idx) => (
               <div
                 key={"dd" + idx}
                 className={
                   day.sel === true
-                    ? "in_invite_calendar_daynumber in_invite_calendar_dayname_sel "
+                    ? "in_invite_calendar_daynumber in_invite_calendar_dayname_sel in_sel_icon"
                     : "in_invite_calendar_daynumber"
                 }
               >
@@ -190,7 +201,7 @@ export const InvitationLime = ({
               Дивитись на мапі
             </a>
           )}
-          <div className="in_text in_center_text in_invite_title in_invite_bg_two great-vibes-regular">
+          <div className="in_text in_center_text mt50 in_invite_title in_invite_bg_two great-vibes-regular">
             Банкет
           </div>
           <div
@@ -249,7 +260,8 @@ export const InvitationLime = ({
           {invite.inviteGroup && showSubAnswer && (
             <div>
               <p className="in_text in_center_text mb50 mt50">
-                На яких частинах свята плануєте бути присутніми?
+                Чи зможете ви приєднатись до святкування на локації Літепло
+                разом з нами?
               </p>
               <div className="in_guest_control mt10">
                 <div className="in_text">Вінчання</div>
@@ -309,9 +321,8 @@ export const InvitationLime = ({
               {invite.inviteGroup && showTransfer && (
                 <div className="in_guest_control mt50">
                   <div className="in_text">
-                    Чи потрібен трансфер
-                    <br />
-                    від церкви до ресторану?
+                    Чи бажаєте скористатися трансфером від цекрви до локації
+                    святкування?
                   </div>
                   <div className="in_guest_btn">
                     <button
@@ -349,6 +360,12 @@ export const InvitationLime = ({
             <div className="in_pad pb50 pt50 in_center_text">
               <p className="great-vibes-regular in_invite_section">Дрес-код</p>
               <p className="in_center_text">{invite.thankyou}</p>
+              <div className="in_palitra">
+                <div className="in_palitra_item pi1"></div>
+                <div className="in_palitra_item pi2"></div>
+                <div className="in_palitra_item pi3"></div>
+                <div className="in_palitra_item pi4"></div>
+              </div>
             </div>
           </>
         )}
@@ -382,14 +399,28 @@ export const InvitationLime = ({
           )}
 
         {invite.addition !== "" && invite.addition !== null && (
-          <div className="in_pad pb50 pt50 in_center_text">
+          <div className="in_pad pb50 pt50 in_center_text in_ligth_bg">
             {invite.addition}
-            <p className="in_center_text pt50 great-vibes-regular in_invite_section">
-              З любов'ю,<br></br>
-              {invite.name_one} та {invite.name_two}
+            <p className="mt30">
+              🔗 Посилання на банку:
+              <br />
+              <a href="https://send.monobank.ua/jar/8P9fgfC1HP" target="_blank">
+                Перейти до банки
+              </a>
+            </p>
+            <p className="mt30">
+              💳 Номер картки банки:
+              <br />
+              5375 4112 2015 0358
             </p>
           </div>
         )}
+        <div>
+          <p className="in_center_text pt50 pb50 great-vibes-regular in_invite_section">
+            З любов'ю,<br></br>
+            {invite.name_one} та {invite.name_two}
+          </p>
+        </div>
       </div>
     </div>
   );

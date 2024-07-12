@@ -24,7 +24,6 @@ dayjs.updateLocale("uk", {
   ],
   weekdays: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
 });
-// import "../../pages/InvitationPage.css";
 
 export const InvitationWhite = ({
   invite,
@@ -89,7 +88,7 @@ export const InvitationWhite = ({
           className="in_header in_head_pad in_pad in_very_dark_bg"
           style={head_style}
         >
-          <h1 className="in_header-title in_title_font great-vibes-regular">
+          <h1 className="in_header-title great-vibes-regular">
             <span className="in_left">{invite.name_one}</span>
             <br />
             <span className="in_plus">+</span>
@@ -190,7 +189,7 @@ export const InvitationWhite = ({
               Дивитись на мапі
             </a>
           )}
-          <div className="in_text in_center_text in_invite_title in_invite_bg_two great-vibes-regular">
+          <div className="in_text in_center_text mt50 in_invite_title in_invite_bg_two great-vibes-regular">
             Банкет
           </div>
           <div
@@ -355,7 +354,7 @@ export const InvitationWhite = ({
 
         {images.length > 0 && (
           <ImageGallery
-            items={images.reverse()}
+            items={images}
             showFullscreenButton={false}
             showPlayButton={false}
             showThumbnails={false}
