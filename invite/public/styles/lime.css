@@ -184,6 +184,9 @@
   justify-content: space-between;
   align-items: center;
 }
+.in_guest_control_transfer {
+  flex-direction: column;
+}
 .in_guest_btn {
   display: flex;
   gap: 4px;

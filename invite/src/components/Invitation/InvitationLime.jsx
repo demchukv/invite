@@ -28,10 +28,10 @@ dayjs.updateLocale("uk", {
 export const InvitationLime = ({
   invite,
   handleAnswerClick,
-  handleSubAnswerClick,
+  // handleSubAnswerClick,
   handleTransferClick,
   showSubAnswer,
-  showTransfer,
+  // showTransfer,
 }) => {
   const head_style = {
     backgroundImage: `url(${invite?.photo}?t=${Math.random()})`,
@@ -59,6 +59,9 @@ export const InvitationLime = ({
       images.push({ original: img.photo_name, thumbnail: null });
     }
   }
+
+  // showSubAnswer = true;
+  // showTransfer = true;
 
   return (
     <div className="in_page">
@@ -224,7 +227,8 @@ export const InvitationLime = ({
         {/* Guests answer */}
         <div className="in_pad pb50 pt50 in_ligth_bg">
           <p className="in_text in_center_text mb50">
-            Чи зможете ви приєднатись до святкування разом з нами?
+            Чи зможете ви приєднатись до святкування на локації Літепло разом з
+            нами?
           </p>
           <>
             {Array.isArray(invite.inviteGuests) &&
@@ -240,7 +244,7 @@ export const InvitationLime = ({
                           ? "in_as_btn in_btn_fixed"
                           : "in_as_btn_outlined in_btn_fixed"
                       }
-                      onClick={() => handleAnswerClick(guest.id, "y")}
+                      onClick={() => handleAnswerClick(guest.id, "y", true)}
                     >
                       Так
                     </button>
@@ -251,7 +255,7 @@ export const InvitationLime = ({
                           ? "in_as_btn in_btn_fixed"
                           : "in_as_btn_outlined in_btn_fixed"
                       }
-                      onClick={() => handleAnswerClick(guest.id, "n")}
+                      onClick={() => handleAnswerClick(guest.id, "n", true)}
                     >
                       Ні
                     </button>
@@ -259,9 +263,10 @@ export const InvitationLime = ({
                 </div>
               ))}
           </>
+
           {invite.inviteGroup && showSubAnswer && (
             <div>
-              <p className="in_text in_center_text mb50 mt50">
+              {/* <p className="in_text in_center_text mb50 mt50">
                 Чи зможете ви приєднатись до святкування на локації Літепло
                 разом з нами?
               </p>
@@ -319,14 +324,14 @@ export const InvitationLime = ({
                     Ні
                   </button>
                 </div>
-              </div>
-              {invite.inviteGroup && showTransfer && (
-                <div className="in_guest_control mt50">
-                  <div className="in_text">
+              </div> */}
+              {invite.inviteGroup && (
+                <div className="in_guest_control in_guest_control_transfer mt50">
+                  <div className="in_text in_center_text">
                     Чи бажаєте скористатися трансфером від цекрви до локації
                     святкування?
                   </div>
-                  <div className="in_guest_btn">
+                  <div className="in_guest_btn mt10">
                     <button
                       type="button"
                       className={

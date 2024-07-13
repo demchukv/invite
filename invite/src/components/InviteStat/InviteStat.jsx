@@ -66,7 +66,7 @@ const InviteStat = () => {
                   На банкеті: &nbsp;<b>{stat.w2y}</b>
                 </ListItem>
                 <ListItem>
-                  Потрібен трансфер: &nbsp;<b>{stat.w2y}</b>
+                  Потрібен трансфер: &nbsp;<b>{stat.transfer}</b>
                 </ListItem>
               </List>
             </CardContent>

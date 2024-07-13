@@ -47,9 +47,14 @@ const InvitationPage = () => {
     );
   }, [invite, link]);
 
-  const handleAnswerClick = (guest_id, answer) => {
+  const handleAnswerClick = (guest_id, answer, setSub = false) => {
     if (!link) return;
     dispatch(updateGuestAnswer({ guest_id, answer, link }));
+    if (setSub === true) {
+      const sa = showSubAnswer ? "y" : "n";
+      handleSubAnswerClick("w1", sa);
+      handleSubAnswerClick("w2", sa);
+    }
   };
 
   const handleSubAnswerClick = (field, val) => {
