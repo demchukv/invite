@@ -34,7 +34,7 @@ export const selectStatistics = createSelector(
           group.w2 === "y" && group.inviteGuests[i].willbe === "y"
             ? (count.w2y += 1)
             : (count.w2n += 1);
-          if (group.transfer === "y") {
+          if (group.transfer === "y" && group.inviteGuests[i].willbe === "y") {
             count.transfer += 1;
           }
         }
