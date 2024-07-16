@@ -383,12 +383,14 @@ export const InvitationWhite = ({
         {invite.addition !== "" && invite.addition !== null && (
           <div className="in_pad pb50 pt50 in_center_text">
             {invite.addition}
-            <img
-              className="in_img_tsan"
-              src="/4/igor-tsan.jpg"
-              width={500}
-              height={889}
-            />
+            <div className="in_img_container">
+              <img
+                className="in_img_tsan"
+                src="/4/igor-tsan.jpg"
+                width={500}
+                height={889}
+              />
+            </div>
             <p>
               🔗Посилання на банку
               <br />
