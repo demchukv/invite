@@ -383,8 +383,26 @@ export const InvitationWhite = ({
         {invite.addition !== "" && invite.addition !== null && (
           <div className="in_pad pb50 pt50 in_center_text">
             {invite.addition}
+            <img
+              className="in_img_tsan"
+              src="/4/igor-tsan.jpg"
+              width={500}
+              height={889}
+            />
+            <p>
+              🔗Посилання на банку
+              <br />
+              <a href="https://send.monobank.ua/jar/3CTkcm2S3A" target="_blank">
+                Перейти до банки
+              </a>
+            </p>
+            <p className="mt10">
+              💳Номер картки банки
+              <br />
+              5375 4112 2009 0315
+            </p>
             <p className="in_center_text pt50 great-vibes-regular in_invite_section">
-              З любов'ю,<br></br>
+              З любов&#39;ю,<br></br>
               {invite.name_one} та {invite.name_two}
             </p>
           </div>

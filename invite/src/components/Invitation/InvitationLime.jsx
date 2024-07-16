@@ -103,7 +103,7 @@ export const InvitationLime = ({
             </div>
             <div className="in_head_date_inner">
               <div className="in_head_date_item in_head_date_border">
-                п'ятниця
+                п&#39;ятниця
               </div>
               <div className="in_head_date_item in_head_date_number">30</div>
               <div className="in_head_date_item in_head_date_border">12:00</div>
@@ -186,7 +186,21 @@ export const InvitationLime = ({
 
         <div className="in_pad pb50 mt10">
           <p className="in_text in_center_text">{invite.postinvite}</p>
+          <p className="in_text in_center_text mt10">
+            Локація pet-friendly, тому будемо раді бачити і ваших улюбленців.
+          </p>
         </div>
+
+        {images.length > 0 && (
+          <div className="in_pad pb30 mb10">
+            <ImageGallery
+              items={images}
+              showFullscreenButton={false}
+              showPlayButton={false}
+              showThumbnails={false}
+            />
+          </div>
+        )}
 
         {/* Map */}
         <div className="in_pad in_dark_bg pb50 pt50 in_invite">
@@ -378,15 +392,6 @@ export const InvitationLime = ({
           </>
         )}
 
-        {images.length > 0 && (
-          <ImageGallery
-            items={images.reverse()}
-            showFullscreenButton={false}
-            showPlayButton={false}
-            showThumbnails={false}
-          />
-        )}
-
         {/* Timings */}
         {Array.isArray(invite.inviteTiming) &&
           invite.inviteTiming.length > 0 && (
@@ -431,7 +436,7 @@ export const InvitationLime = ({
         )}
         <div>
           <p className="in_center_text pt50 pb50 great-vibes-regular in_invite_section">
-            З любов'ю,<br></br>
+            З любов&#39;ю,<br></br>
             {invite.name_one} та {invite.name_two}
           </p>
         </div>

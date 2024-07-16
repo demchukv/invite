@@ -6,6 +6,7 @@
   --color-black: #000;
   --color-btn-bg: #6d4c41;
   --color-btn-bg-hover: #3e2723;
+
   font-weight: 300;
   font-style: normal;
 }
@@ -63,7 +64,6 @@ body {
   outline: none;
   text-align: center;
   cursor: pointer;
-  font-family: "Cormorant Garamond", serif;
 }
 .in_as_btn:hover {
   background-color: var(--color-btn-bg-hover);
@@ -81,7 +81,6 @@ body {
   outline: none;
   text-align: center;
   cursor: pointer;
-  font-family: "Cormorant Garamond", serif;
 }
 .in_as_btn_outlined:hover {
   background-color: var(--color-bg-dark);
