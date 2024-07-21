@@ -5,25 +5,6 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import dayjs from "dayjs";
 import "dayjs/locale/uk";
 import updateLocale from "dayjs/plugin/updateLocale";
-dayjs.locale("uk");
-dayjs.extend(updateLocale);
-dayjs.updateLocale("uk", {
-  months: [
-    "Січень",
-    "Лютий",
-    "Березень",
-    "Квітень",
-    "Травень",
-    "Червень",
-    "Липень",
-    "Серпень",
-    "Вересень",
-    "Жовтень",
-    "Листопад",
-    "Грудень",
-  ],
-  weekdays: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-});
 
 export const InvitationLime = ({
   invite,
@@ -33,6 +14,25 @@ export const InvitationLime = ({
   showSubAnswer,
   // showTransfer,
 }) => {
+  dayjs.locale("uk");
+  dayjs.extend(updateLocale);
+  dayjs.updateLocale("uk", {
+    months: [
+      "Січень",
+      "Лютий",
+      "Березень",
+      "Квітень",
+      "Травень",
+      "Червень",
+      "Липень",
+      "Серпень",
+      "Вересень",
+      "Жовтень",
+      "Листопад",
+      "Грудень",
+    ],
+    weekdays: ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+  });
   const head_style = {
     backgroundImage: `url(${invite?.photo}?t=${Math.random()})`,
   };
@@ -119,12 +119,12 @@ export const InvitationLime = ({
           {Array.isArray(invite.inviteGuests) &&
             invite.inviteGuests.length > 0 && (
               <>
-                {invite.inviteGuests.length === 1 && (
+                {/* {invite.inviteGuests.length === 1 && (
                   <p className="in_text in_center_text">Дорогий</p>
                 )}
                 {invite.inviteGuests.length > 1 && (
                   <p className="in_text in_center_text">Дорогі</p>
-                )}
+                )} */}
 
                 {invite.inviteGuests.length === 1 &&
                   invite.inviteGuests.map((guest, idx) => (

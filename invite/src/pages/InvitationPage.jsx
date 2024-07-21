@@ -16,6 +16,7 @@ import Loader from "../components/Loader/Loader";
 
 import { InvitationWhite } from "../components/Invitation/InvitationWhite";
 import { InvitationLime } from "../components/Invitation/InvitationLime";
+import { InvitationLimeSpain } from "../components/Invitation/InvitationLimeSpain";
 
 import "./InvitationPage.css";
 
@@ -63,10 +64,12 @@ const InvitationPage = () => {
   };
 
   const cssFile = invite?.inviteTheme?.css
-    ? `/styles/${invite.inviteTheme.css}.css?t=${Math.random()}`
+    ? `/styles/${
+        invite.inviteTheme.css == "lime_spain" ? "lime" : invite.inviteTheme.css
+      }.css?t=${Math.random()}`
     : `/styles/white.css?t=${Math.random()}`;
 
-  const nameOfTemplates = ["white", "lime"];
+  const nameOfTemplates = ["white", "lime", "lime_spain"];
   return (
     <>
       {isError && <ErrorMessage>{isError}</ErrorMessage>}
@@ -102,6 +105,19 @@ const InvitationPage = () => {
               showSubAnswer={showSubAnswer}
               showTransfer={showTransfer}
             />
+          )}
+
+          {invite.inviteTheme.css === "lime_spain" && (
+            <>
+              <InvitationLimeSpain
+                invite={invite}
+                handleAnswerClick={handleAnswerClick}
+                handleSubAnswerClick={handleSubAnswerClick}
+                handleTransferClick={handleTransferClick}
+                showSubAnswer={showSubAnswer}
+                showTransfer={showTransfer}
+              />
+            </>
           )}
         </>
       )}

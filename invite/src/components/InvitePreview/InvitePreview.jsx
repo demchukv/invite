@@ -22,19 +22,27 @@ const InvitePreview = () => {
   const invite = useSelector(selectInvitation);
   const [style, setStyle] = useState(
     invite?.inviteTheme?.css
-      ? `/styles/${invite.inviteTheme.css}.css`
+      ? `/styles/${
+          invite.inviteTheme.css === "lime_spain"
+            ? "lime"
+            : invite.inviteTheme.css
+        }.css`
       : `/styles/white.css`
   );
   const [styleKey, setStyleKey] = useState(
-    invite?.inviteTheme?.css ? invite.inviteTheme.css : "white"
+    invite?.inviteTheme?.css
+      ? invite.inviteTheme.css === "lime_spain"
+        ? "lime"
+        : invite.inviteTheme.css
+      : "white"
   );
 
   const handleStyle = (event) => {
-    setStyleKey(event.target.value);
-    setStyle(`/styles/${event.target.value}.css`);
-    dispatch(
-      changeInvitationTheme({ css: event.target.value, invite_id: invite.id })
-    );
+    const newStyle =
+      event.target.value === "lime_spain" ? "lime" : event.target.value;
+    setStyleKey(newStyle);
+    setStyle(`/styles/${newStyle}.css`);
+    dispatch(changeInvitationTheme({ css: newStyle, invite_id: invite.id }));
   };
 
   const styleVariants = [
@@ -42,6 +50,7 @@ const InvitePreview = () => {
     // { key: "first", name: "Brown" },
     // { key: "second", name: "Blue-Grey" },
     { key: "lime", name: "Lime" },
+    { key: "lime_spain", name: "LimeSpain" },
   ];
 
   return (
@@ -64,8 +73,8 @@ const InvitePreview = () => {
                 label="Тема запрошення"
                 onChange={handleStyle}
               >
-                {styleVariants.map((variant) => (
-                  <MenuItem key={variant.key} value={variant.key}>
+                {styleVariants.map((variant, idx) => (
+                  <MenuItem key={`${variant.key}-${idx}`} value={variant.key}>
                     {variant.name}
                   </MenuItem>
                 ))}
